@@ -8,10 +8,14 @@ class RubixCube
   public:
     __int8 colors[6][8];
     RubixCube* parent;
+    RubixCube* firstChild;
+    RubixCube* sibling;
 
     RubixCube();
     RubixCube& operator=(const RubixCube& other);
     bool operator==(const RubixCube& other);
+    bool operator<(const RubixCube& other);
+    bool operator>(const RubixCube& other);
     void print();
     RubixCube returnChild(int move);
     RubixCube returnRot(int rot);
@@ -26,6 +30,23 @@ class RubixCube
 
   protected:
 
+  private:
+};
+
+class CubeContainer
+{
+  public:
+    RubixCube* cube;
+
+    CubeContainer();
+    CubeContainer& operator=(const RubixCube& other);
+    CubeContainer& operator=(const CubeContainer& other);
+    bool operator==(const CubeContainer& other);
+    bool operator<(const CubeContainer& other);
+    bool operator>(const CubeContainer& other);
+    virtual ~CubeContainer();
+
+  protected:
   private:
 };
 

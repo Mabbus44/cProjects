@@ -25,6 +25,35 @@ bool RubixCube::operator==(const RubixCube& other)
   return true;
 }
 
+bool RubixCube::operator<(const RubixCube& other)
+{
+  for(int s=0; s<6; s++)
+  {
+    for(int b=0; b<8; b++)
+    {
+      if(this->colors[s][b] > other.colors[s][b])
+        return false;
+      if(this->colors[s][b] < other.colors[s][b])
+        return true;
+    }
+  }
+  return false;
+}
+
+bool RubixCube::operator>(const RubixCube& other)
+{
+  for(int s=0; s<6; s++)
+  {
+    for(int b=0; b<8; b++)
+    {
+      if(this->colors[s][b] < other.colors[s][b])
+        return false;
+      if(this->colors[s][b] > other.colors[s][b])
+        return true;
+    }
+  }
+  return false;
+}
 
 void RubixCube::print()
 {
@@ -709,4 +738,52 @@ void RubixCube::swapNumber(int a, int b, int c, int d)
 RubixCube::~RubixCube()
 {
   //dtor
+}
+
+
+CubeContainer::CubeContainer()
+{
+  cube = NULL;
+}
+
+
+CubeContainer& CubeContainer::operator=(const RubixCube& other)
+{
+  if(cube)
+    delete cube;
+  cube = new RubixCube;
+  *cube = other;
+  return *this;
+}
+
+
+CubeContainer& CubeContainer::operator=(const CubeContainer& other)
+{
+  //Not deleting cube since im not sure how SET uses operator=
+  cube = other.cube;
+  return *this;
+}
+
+
+bool CubeContainer::operator==(const CubeContainer& other)
+{
+  return *(this->cube) == *(other.cube);
+}
+
+
+bool CubeContainer::operator<(const CubeContainer& other)
+{
+  return *(this->cube) < *(other.cube);
+}
+
+
+bool CubeContainer::operator>(const CubeContainer& other)
+{
+  return *(this->cube) > *(other.cube);
+}
+
+
+CubeContainer::~CubeContainer()
+{
+
 }
