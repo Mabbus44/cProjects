@@ -3,6 +3,9 @@
 
 RubixCube::RubixCube()
 {
+  parent = NULL;
+  firstChild = NULL;
+  sibling = NULL;
   //ctor
 }
 

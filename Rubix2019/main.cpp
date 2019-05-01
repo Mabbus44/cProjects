@@ -5,11 +5,11 @@
 #include "RubixCube.h"
 
 void generateCubesVector(int maxGenerations, bool outputProgress = false);
-void generateCubesSet(int maxGenerations, bool outputProgress = false)
+void generateCubesSet(int maxGenerations, bool outputProgress = false);
 
 int main()
 {
-  generateCubesSet(2);
+  generateCubesVector(6);
 }
 
 void generateCubesVector(int maxGenerations, bool outputProgress)
@@ -21,6 +21,7 @@ void generateCubesVector(int maxGenerations, bool outputProgress)
   RubixCube r;
   std::vector<RubixCube> rVector;
   std::vector<int> gVector;
+  std::vector<double> tVector;
   bool unique;
   int parentIndex;
   int generation;
@@ -54,10 +55,11 @@ void generateCubesVector(int maxGenerations, bool outputProgress)
       r.colors[side][square] = arr[side][square];
   rVector.push_back(r);
   gVector.push_back(1);
+  tVector.push_back(0);
   parentIndex = 0;
   generation = 1;
   generationEnd = 0;
-  while(generation <= maxGenerations)
+  while(generation < maxGenerations)
   {
     for(int move=0; move<12; move++)
     {
@@ -95,17 +97,16 @@ void generateCubesVector(int maxGenerations, bool outputProgress)
       }
       generation++;
       gVector.push_back(rVector.size() - generationEnd-1);
+      time(&timeFinish);
+      timePassed = difftime(timeFinish, timeStart);
+      tVector.push_back(timePassed);
       generationEnd = rVector.size()-1;
     }
   }
-  time(&timeFinish);
-  timePassed = difftime(timeFinish, timeStart);
 
-  std::cout << std::endl << "generateCubes() done in " << timePassed << " seconds" << std::endl;
+  std::cout << std::endl << "generateCubes() done" << std::endl;
   for(unsigned int i=0; i<gVector.size(); i++)
-  {
-    std::cout << "Generation " << i+1 << ": " << gVector[i] << std::endl;
-  }
+    std::cout << "Generation " << i+1 << ": " << gVector[i] << " in " << tVector[i] << " seconds" << std::endl;
 }
 
 
@@ -114,10 +115,12 @@ void generateCubesSet(int maxGenerations, bool outputProgress)
   time_t timeStart, timeFinish;
   double timePassed;
   time(&timeStart);
-  RubixCube child, rotChild;
-  RubixCube r;
-  std::set<RubixCube> rVector;
+  RubixCube* child;
+  RubixCube* rotChild;
+  RubixCube* r;
+  std::set<CubeContainer> rSet;
   std::vector<int> gVector;
+  std::vector<double> tVector;
   bool unique;
   int parentIndex;
   int generation;
@@ -148,28 +151,30 @@ void generateCubesSet(int maxGenerations, bool outputProgress)
 
   for(int side = 0; side<6; side++)
     for(int square = 0; square<8; square++)
-      r.colors[side][square] = arr[side][square];
-  rVector.push_back(r);
+      r->colors[side][square] = arr[side][square];
+  c.cube = r;
+  rSet.insert(c);
   gVector.push_back(1);
+  tVector.push_back(0);
   parentIndex = 0;
   generation = 1;
   generationEnd = 0;
-  while(generation <= maxGenerations)
+  while(generation < maxGenerations)
   {
     for(int move=0; move<12; move++)
     {
-      child = rVector[parentIndex].returnChild(move);
+      child = rSet[parentIndex].returnChild(move);
       unique = true;
       for(int rot=0; rot<24 && unique; rot++)
       {
         rotChild = child.returnRot(rot);
-        int vectorSize = rVector.size();
+        int vectorSize = rSet.size();
         for(int i = 0; i<vectorSize && unique; i++)
-          if(rotChild == rVector[i])
+          if(rotChild == rSet[i])
             unique = false;
       }
       if(unique)
-        rVector.push_back(child);
+        rSet.push_back(child);
     }
     parentIndex++;
     if(parentIndex>showNext)
@@ -183,7 +188,7 @@ void generateCubesSet(int maxGenerations, bool outputProgress)
       if(outputProgress)
       {
         int genPop = gVector[generation-1];
-        int newChildren = rVector.size() - generationEnd-1;
+        int newChildren = rSet.size() - generationEnd-1;
         double fertility = (newChildren) / ((double)genPop*12.0)*100.0;
         std::cout << std::endl << "Generation " << generation << std::endl;
         std::cout << "Total population " << generationEnd+1 << std::endl;
@@ -191,16 +196,15 @@ void generateCubesSet(int maxGenerations, bool outputProgress)
         std::cout << "New children " << newChildren << " (" << fertility << "%)" << std::endl;
       }
       generation++;
-      gVector.push_back(rVector.size() - generationEnd-1);
-      generationEnd = rVector.size()-1;
+      gVector.push_back(rSet.size() - generationEnd-1);
+      time(&timeFinish);
+      timePassed = difftime(timeFinish, timeStart);
+      tVector.push_back(timePassed);
+      generationEnd = rSet.size()-1;
     }
   }
-  time(&timeFinish);
-  timePassed = difftime(timeFinish, timeStart);
 
-  std::cout << std::endl << "generateCubes() done in " << timePassed << " seconds" << std::endl;
+  std::cout << std::endl << "generateCubes() done" << std::endl;
   for(unsigned int i=0; i<gVector.size(); i++)
-  {
-    std::cout << "Generation " << i+1 << ": " << gVector[i] << std::endl;
-  }
+    std::cout << "Generation " << i+1 << ": " << gVector[i] << " in " << tVector[i] << " seconds" << std::endl;
 }
