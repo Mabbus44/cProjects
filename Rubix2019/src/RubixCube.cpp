@@ -774,13 +774,13 @@ bool CubeContainer::operator==(const CubeContainer& other)
 }
 
 
-bool CubeContainer::operator<(const CubeContainer& other)
+bool CubeContainer::operator<(const CubeContainer& other) const
 {
   return *(this->cube) < *(other.cube);
 }
 
 
-bool CubeContainer::operator>(const CubeContainer& other)
+bool CubeContainer::operator>(const CubeContainer& other) const
 {
   return *(this->cube) > *(other.cube);
 }

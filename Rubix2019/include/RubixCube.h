@@ -42,8 +42,8 @@ class CubeContainer
     CubeContainer& operator=(const RubixCube& other);
     CubeContainer& operator=(const CubeContainer& other);
     bool operator==(const CubeContainer& other);
-    bool operator<(const CubeContainer& other);
-    bool operator>(const CubeContainer& other);
+    bool operator<(const CubeContainer& other) const;
+    bool operator>(const CubeContainer& other) const;
     virtual ~CubeContainer();
 
   protected:
