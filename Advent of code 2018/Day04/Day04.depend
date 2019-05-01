@@ -1,0 +1,38 @@
+# depslib dependency file v1.0
+1544822033 source:c:\users\rasun\documents\c++ projects\advent of code 2018\day04\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<list>
+	"Event.h"
+	"Guard.h"
+
+1544812383 c:\users\rasun\documents\c++ projects\advent of code 2018\sharedfunctions\include\functions.h
+	<fstream>
+	<string>
+	<list>
+
+1544816986 source:c:\users\rasun\documents\c++ projects\advent of code 2018\day04\src\event.cpp
+	"Event.h"
+
+1544818840 c:\users\rasun\documents\c++ projects\advent of code 2018\day04\include\event.h
+	<string>
+	<iostream>
+	"Functions.h"
+
+1544812383 source:c:\users\rasun\documents\c++ projects\advent of code 2018\sharedfunctions\functions.cpp
+	"Functions.h"
+
+1544812383 c:\users\rasun\documents\c++ projects\advent of code 2018\sharedfunctions\functions.h
+	<fstream>
+	<string>
+	<list>
+
+1544820514 c:\users\rasun\documents\c++ projects\advent of code 2018\day04\include\guard.h
+	<iostream>
+	<list>
+	"Event.h"
+
+1544823071 source:c:\users\rasun\documents\c++ projects\advent of code 2018\day04\src\guard.cpp
+	"Guard.h"
+

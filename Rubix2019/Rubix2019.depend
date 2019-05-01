@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1556650067 source:c:\users\rasun\documents\c++ projects\rubix2019\main.cpp
+	<iostream>
+	<vector>
+	"RubixCube.h"
+
+1556568580 source:c:\users\rasun\documents\c++ projects\rubix2019\src\rubixcube.cpp
+	<iostream>
+	"RubixCube.h"
+
+1556568580 c:\users\rasun\documents\c++ projects\rubix2019\include\rubixcube.h
+	<inttypes.h>
+

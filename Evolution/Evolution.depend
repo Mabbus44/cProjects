@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1530454604 source:c:\users\rasun\documents\c++ projects\evolution\main.cpp
+	<iostream>
+	"Creature.h"
+	"AngularVector.h"
+
+1530456634 source:c:\users\rasun\documents\c++ projects\evolution\src\creature.cpp
+	"Creature.h"
+
+1530456634 c:\users\rasun\documents\c++ projects\evolution\include\creature.h
+	<stdint.h>
+	"AngularVector.h"
+
+1530455857 source:c:\users\rasun\documents\c++ projects\evolution\src\angularvector.cpp
+	"AngularVector.h"
+	<math.h>
+
+1530456658 c:\users\rasun\documents\c++ projects\evolution\include\angularvector.h
+	<stdint.h>
+

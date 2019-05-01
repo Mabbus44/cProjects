@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="Day01/Day01.cbp" />
+		<Project filename="Day02/Day02.cbp" />
+		<Project filename="Day03/Day03.cbp" />
+		<Project filename="Day04/Day04.cbp" />
+		<Project filename="Day05/Day05.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

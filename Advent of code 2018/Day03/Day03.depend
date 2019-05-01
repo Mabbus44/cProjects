@@ -1,0 +1,27 @@
+# depslib dependency file v1.0
+1544735581 source:c:\users\rasun\documents\c++ projects\advent of code 2018\day03\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<list>
+	"Claim.h"
+	"Functions.h"
+
+1544732673 source:c:\users\rasun\documents\c++ projects\advent of code 2018\day03\src\claim.cpp
+	"Claim.h"
+
+1544732673 c:\users\rasun\documents\c++ projects\advent of code 2018\day03\include\claim.h
+	<iostream>
+	<fstream>
+	<string>
+	<list>
+	"functions.h"
+
+1544731869 c:\users\rasun\documents\c++ projects\advent of code 2018\day03\include\functions.h
+	<fstream>
+	<string>
+	<list>
+
+1544731869 source:c:\users\rasun\documents\c++ projects\advent of code 2018\day03\src\functions.cpp
+	"Functions.h"
+
