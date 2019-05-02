@@ -25,3 +25,17 @@
 	<iostream>
 	"RubixCube.h"
 
+1556804598 source:c:\users\a486071\documents\cprojects\rubix2019\main.cpp
+	<iostream>
+	<vector>
+	<set>
+	<time.h>
+	"RubixCube.h"
+
+1556797553 c:\users\a486071\documents\cprojects\rubix2019\include\rubixcube.h
+	<inttypes.h>
+
+1556797553 source:c:\users\a486071\documents\cprojects\rubix2019\src\rubixcube.cpp
+	<iostream>
+	"RubixCube.h"
+
