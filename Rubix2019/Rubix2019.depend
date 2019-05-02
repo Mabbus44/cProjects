@@ -25,11 +25,12 @@
 	<iostream>
 	"RubixCube.h"
 
-1556804598 source:c:\users\a486071\documents\cprojects\rubix2019\main.cpp
+1556810711 source:c:\users\a486071\documents\cprojects\rubix2019\main.cpp
 	<iostream>
 	<vector>
 	<set>
 	<time.h>
+	<chrono>
 	"RubixCube.h"
 
 1556797553 c:\users\a486071\documents\cprojects\rubix2019\include\rubixcube.h

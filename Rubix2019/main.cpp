@@ -2,6 +2,7 @@
 #include <vector>
 #include <set>
 #include <time.h>
+#include <chrono>
 #include "RubixCube.h"
 
 void generateCubesVector(int maxGenerations, bool outputProgress = false);
@@ -10,13 +11,15 @@ void generateCubesSet(int maxGenerations, bool outputProgress = false);
 int main()
 {
   int generations = 7;
-  generateCubesVector(3);
-  generateCubesSet(9);
+  generateCubesVector(6);
+  generateCubesSet(8);
 }
 
 void generateCubesVector(int maxGenerations, bool outputProgress)
 {
   time_t timeStart, timeFinish;
+  auto chronoTimeStart = std::chrono::steady_clock::now();
+  auto chronoTimeFinish = std::chrono::steady_clock::now();
   double timePassed;
   time(&timeStart);
   RubixCube child, rotChild;
@@ -99,8 +102,13 @@ void generateCubesVector(int maxGenerations, bool outputProgress)
       }
       generation++;
       gVector.push_back(rVector.size() - generationEnd-1);
-      time(&timeFinish);
-      timePassed = difftime(timeFinish, timeStart);
+
+      //time(&timeFinish);
+      //timePassed = difftime(timeFinish, timeStart);
+      chronoTimeFinish = std::chrono::steady_clock::now();
+      //timePassed = std::chrono::duration_cast<std::chrono::seconds>(chronoTimeFinish - chronoTimeStart).count();
+      //timePassed  = (std::chrono::duration_cast<std::chrono::milliseconds>(chronoTimeFinish - chronoTimeStart).count())/1.0;
+      timePassed = (std::chrono::duration_cast<std::chrono::microseconds>(chronoTimeFinish - chronoTimeStart).count())/1000000.0;
       tVector.push_back(timePassed);
       generationEnd = rVector.size()-1;
     }
@@ -115,6 +123,8 @@ void generateCubesVector(int maxGenerations, bool outputProgress)
 void generateCubesSet(int maxGenerations, bool outputProgress)
 {
   time_t timeStart, timeFinish;
+  auto chronoTimeStart = std::chrono::steady_clock::now();
+  auto chronoTimeFinish = std::chrono::steady_clock::now();
   double timePassed;
   time(&timeStart);
   CubeContainer child;
@@ -235,8 +245,14 @@ void generateCubesSet(int maxGenerations, bool outputProgress)
     }
     gVector.push_back(rSet.size() - totalPopulation);
     totalPopulation += gVector[generation];
-    time(&timeFinish);
-    timePassed = difftime(timeFinish, timeStart);
+
+    //time(&timeFinish);
+    //timePassed = difftime(timeFinish, timeStart);
+    chronoTimeFinish = std::chrono::steady_clock::now();
+    //timePassed = std::chrono::duration_cast<std::chrono::seconds>(chronoTimeFinish - chronoTimeStart).count();
+    //timePassed  = (std::chrono::duration_cast<std::chrono::milliseconds>(chronoTimeFinish - chronoTimeStart).count())/1.0;
+    timePassed = (std::chrono::duration_cast<std::chrono::microseconds>(chronoTimeFinish - chronoTimeStart).count())/1000000.0;
+
     tVector.push_back(timePassed);
     generation++;
   }
