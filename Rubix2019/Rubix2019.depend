@@ -11,17 +11,18 @@
 1556568580 c:\users\rasun\documents\c++ projects\rubix2019\include\rubixcube.h
 	<inttypes.h>
 
-1556731281 source:c:\users\rasun\documents\cprojects\rubix2019\main.cpp
+1558946516 source:c:\users\rasun\documents\cprojects\rubix2019\main.cpp
 	<iostream>
 	<vector>
 	<set>
 	<time.h>
+	<chrono>
 	"RubixCube.h"
 
 1556731434 c:\users\rasun\documents\cprojects\rubix2019\include\rubixcube.h
 	<inttypes.h>
 
-1556731449 source:c:\users\rasun\documents\cprojects\rubix2019\src\rubixcube.cpp
+1558959596 source:c:\users\rasun\documents\cprojects\rubix2019\src\rubixcube.cpp
 	<iostream>
 	"RubixCube.h"
 
@@ -39,4 +40,10 @@
 1556797553 source:c:\users\a486071\documents\cprojects\rubix2019\src\rubixcube.cpp
 	<iostream>
 	"RubixCube.h"
+
+1558960321 source:c:\users\rasun\documents\cprojects\rubix2019\src\rubixcube20b.cpp
+	<iostream>
+	"RubixCube20B.h"
+
+1558959578 c:\users\rasun\documents\cprojects\rubix2019\include\rubixcube20b.h
 

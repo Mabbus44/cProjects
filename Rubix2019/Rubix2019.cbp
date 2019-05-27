@@ -35,8 +35,10 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="include/RubixCube.h" />
+		<Unit filename="include/RubixCube20B.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/RubixCube.cpp" />
+		<Unit filename="src/RubixCube20B.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
