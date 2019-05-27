@@ -7,6 +7,7 @@ using namespace std;
 
 void set8bitIntsx48(__int8* reciever, __int8* sender);
 void set64bitIntsx100(__int64* reciever, __int64* sender);
+void set64bitIntsx4p1(__int64* reciever, __int64* sender, int rPos, int sPos);
 
 int main()
 {
@@ -18,19 +19,23 @@ int main()
   __int8* sender = new __int8[48];
   __int64* reciever64 = new __int64;
   __int64* sender64 = new __int64;
-  *sender64  = 64;
-  for(int runs=0; runs<10; runs++)
+  *sender64  = 3<<5;
+  for(int test=0; test<2; test++)
   {
-    chronoTimeStart = std::chrono::steady_clock::now();
-    for(int i=0; i<1; i++)
+    for(int runs=0; runs<10; runs++)
     {
-      set64bitIntsx100(reciever64, sender64);
-      cout << *sender64 << " " << *reciever64 << endl;
-      //set8bitIntsx48(reciever, sender);
+      chronoTimeStart = std::chrono::steady_clock::now();
+      for(int i=0; i<1000000; i++)
+      {
+        if(test==0)
+          set64bitIntsx100(reciever64, sender64);
+        else
+          set8bitIntsx48(reciever, sender);
+      }
+      chronoTimeFinish = std::chrono::steady_clock::now();
+      timePassed  = (std::chrono::duration_cast<std::chrono::milliseconds>(chronoTimeFinish - chronoTimeStart).count())/1000.0;
+      cout << "Run " << runs << ": " << timePassed << " s" << endl;
     }
-    chronoTimeFinish = std::chrono::steady_clock::now();
-    timePassed  = (std::chrono::duration_cast<std::chrono::milliseconds>(chronoTimeFinish - chronoTimeStart).count())/1000.0;
-    cout << "Run " << runs << ": " << timePassed << " s" << endl;
   }
 
   return 0;
@@ -92,6 +97,14 @@ void set8bitIntsx48(__int8* reciever, __int8* sender)
 void set64bitIntsx100(__int64* reciever, __int64* sender)
 {
   *reciever = 0;
-  //*reciever=*sender&31;
-  *reciever=(*sender&(31<<5))>>5;
+  for(int i=0; i<100; i++)
+    set64bitIntsx4p1(reciever, sender, 0, 1);
+}
+
+void set64bitIntsx4p1(__int64* reciever, __int64* sender, int rPos, int sPos)
+{
+  if(rPos > sPos)
+    *reciever=(*sender&(31<<(5*sPos)))<<(5*(rPos-sPos));
+  else
+    *reciever=(*sender&(31<<(5*sPos)))>>(5*(sPos-rPos));
 }
