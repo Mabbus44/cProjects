@@ -19,13 +19,11 @@ class RubixCube20B
     void print();
     RubixCube20B returnChild(int move);
     RubixCube20B returnRot(int rot);
-    void setSide(int side, RubixCube20B* other, int otherSide);
-    void setSideRotLeft(int side, RubixCube20B* other, int otherSide);
-    void setSideRotRight(int side, RubixCube20B* other, int otherSide);
-    void setSideRotX(int side, RubixCube20B* other, int otherSide);
-    void swapNumber(int a, int b);
-    void swapNumber(int a, int b, int c);
-    void swapNumber(int a, int b, int c, int d);
+    __int8 turnSide(__int8 side);
+    __int8 turnCornerRight(__int8 corner);
+    __int8 turnCornerLeft(__int8 corner);
+    __int8 replaceSide(__int8 side, int rot);
+    __int8 replaceCorner(__int8 corner, int rot);
     virtual ~RubixCube20B();
 
   protected:

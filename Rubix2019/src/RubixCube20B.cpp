@@ -85,287 +85,287 @@ RubixCube20B RubixCube20B::returnChild(int move)
 {
   RubixCube20B child = *this;
   child.parent = this;
-  /*switch(move)            ///////////TODOTODOTODOTODO
+  switch(move)
   {
   case 0:
     //Turn side 0 clockwise
-    child.colors[0][0] = this->colors[0][5];
-    child.colors[0][1] = this->colors[0][3];
-    child.colors[0][2] = this->colors[0][0];
-    child.colors[0][3] = this->colors[0][6];
-    child.colors[0][4] = this->colors[0][1];
-    child.colors[0][5] = this->colors[0][7];
-    child.colors[0][6] = this->colors[0][4];
-    child.colors[0][7] = this->colors[0][2];
-    child.colors[5][0] = this->colors[1][0];
-    child.colors[5][3] = this->colors[1][3];
-    child.colors[5][5] = this->colors[1][5];
-    child.colors[3][7] = this->colors[5][0];
-    child.colors[3][4] = this->colors[5][3];
-    child.colors[3][2] = this->colors[5][5];
-    child.colors[4][0] = this->colors[3][7];
-    child.colors[4][3] = this->colors[3][4];
-    child.colors[4][5] = this->colors[3][2];
-    child.colors[1][0] = this->colors[4][0];
-    child.colors[1][3] = this->colors[4][3];
-    child.colors[1][5] = this->colors[4][5];
+    child.corners[0] = this->corners[4];
+    child.corners[1] = this->turnCornerRight(this->corners[0]);
+    child.corners[2] = this->corners[2];
+    child.corners[3] = this->corners[3];
+    child.corners[4] = this->turnCornerRight(this->corners[5]);
+    child.corners[5] = this->turnCornerRight(this->corners[1]);
+    child.corners[6] = this->corners[6];
+    child.corners[7] = this->corners[7];
+    child.sides[0] = this->turnSide(this->sides[8]);
+    child.sides[1] = this->sides[4];
+    child.sides[2] = this->sides[2];
+    child.sides[3] = this->sides[3];
+    child.sides[4] = this->turnSide(this->sides[0]);
+    child.sides[5] = this->sides[5];
+    child.sides[6] = this->sides[6];
+    child.sides[7] = this->sides[7];
+    child.sides[8] = this->sides[1];
+    child.sides[9] = this->sides[9];
+    child.sides[10] = this->sides[10];
+    child.sides[11] = this->sides[11];
     break;
   case 1:
     //Turn side 1 clockwise
-    child.colors[1][0] = this->colors[1][5];
-    child.colors[1][1] = this->colors[1][3];
-    child.colors[1][2] = this->colors[1][0];
-    child.colors[1][3] = this->colors[1][6];
-    child.colors[1][4] = this->colors[1][1];
-    child.colors[1][5] = this->colors[1][7];
-    child.colors[1][6] = this->colors[1][4];
-    child.colors[1][7] = this->colors[1][2];
-    child.colors[4][5] = this->colors[0][7];
-    child.colors[4][6] = this->colors[0][4];
-    child.colors[4][7] = this->colors[0][2];
-    child.colors[2][0] = this->colors[4][5];
-    child.colors[2][3] = this->colors[4][6];
-    child.colors[2][5] = this->colors[4][7];
-    child.colors[5][2] = this->colors[2][0];
-    child.colors[5][1] = this->colors[2][3];
-    child.colors[5][0] = this->colors[2][5];
-    child.colors[0][7] = this->colors[5][2];
-    child.colors[0][4] = this->colors[5][1];
-    child.colors[0][2] = this->colors[5][0];
+    child.corners[0] = this->corners[0];
+    child.corners[1] = this->corners[5];
+    child.corners[2] = this->turnCornerRight(this->corners[1]);
+    child.corners[3] = this->corners[3];
+    child.corners[4] = this->corners[4];
+    child.corners[5] = this->turnCornerRight(this->corners[6]);
+    child.corners[6] = this->turnCornerRight(this->corners[2]);
+    child.corners[7] = this->corners[7];
+    child.sides[0] = this->sides[0];
+    child.sides[1] = this->turnSide(this->sides[9]);
+    child.sides[2] = this->sides[5];
+    child.sides[3] = this->sides[3];
+    child.sides[4] = this->sides[4];
+    child.sides[5] = this->turnSide(this->sides[1]);
+    child.sides[6] = this->sides[6];
+    child.sides[7] = this->sides[7];
+    child.sides[8] = this->sides[8];
+    child.sides[9] = this->sides[2];
+    child.sides[10] = this->sides[10];
+    child.sides[11] = this->sides[11];
     break;
   case 2:
     //Turn side 2 clockwise
-    child.colors[2][0] = this->colors[2][5];
-    child.colors[2][1] = this->colors[2][3];
-    child.colors[2][2] = this->colors[2][0];
-    child.colors[2][3] = this->colors[2][6];
-    child.colors[2][4] = this->colors[2][1];
-    child.colors[2][5] = this->colors[2][7];
-    child.colors[2][6] = this->colors[2][4];
-    child.colors[2][7] = this->colors[2][2];
-    child.colors[4][7] = this->colors[1][7];
-    child.colors[4][4] = this->colors[1][4];
-    child.colors[4][2] = this->colors[1][2];
-    child.colors[3][0] = this->colors[4][7];
-    child.colors[3][3] = this->colors[4][4];
-    child.colors[3][5] = this->colors[4][2];
-    child.colors[5][7] = this->colors[3][0];
-    child.colors[5][4] = this->colors[3][3];
-    child.colors[5][2] = this->colors[3][5];
-    child.colors[1][7] = this->colors[5][7];
-    child.colors[1][4] = this->colors[5][4];
-    child.colors[1][2] = this->colors[5][2];
+    child.corners[0] = this->corners[0];
+    child.corners[1] = this->corners[1];
+    child.corners[2] = this->corners[6];
+    child.corners[3] = this->turnCornerRight(this->corners[2]);
+    child.corners[4] = this->corners[4];
+    child.corners[5] = this->corners[5];
+    child.corners[6] = this->turnCornerRight(this->corners[7]);
+    child.corners[7] = this->turnCornerRight(this->corners[3]);
+    child.sides[0] = this->sides[0];
+    child.sides[1] = this->sides[1];
+    child.sides[2] = this->turnSide(this->sides[10]);
+    child.sides[3] = this->sides[6];
+    child.sides[4] = this->sides[4];
+    child.sides[5] = this->sides[5];
+    child.sides[6] = this->turnSide(this->sides[2]);
+    child.sides[7] = this->sides[7];
+    child.sides[8] = this->sides[8];
+    child.sides[9] = this->sides[9];
+    child.sides[10] = this->sides[3];
+    child.sides[11] = this->sides[11];
     break;
   case 3:
     //Turn side 3 clockwise
-    child.colors[3][0] = this->colors[3][5];
-    child.colors[3][1] = this->colors[3][3];
-    child.colors[3][2] = this->colors[3][0];
-    child.colors[3][3] = this->colors[3][6];
-    child.colors[3][4] = this->colors[3][1];
-    child.colors[3][5] = this->colors[3][7];
-    child.colors[3][6] = this->colors[3][4];
-    child.colors[3][7] = this->colors[3][2];
-    child.colors[4][2] = this->colors[2][7];
-    child.colors[4][1] = this->colors[2][4];
-    child.colors[4][0] = this->colors[2][2];
-    child.colors[0][0] = this->colors[4][2];
-    child.colors[0][3] = this->colors[4][1];
-    child.colors[0][5] = this->colors[4][0];
-    child.colors[5][5] = this->colors[0][0];
-    child.colors[5][6] = this->colors[0][3];
-    child.colors[5][7] = this->colors[0][5];
-    child.colors[2][7] = this->colors[5][5];
-    child.colors[2][4] = this->colors[5][6];
-    child.colors[2][2] = this->colors[5][7];
+    child.corners[0] = this->turnCornerRight(this->corners[3]);
+    child.corners[1] = this->corners[1];
+    child.corners[2] = this->corners[2];
+    child.corners[3] = this->corners[7];
+    child.corners[4] = this->turnCornerRight(this->corners[0]);
+    child.corners[5] = this->corners[5];
+    child.corners[6] = this->corners[6];
+    child.corners[7] = this->turnCornerRight(this->corners[4]);
+    child.sides[0] = this->sides[7];
+    child.sides[1] = this->sides[1];
+    child.sides[2] = this->sides[2];
+    child.sides[3] = this->turnSide(this->sides[11]);
+    child.sides[4] = this->sides[4];
+    child.sides[5] = this->sides[5];
+    child.sides[6] = this->sides[6];
+    child.sides[7] = this->turnSide(this->sides[3]);
+    child.sides[8] = this->sides[8];
+    child.sides[9] = this->sides[9];
+    child.sides[10] = this->sides[10];
+    child.sides[11] = this->sides[0];
     break;
   case 4:
     //Turn side 4 clockwise
-    child.colors[4][0] = this->colors[4][5];
-    child.colors[4][1] = this->colors[4][3];
-    child.colors[4][2] = this->colors[4][0];
-    child.colors[4][3] = this->colors[4][6];
-    child.colors[4][4] = this->colors[4][1];
-    child.colors[4][5] = this->colors[4][7];
-    child.colors[4][6] = this->colors[4][4];
-    child.colors[4][7] = this->colors[4][2];
-    child.colors[3][2] = this->colors[0][2];
-    child.colors[3][1] = this->colors[0][1];
-    child.colors[3][0] = this->colors[0][0];
-    child.colors[2][2] = this->colors[3][2];
-    child.colors[2][1] = this->colors[3][1];
-    child.colors[2][0] = this->colors[3][0];
-    child.colors[1][2] = this->colors[2][2];
-    child.colors[1][1] = this->colors[2][1];
-    child.colors[1][0] = this->colors[2][0];
-    child.colors[0][2] = this->colors[1][2];
-    child.colors[0][1] = this->colors[1][1];
-    child.colors[0][0] = this->colors[1][0];
+    child.corners[0] = this->corners[1];
+    child.corners[1] = this->corners[2];
+    child.corners[2] = this->corners[3];
+    child.corners[3] = this->corners[0];
+    child.corners[4] = this->corners[4];
+    child.corners[5] = this->corners[5];
+    child.corners[6] = this->corners[6];
+    child.corners[7] = this->corners[7];
+    child.sides[0] = this->sides[0];
+    child.sides[1] = this->sides[1];
+    child.sides[2] = this->sides[2];
+    child.sides[3] = this->sides[3];
+    child.sides[4] = this->sides[5];
+    child.sides[5] = this->sides[6];
+    child.sides[6] = this->sides[7];
+    child.sides[7] = this->sides[4];
+    child.sides[8] = this->sides[8];
+    child.sides[9] = this->sides[9];
+    child.sides[10] = this->sides[10];
+    child.sides[11] = this->sides[11];
     break;
   case 5:
     //Turn side 5 clockwise
-    child.colors[5][0] = this->colors[5][5];
-    child.colors[5][1] = this->colors[5][3];
-    child.colors[5][2] = this->colors[5][0];
-    child.colors[5][3] = this->colors[5][6];
-    child.colors[5][4] = this->colors[5][1];
-    child.colors[5][5] = this->colors[5][7];
-    child.colors[5][6] = this->colors[5][4];
-    child.colors[5][7] = this->colors[5][2];
-    child.colors[1][5] = this->colors[0][5];
-    child.colors[1][6] = this->colors[0][6];
-    child.colors[1][7] = this->colors[0][7];
-    child.colors[2][5] = this->colors[1][5];
-    child.colors[2][6] = this->colors[1][6];
-    child.colors[2][7] = this->colors[1][7];
-    child.colors[3][5] = this->colors[2][5];
-    child.colors[3][6] = this->colors[2][6];
-    child.colors[3][7] = this->colors[2][7];
-    child.colors[0][5] = this->colors[3][5];
-    child.colors[0][6] = this->colors[3][6];
-    child.colors[0][7] = this->colors[3][7];
+    child.corners[0] = this->corners[0];
+    child.corners[1] = this->corners[1];
+    child.corners[2] = this->corners[2];
+    child.corners[3] = this->corners[3];
+    child.corners[4] = this->corners[7];
+    child.corners[5] = this->corners[4];
+    child.corners[6] = this->corners[5];
+    child.corners[7] = this->corners[6];
+    child.sides[0] = this->sides[0];
+    child.sides[1] = this->sides[1];
+    child.sides[2] = this->sides[2];
+    child.sides[3] = this->sides[3];
+    child.sides[4] = this->sides[4];
+    child.sides[5] = this->sides[5];
+    child.sides[6] = this->sides[6];
+    child.sides[7] = this->sides[7];
+    child.sides[8] = this->sides[11];
+    child.sides[9] = this->sides[8];
+    child.sides[10] = this->sides[9];
+    child.sides[11] = this->sides[10];
     break;
   case 6:
     //Turn side 0 counter clockwise
-    child.colors[0][5] = this->colors[0][0];
-    child.colors[0][3] = this->colors[0][1];
-    child.colors[0][0] = this->colors[0][2];
-    child.colors[0][6] = this->colors[0][3];
-    child.colors[0][1] = this->colors[0][4];
-    child.colors[0][7] = this->colors[0][5];
-    child.colors[0][4] = this->colors[0][6];
-    child.colors[0][2] = this->colors[0][7];
-    child.colors[1][0] = this->colors[5][0];
-    child.colors[1][3] = this->colors[5][3];
-    child.colors[1][5] = this->colors[5][5];
-    child.colors[5][0] = this->colors[3][7];
-    child.colors[5][3] = this->colors[3][4];
-    child.colors[5][5] = this->colors[3][2];
-    child.colors[3][7] = this->colors[4][0];
-    child.colors[3][4] = this->colors[4][3];
-    child.colors[3][2] = this->colors[4][5];
-    child.colors[4][0] = this->colors[1][0];
-    child.colors[4][3] = this->colors[1][3];
-    child.colors[4][5] = this->colors[1][5];
+    child.corners[0] = this->turnCornerLeft(this->corners[1]);
+    child.corners[1] = this->turnCornerLeft(this->corners[5]);
+    child.corners[2] = this->corners[2];
+    child.corners[3] = this->corners[3];
+    child.corners[4] = this->corners[0];
+    child.corners[5] = this->turnCornerLeft(this->corners[4]);
+    child.corners[6] = this->corners[6];
+    child.corners[7] = this->corners[7];
+    child.sides[0] = this->turnSide(this->sides[4]);
+    child.sides[1] = this->sides[8];
+    child.sides[2] = this->sides[2];
+    child.sides[3] = this->sides[3];
+    child.sides[4] = this->sides[1];
+    child.sides[5] = this->sides[5];
+    child.sides[6] = this->sides[6];
+    child.sides[7] = this->sides[7];
+    child.sides[8] = this->turnSide(this->sides[0]);
+    child.sides[9] = this->sides[9];
+    child.sides[10] = this->sides[10];
+    child.sides[11] = this->sides[11];
     break;
   case 7:
     //Turn side 1 counter clockwise
-    child.colors[1][5] = this->colors[1][0];
-    child.colors[1][3] = this->colors[1][1];
-    child.colors[1][0] = this->colors[1][2];
-    child.colors[1][6] = this->colors[1][3];
-    child.colors[1][1] = this->colors[1][4];
-    child.colors[1][7] = this->colors[1][5];
-    child.colors[1][4] = this->colors[1][6];
-    child.colors[1][2] = this->colors[1][7];
-    child.colors[0][7] = this->colors[4][5];
-    child.colors[0][4] = this->colors[4][6];
-    child.colors[0][2] = this->colors[4][7];
-    child.colors[4][5] = this->colors[2][0];
-    child.colors[4][6] = this->colors[2][3];
-    child.colors[4][7] = this->colors[2][5];
-    child.colors[2][0] = this->colors[5][2];
-    child.colors[2][3] = this->colors[5][1];
-    child.colors[2][5] = this->colors[5][0];
-    child.colors[5][2] = this->colors[0][7];
-    child.colors[5][1] = this->colors[0][4];
-    child.colors[5][0] = this->colors[0][2];
+    child.corners[0] = this->corners[0];
+    child.corners[1] = this->turnCornerLeft(this->corners[2]);
+    child.corners[2] = this->turnCornerLeft(this->corners[6]);
+    child.corners[3] = this->corners[3];
+    child.corners[4] = this->corners[4];
+    child.corners[5] = this->corners[1];
+    child.corners[6] = this->turnCornerLeft(this->corners[5]);
+    child.corners[7] = this->corners[7];
+    child.sides[0] = this->sides[0];
+    child.sides[1] = this->turnSide(this->sides[5]);
+    child.sides[2] = this->sides[9];
+    child.sides[3] = this->sides[3];
+    child.sides[4] = this->sides[4];
+    child.sides[5] = this->sides[2];
+    child.sides[6] = this->sides[6];
+    child.sides[7] = this->sides[7];
+    child.sides[8] = this->sides[8];
+    child.sides[9] = this->turnSide(this->sides[1]);
+    child.sides[10] = this->sides[10];
+    child.sides[11] = this->sides[11];
     break;
   case 8:
     //Turn side 2 counter clockwise
-    child.colors[2][5] = this->colors[2][0];
-    child.colors[2][3] = this->colors[2][1];
-    child.colors[2][0] = this->colors[2][2];
-    child.colors[2][6] = this->colors[2][3];
-    child.colors[2][1] = this->colors[2][4];
-    child.colors[2][7] = this->colors[2][5];
-    child.colors[2][4] = this->colors[2][6];
-    child.colors[2][2] = this->colors[2][7];
-    child.colors[1][7] = this->colors[4][7];
-    child.colors[1][4] = this->colors[4][4];
-    child.colors[1][2] = this->colors[4][2];
-    child.colors[4][7] = this->colors[3][0];
-    child.colors[4][4] = this->colors[3][3];
-    child.colors[4][2] = this->colors[3][5];
-    child.colors[3][0] = this->colors[5][7];
-    child.colors[3][3] = this->colors[5][4];
-    child.colors[3][5] = this->colors[5][2];
-    child.colors[5][7] = this->colors[1][7];
-    child.colors[5][4] = this->colors[1][4];
-    child.colors[5][2] = this->colors[1][2];
+    child.corners[0] = this->corners[0];
+    child.corners[1] = this->corners[1];
+    child.corners[2] = this->turnCornerLeft(this->corners[3]);
+    child.corners[3] = this->turnCornerLeft(this->corners[7]);
+    child.corners[4] = this->corners[4];
+    child.corners[5] = this->corners[5];
+    child.corners[6] = this->corners[2];
+    child.corners[7] = this->turnCornerRight(this->corners[6]);
+    child.sides[0] = this->sides[0];
+    child.sides[1] = this->sides[1];
+    child.sides[2] = this->turnSide(this->sides[6]);
+    child.sides[3] = this->sides[10];
+    child.sides[4] = this->sides[4];
+    child.sides[5] = this->sides[5];
+    child.sides[6] = this->sides[3];
+    child.sides[7] = this->sides[7];
+    child.sides[8] = this->sides[8];
+    child.sides[9] = this->sides[9];
+    child.sides[10] = this->turnSide(this->sides[2]);
+    child.sides[11] = this->sides[11];
     break;
   case 9:
     //Turn side 3 counter clockwise
-    child.colors[3][5] = this->colors[3][0];
-    child.colors[3][3] = this->colors[3][1];
-    child.colors[3][0] = this->colors[3][2];
-    child.colors[3][6] = this->colors[3][3];
-    child.colors[3][1] = this->colors[3][4];
-    child.colors[3][7] = this->colors[3][5];
-    child.colors[3][4] = this->colors[3][6];
-    child.colors[3][2] = this->colors[3][7];
-    child.colors[2][7] = this->colors[4][2];
-    child.colors[2][4] = this->colors[4][1];
-    child.colors[2][2] = this->colors[4][0];
-    child.colors[4][2] = this->colors[0][0];
-    child.colors[4][1] = this->colors[0][3];
-    child.colors[4][0] = this->colors[0][5];
-    child.colors[0][0] = this->colors[5][5];
-    child.colors[0][3] = this->colors[5][6];
-    child.colors[0][5] = this->colors[5][7];
-    child.colors[5][5] = this->colors[2][7];
-    child.colors[5][6] = this->colors[2][4];
-    child.colors[5][7] = this->colors[2][2];
+    child.corners[0] = this->turnCornerLeft(this->corners[4]);
+    child.corners[1] = this->corners[1];
+    child.corners[2] = this->corners[2];
+    child.corners[3] = this->turnCornerLeft(this->corners[0]);
+    child.corners[4] = this->turnCornerLeft(this->corners[7]);
+    child.corners[5] = this->corners[5];
+    child.corners[6] = this->corners[6];
+    child.corners[7] = this->corners[3];
+    child.sides[0] = this->sides[11];
+    child.sides[1] = this->sides[1];
+    child.sides[2] = this->sides[2];
+    child.sides[3] = this->turnSide(this->sides[7]);
+    child.sides[4] = this->sides[4];
+    child.sides[5] = this->sides[5];
+    child.sides[6] = this->sides[6];
+    child.sides[7] = this->sides[0];
+    child.sides[8] = this->sides[8];
+    child.sides[9] = this->sides[9];
+    child.sides[10] = this->sides[10];
+    child.sides[11] = this->turnSide(this->sides[3]);
     break;
   case 10:
     //Turn side 4 counter clockwise
-    child.colors[4][5] = this->colors[4][0];
-    child.colors[4][3] = this->colors[4][1];
-    child.colors[4][0] = this->colors[4][2];
-    child.colors[4][6] = this->colors[4][3];
-    child.colors[4][1] = this->colors[4][4];
-    child.colors[4][7] = this->colors[4][5];
-    child.colors[4][4] = this->colors[4][6];
-    child.colors[4][2] = this->colors[4][7];
-    child.colors[0][2] = this->colors[3][2];
-    child.colors[0][1] = this->colors[3][1];
-    child.colors[0][0] = this->colors[3][0];
-    child.colors[3][2] = this->colors[2][2];
-    child.colors[3][1] = this->colors[2][1];
-    child.colors[3][0] = this->colors[2][0];
-    child.colors[2][2] = this->colors[1][2];
-    child.colors[2][1] = this->colors[1][1];
-    child.colors[2][0] = this->colors[1][0];
-    child.colors[1][2] = this->colors[0][2];
-    child.colors[1][1] = this->colors[0][1];
-    child.colors[1][0] = this->colors[0][0];
+    child.corners[0] = this->corners[3];
+    child.corners[1] = this->corners[0];
+    child.corners[2] = this->corners[1];
+    child.corners[3] = this->corners[2];
+    child.corners[4] = this->corners[4];
+    child.corners[5] = this->corners[5];
+    child.corners[6] = this->corners[6];
+    child.corners[7] = this->corners[7];
+    child.sides[0] = this->sides[0];
+    child.sides[1] = this->sides[1];
+    child.sides[2] = this->sides[2];
+    child.sides[3] = this->sides[3];
+    child.sides[4] = this->sides[7];
+    child.sides[5] = this->sides[4];
+    child.sides[6] = this->sides[5];
+    child.sides[7] = this->sides[6];
+    child.sides[8] = this->sides[8];
+    child.sides[9] = this->sides[9];
+    child.sides[10] = this->sides[10];
+    child.sides[11] = this->sides[11];
     break;
   case 11:
     //Turn side 5 counter clockwise
-    child.colors[5][5] = this->colors[5][0];
-    child.colors[5][3] = this->colors[5][1];
-    child.colors[5][0] = this->colors[5][2];
-    child.colors[5][6] = this->colors[5][3];
-    child.colors[5][1] = this->colors[5][4];
-    child.colors[5][7] = this->colors[5][5];
-    child.colors[5][4] = this->colors[5][6];
-    child.colors[5][2] = this->colors[5][7];
-    child.colors[0][5] = this->colors[1][5];
-    child.colors[0][6] = this->colors[1][6];
-    child.colors[0][7] = this->colors[1][7];
-    child.colors[1][5] = this->colors[2][5];
-    child.colors[1][6] = this->colors[2][6];
-    child.colors[1][7] = this->colors[2][7];
-    child.colors[2][5] = this->colors[3][5];
-    child.colors[2][6] = this->colors[3][6];
-    child.colors[2][7] = this->colors[3][7];
-    child.colors[3][5] = this->colors[0][5];
-    child.colors[3][6] = this->colors[0][6];
-    child.colors[3][7] = this->colors[0][7];
+    child.corners[0] = this->corners[0];
+    child.corners[1] = this->corners[1];
+    child.corners[2] = this->corners[2];
+    child.corners[3] = this->corners[3];
+    child.corners[4] = this->corners[5];
+    child.corners[5] = this->corners[6];
+    child.corners[6] = this->corners[7];
+    child.corners[7] = this->corners[4];
+    child.sides[0] = this->sides[0];
+    child.sides[1] = this->sides[1];
+    child.sides[2] = this->sides[2];
+    child.sides[3] = this->sides[3];
+    child.sides[4] = this->sides[4];
+    child.sides[5] = this->sides[5];
+    child.sides[6] = this->sides[6];
+    child.sides[7] = this->sides[7];
+    child.sides[8] = this->sides[9];
+    child.sides[9] = this->sides[10];
+    child.sides[10] = this->sides[11];
+    child.sides[11] = this->sides[8];
     break;
   default:
     break;
-  }*/
+  }
   return child;
 }
 
@@ -373,378 +373,601 @@ RubixCube20B RubixCube20B::returnChild(int move)
 RubixCube20B RubixCube20B::returnRot(int rot)
 {
   RubixCube20B rotatedCube;
-  rotatedCube.parent = this;
-  /*switch(rot)                         //////////////////TODOTODOTODOTODOTODOTODOTODO
+  switch(rot)
   {
   case 0:
     //Side 0 forwards
-    rotatedCube.setSide(0, this, 3);
-    rotatedCube.setSide(1, this, 0);
-    rotatedCube.setSide(2, this, 1);
-    rotatedCube.setSide(3, this, 2);
-    rotatedCube.setSideRotLeft(4, this, 4);
-    rotatedCube.setSideRotRight(5, this, 5);
-    rotatedCube.swapNumber(0,1,2,3);
+    rotatedCube.corners[0] = this->replaceCorner(this->corners[3], rot);
+    rotatedCube.corners[1] = this->replaceCorner(this->corners[0], rot);
+    rotatedCube.corners[2] = this->replaceCorner(this->corners[1], rot);
+    rotatedCube.corners[3] = this->replaceCorner(this->corners[2], rot);
+    rotatedCube.corners[4] = this->replaceCorner(this->corners[7], rot);
+    rotatedCube.corners[5] = this->replaceCorner(this->corners[4], rot);
+    rotatedCube.corners[6] = this->replaceCorner(this->corners[5], rot);
+    rotatedCube.corners[7] = this->replaceCorner(this->corners[6], rot);
+    rotatedCube.sides[0] = this->replaceSide(this->sides[3], rot);
+    rotatedCube.sides[1] = this->replaceSide(this->sides[0], rot);
+    rotatedCube.sides[2] = this->replaceSide(this->sides[1], rot);
+    rotatedCube.sides[3] = this->replaceSide(this->sides[2], rot);
+    rotatedCube.sides[4] = this->replaceSide(this->sides[7], rot);
+    rotatedCube.sides[5] = this->replaceSide(this->sides[4], rot);
+    rotatedCube.sides[6] = this->replaceSide(this->sides[5], rot);
+    rotatedCube.sides[7] = this->replaceSide(this->sides[6], rot);
+    rotatedCube.sides[8] = this->replaceSide(this->sides[11], rot);
+    rotatedCube.sides[9] = this->replaceSide(this->sides[8], rot);
+    rotatedCube.sides[10] = this->replaceSide(this->sides[9], rot);
+    rotatedCube.sides[11] = this->replaceSide(this->sides[10], rot);
     break;
   case 1:
     //Side 0 forwards rotate left
-    rotatedCube.setSideRotX(0, this, 4);
-    rotatedCube.setSideRotLeft(4, this, 1);
-    rotatedCube.setSideRotLeft(1, this, 0);
-    rotatedCube.setSide(2, this, 5);
-    rotatedCube.setSideRotLeft(5, this, 3);
-    rotatedCube.setSideRotRight(3, this, 2);
-    rotatedCube.swapNumber(0,1,4);
-    rotatedCube.swapNumber(2,3,5);
+    rotatedCube.corners[0] = this->turnCornerRight(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[1] = this->turnCornerLeft(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[2] = this->turnCornerLeft(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[3] = this->replaceCorner(this->corners[6], rot);
+    rotatedCube.corners[4] = this->turnCornerRight(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[5] = this->replaceCorner(this->corners[0], rot);
+    rotatedCube.corners[6] = this->turnCornerLeft(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[7] = this->turnCornerRight(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.sides[0] = this->replaceSide(this->sides[6], rot);
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[4], rot));
+    rotatedCube.sides[2] = this->replaceSide(this->sides[8], rot);
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[10], rot));
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[5], rot));
+    rotatedCube.sides[5] = this->replaceSide(this->sides[1], rot);
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[9], rot));
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[2], rot));
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[7], rot));
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[0], rot));
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[11], rot));
+    rotatedCube.sides[11] = this->replaceSide(this->sides[3], rot);
     break;
   case 2:
     //Side 0 forwards rotate 2x
-    rotatedCube.setSideRotX(1, this, 0);
-    rotatedCube.setSideRotX(0, this, 1);
-    rotatedCube.setSideRotX(3, this, 2);
-    rotatedCube.setSideRotX(2, this, 3);
-    rotatedCube.setSideRotRight(5, this, 4);
-    rotatedCube.setSideRotLeft(4, this, 5);
-    rotatedCube.swapNumber(0,1);
-    rotatedCube.swapNumber(2,3);
-    rotatedCube.swapNumber(4,5);
+    rotatedCube.corners[0] = this->turnCornerRight(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[1] = this->turnCornerRight(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[2] = this->turnCornerRight(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[3] = this->turnCornerRight(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[4] = this->turnCornerLeft(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[5] = this->turnCornerLeft(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[6] = this->turnCornerLeft(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[7] = this->turnCornerLeft(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[2], rot));
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[1], rot));
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[0], rot));
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[3], rot));
+    rotatedCube.sides[4] = this->replaceSide(this->sides[9], rot);
+    rotatedCube.sides[5] = this->replaceSide(this->sides[8], rot);
+    rotatedCube.sides[6] = this->replaceSide(this->sides[11], rot);
+    rotatedCube.sides[7] = this->replaceSide(this->sides[10], rot);
+    rotatedCube.sides[8] = this->replaceSide(this->sides[5], rot);
+    rotatedCube.sides[9] = this->replaceSide(this->sides[4], rot);
+    rotatedCube.sides[10] = this->replaceSide(this->sides[7], rot);
+    rotatedCube.sides[11] = this->replaceSide(this->sides[6], rot);
     break;
   case 3:
     //Side 0 forwards rotate right
-    rotatedCube.setSideRotRight(5, this, 1);
-    rotatedCube.setSideRotRight(1, this, 0);
-    rotatedCube.setSideRotX(0, this, 5);
-    rotatedCube.setSideRotRight(4, this, 3);
-    rotatedCube.setSideRotLeft(3, this, 2);
-    rotatedCube.setSide(2, this, 4);
-    rotatedCube.swapNumber(0,1,5);
-    rotatedCube.swapNumber(2,3,4);
+    rotatedCube.corners[0] = this->turnCornerLeft(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[1] = this->replaceCorner(this->corners[4], rot);
+    rotatedCube.corners[2] = this->turnCornerRight(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[3] = this->turnCornerLeft(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[4] = this->turnCornerLeft(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[5] = this->turnCornerRight(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[6] = this->turnCornerRight(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[7] = this->replaceCorner(this->corners[2], rot);
+    rotatedCube.sides[0] = this->replaceSide(this->sides[10], rot);
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[8], rot));
+    rotatedCube.sides[2] = this->replaceSide(this->sides[4], rot);
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[6], rot));
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[11], rot));
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[0], rot));
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[7], rot));
+    rotatedCube.sides[7] = this->replaceSide(this->sides[3], rot);
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[9], rot));
+    rotatedCube.sides[9] = this->replaceSide(this->sides[1], rot);
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[5], rot));
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[2], rot));
     break;
   case 4:
     //Side 1 forwards
-    rotatedCube.setSide(0, this, 0);
-    rotatedCube.setSide(1, this, 1);
-    rotatedCube.setSide(2, this, 2);
-    rotatedCube.setSide(3, this, 3);
-    rotatedCube.setSide(4, this, 4);
-    rotatedCube.setSide(5, this, 5);
+    rotatedCube.corners[0] = this->corners[0];
+    rotatedCube.corners[1] = this->corners[1];
+    rotatedCube.corners[2] = this->corners[2];
+    rotatedCube.corners[3] = this->corners[3];
+    rotatedCube.corners[4] = this->corners[4];
+    rotatedCube.corners[5] = this->corners[5];
+    rotatedCube.corners[6] = this->corners[6];
+    rotatedCube.corners[7] = this->corners[7];
+    rotatedCube.sides[0] = this->sides[0];
+    rotatedCube.sides[1] = this->sides[1];
+    rotatedCube.sides[2] = this->sides[2];
+    rotatedCube.sides[3] = this->sides[3];
+    rotatedCube.sides[4] = this->sides[4];
+    rotatedCube.sides[5] = this->sides[5];
+    rotatedCube.sides[6] = this->sides[6];
+    rotatedCube.sides[7] = this->sides[7];
+    rotatedCube.sides[8] = this->sides[8];
+    rotatedCube.sides[9] = this->sides[9];
+    rotatedCube.sides[10] = this->sides[10];
+    rotatedCube.sides[11] = this->sides[11];
     break;
   case 5:
     //Side 1 forwards rotate left
-    rotatedCube.setSideRotLeft(1, this, 1);
-    rotatedCube.setSideRotLeft(2, this, 5);
-    rotatedCube.setSideRotLeft(5, this, 0);
-    rotatedCube.setSideRotLeft(0, this, 4);
-    rotatedCube.setSideRotLeft(4, this, 2);
-    rotatedCube.setSideRotRight(3, this, 3);
-    rotatedCube.swapNumber(4,0,5,2);
+    rotatedCube.corners[0] = this->turnCornerRight(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[1] = this->turnCornerLeft(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[2] = this->turnCornerLeft(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[3] = this->replaceCorner(this->corners[7], rot);
+    rotatedCube.corners[4] = this->turnCornerRight(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[5] = this->replaceCorner(this->corners[1], rot);
+    rotatedCube.corners[6] = this->turnCornerLeft(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[7] = this->turnCornerRight(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.sides[0] = this->replaceSide(this->sides[7], rot);
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[5], rot));
+    rotatedCube.sides[2] = this->replaceSide(this->sides[9], rot);
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[11], rot));
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[6], rot));
+    rotatedCube.sides[5] = this->replaceSide(this->sides[2], rot);
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[10], rot));
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[3], rot));
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[4], rot));
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[1], rot));
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[8], rot));
+    rotatedCube.sides[11] = this->replaceSide(this->sides[0], rot);
     break;
   case 6:
     //Side 1 forwards rotate 2x
-    rotatedCube.setSideRotX(1, this, 1);
-    rotatedCube.setSideRotX(5, this, 4);
-    rotatedCube.setSideRotX(4, this, 5);
-    rotatedCube.setSideRotX(2, this, 0);
-    rotatedCube.setSideRotX(0, this, 2);
-    rotatedCube.setSideRotX(3, this, 3);
-    rotatedCube.swapNumber(4,5);
-    rotatedCube.swapNumber(0,2);
+    rotatedCube.corners[0] = this->turnCornerRight(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[1] = this->turnCornerRight(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[2] = this->turnCornerRight(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[3] = this->turnCornerRight(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[4] = this->turnCornerLeft(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[5] = this->turnCornerLeft(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[6] = this->turnCornerLeft(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[7] = this->turnCornerLeft(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[3], rot));
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[2], rot));
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[1], rot));
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[0], rot));
+    rotatedCube.sides[4] = this->replaceSide(this->sides[10], rot);
+    rotatedCube.sides[5] = this->replaceSide(this->sides[9], rot);
+    rotatedCube.sides[6] = this->replaceSide(this->sides[8], rot);
+    rotatedCube.sides[7] = this->replaceSide(this->sides[11], rot);
+    rotatedCube.sides[8] = this->replaceSide(this->sides[6], rot);
+    rotatedCube.sides[9] = this->replaceSide(this->sides[5], rot);
+    rotatedCube.sides[10] = this->replaceSide(this->sides[4], rot);
+    rotatedCube.sides[11] = this->replaceSide(this->sides[7], rot);
     break;
   case 7:
     //Side 1 forwards rotate right
-    rotatedCube.setSideRotRight(1, this, 1);
-    rotatedCube.setSideRotRight(0, this, 5);
-    rotatedCube.setSideRotRight(5, this, 2);
-    rotatedCube.setSideRotRight(2, this, 4);
-    rotatedCube.setSideRotRight(4, this, 0);
-    rotatedCube.setSideRotLeft(3, this, 3);
-    rotatedCube.swapNumber(4,2,5,0);
+    rotatedCube.corners[0] = this->turnCornerLeft(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[1] = this->replaceCorner(this->corners[5], rot);
+    rotatedCube.corners[2] = this->turnCornerRight(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[3] = this->turnCornerLeft(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[4] = this->turnCornerLeft(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[5] = this->turnCornerRight(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[6] = this->turnCornerRight(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[7] = this->replaceCorner(this->corners[3], rot);
+    rotatedCube.sides[0] = this->replaceSide(this->sides[11], rot);
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[9], rot));
+    rotatedCube.sides[2] = this->replaceSide(this->sides[5], rot);
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[7], rot));
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[8], rot));
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[1], rot));
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[4], rot));
+    rotatedCube.sides[7] = this->replaceSide(this->sides[0], rot);
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[10], rot));
+    rotatedCube.sides[9] = this->replaceSide(this->sides[2], rot);
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[6], rot));
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[3], rot));
     break;
   case 8:
     //Side 2 forwards
-    rotatedCube.setSideRotRight(4, this, 4);
-    rotatedCube.setSide(3, this, 0);
-    rotatedCube.setSide(0, this, 1);
-    rotatedCube.setSide(1, this, 2);
-    rotatedCube.setSide(2, this, 3);
-    rotatedCube.setSideRotLeft(5, this, 5);
-    rotatedCube.swapNumber(2,1,0,3);
+    rotatedCube.corners[0] = this->replaceCorner(this->corners[1], rot);
+    rotatedCube.corners[1] = this->replaceCorner(this->corners[2], rot);
+    rotatedCube.corners[2] = this->replaceCorner(this->corners[3], rot);
+    rotatedCube.corners[3] = this->replaceCorner(this->corners[0], rot);
+    rotatedCube.corners[4] = this->replaceCorner(this->corners[5], rot);
+    rotatedCube.corners[5] = this->replaceCorner(this->corners[6], rot);
+    rotatedCube.corners[6] = this->replaceCorner(this->corners[7], rot);
+    rotatedCube.corners[7] = this->replaceCorner(this->corners[4], rot);
+    rotatedCube.sides[0] = this->replaceSide(this->sides[1], rot);
+    rotatedCube.sides[1] = this->replaceSide(this->sides[2], rot);
+    rotatedCube.sides[2] = this->replaceSide(this->sides[3], rot);
+    rotatedCube.sides[3] = this->replaceSide(this->sides[0], rot);
+    rotatedCube.sides[4] = this->replaceSide(this->sides[5], rot);
+    rotatedCube.sides[5] = this->replaceSide(this->sides[6], rot);
+    rotatedCube.sides[6] = this->replaceSide(this->sides[7], rot);
+    rotatedCube.sides[7] = this->replaceSide(this->sides[4], rot);
+    rotatedCube.sides[8] = this->replaceSide(this->sides[9], rot);
+    rotatedCube.sides[9] = this->replaceSide(this->sides[10], rot);
+    rotatedCube.sides[10] = this->replaceSide(this->sides[11], rot);
+    rotatedCube.sides[11] = this->replaceSide(this->sides[8], rot);
     break;
   case 9:
     //Side 2 forwards rotate left
-    rotatedCube.setSideRotLeft(5, this, 1);
-    rotatedCube.setSideRotLeft(1, this, 2);
-    rotatedCube.setSideRotX(2, this, 5);
-    rotatedCube.setSideRotLeft(4, this, 3);
-    rotatedCube.setSideRotRight(3, this, 0);
-    rotatedCube.setSide(0, this, 4);
-    rotatedCube.swapNumber(2,1,5);
-    rotatedCube.swapNumber(0,3,4);
+    rotatedCube.corners[0] = this->turnCornerRight(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[1] = this->turnCornerLeft(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[2] = this->turnCornerLeft(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[3] = this->replaceCorner(this->corners[4], rot);
+    rotatedCube.corners[4] = this->turnCornerRight(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[5] = this->replaceCorner(this->corners[2], rot);
+    rotatedCube.corners[6] = this->turnCornerLeft(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[7] = this->turnCornerRight(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.sides[0] = this->replaceSide(this->sides[4], rot);
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[6], rot));
+    rotatedCube.sides[2] = this->replaceSide(this->sides[10], rot);
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[8], rot));
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[7], rot));
+    rotatedCube.sides[5] = this->replaceSide(this->sides[3], rot);
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[11], rot));
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[0], rot));
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[5], rot));
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[2], rot));
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[9], rot));
+    rotatedCube.sides[11] = this->replaceSide(this->sides[1], rot);
     break;
   case 10:
     //Side 2 forwards rotate 2x
-    rotatedCube.setSideRotX(2, this, 1);
-    rotatedCube.setSideRotX(1, this, 2);
-    rotatedCube.setSideRotX(0, this, 3);
-    rotatedCube.setSideRotX(3, this, 0);
-    rotatedCube.setSideRotRight(4, this, 5);
-    rotatedCube.setSideRotLeft(5, this, 4);
-    rotatedCube.swapNumber(2,1);
-    rotatedCube.swapNumber(0,3);
-    rotatedCube.swapNumber(4,5);
+    rotatedCube.corners[0] = this->turnCornerRight(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[1] = this->turnCornerRight(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[2] = this->turnCornerRight(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[3] = this->turnCornerRight(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[4] = this->turnCornerLeft(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[5] = this->turnCornerLeft(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[6] = this->turnCornerLeft(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[7] = this->turnCornerLeft(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[0], rot));
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[3], rot));
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[2], rot));
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[1], rot));
+    rotatedCube.sides[4] = this->replaceSide(this->sides[11], rot);
+    rotatedCube.sides[5] = this->replaceSide(this->sides[10], rot);
+    rotatedCube.sides[6] = this->replaceSide(this->sides[9], rot);
+    rotatedCube.sides[7] = this->replaceSide(this->sides[8], rot);
+    rotatedCube.sides[8] = this->replaceSide(this->sides[7], rot);
+    rotatedCube.sides[9] = this->replaceSide(this->sides[6], rot);
+    rotatedCube.sides[10] = this->replaceSide(this->sides[5], rot);
+    rotatedCube.sides[11] = this->replaceSide(this->sides[4], rot);
     break;
   case 11:
     //Side 2 forwards rotate right
-    rotatedCube.setSideRotRight(4, this, 1);
-    rotatedCube.setSideRotRight(1, this, 2);
-    rotatedCube.setSideRotX(2, this, 4);
-    rotatedCube.setSideRotRight(5, this, 3);
-    rotatedCube.setSideRotLeft(3, this, 0);
-    rotatedCube.setSide(0, this, 5);
-    rotatedCube.swapNumber(2,1,4);
-    rotatedCube.swapNumber(0,3,5);
+    rotatedCube.corners[0] = this->turnCornerLeft(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[1] = this->replaceCorner(this->corners[6], rot);
+    rotatedCube.corners[2] = this->turnCornerRight(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[3] = this->turnCornerLeft(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[4] = this->turnCornerLeft(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[5] = this->turnCornerRight(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[6] = this->turnCornerRight(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[7] = this->replaceCorner(this->corners[0], rot);
+    rotatedCube.sides[0] = this->replaceSide(this->sides[8], rot);
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[10], rot));
+    rotatedCube.sides[2] = this->replaceSide(this->sides[6], rot);
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[4], rot));
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[9], rot));
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[2], rot));
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[5], rot));
+    rotatedCube.sides[7] = this->replaceSide(this->sides[1], rot);
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[11], rot));
+    rotatedCube.sides[9] = this->replaceSide(this->sides[3], rot);
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[7], rot));
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[0], rot));
     break;
   case 12:
     //Side 3 forwards
-    rotatedCube.setSide(1, this, 3);
-    rotatedCube.setSide(3, this, 1);
-    rotatedCube.setSide(0, this, 2);
-    rotatedCube.setSide(2, this, 0);
-    rotatedCube.setSideRotX(4, this, 4);
-    rotatedCube.setSideRotX(5, this, 5);
-    rotatedCube.swapNumber(1,3);
-    rotatedCube.swapNumber(0,2);
+    rotatedCube.corners[0] = this->replaceCorner(this->corners[2], rot);
+    rotatedCube.corners[1] = this->replaceCorner(this->corners[3], rot);
+    rotatedCube.corners[2] = this->replaceCorner(this->corners[0], rot);
+    rotatedCube.corners[3] = this->replaceCorner(this->corners[1], rot);
+    rotatedCube.corners[4] = this->replaceCorner(this->corners[6], rot);
+    rotatedCube.corners[5] = this->replaceCorner(this->corners[7], rot);
+    rotatedCube.corners[6] = this->replaceCorner(this->corners[4], rot);
+    rotatedCube.corners[7] = this->replaceCorner(this->corners[5], rot);
+    rotatedCube.sides[0] = this->replaceSide(this->sides[2], rot);
+    rotatedCube.sides[1] = this->replaceSide(this->sides[3], rot);
+    rotatedCube.sides[2] = this->replaceSide(this->sides[0], rot);
+    rotatedCube.sides[3] = this->replaceSide(this->sides[1], rot);
+    rotatedCube.sides[4] = this->replaceSide(this->sides[6], rot);
+    rotatedCube.sides[5] = this->replaceSide(this->sides[7], rot);
+    rotatedCube.sides[6] = this->replaceSide(this->sides[4], rot);
+    rotatedCube.sides[7] = this->replaceSide(this->sides[5], rot);
+    rotatedCube.sides[8] = this->replaceSide(this->sides[10], rot);
+    rotatedCube.sides[9] = this->replaceSide(this->sides[11], rot);
+    rotatedCube.sides[10] = this->replaceSide(this->sides[8], rot);
+    rotatedCube.sides[11] = this->replaceSide(this->sides[9], rot);
     break;
   case 13:
     //Side 3 forwards rotate left
-    rotatedCube.setSideRotRight(0, this, 4);
-    rotatedCube.setSideRotLeft(4, this, 0);
-    rotatedCube.setSideRotLeft(1, this, 3);
-    rotatedCube.setSideRotRight(3, this, 1);
-    rotatedCube.setSideRotRight(2, this, 5);
-    rotatedCube.setSideRotLeft(5, this, 2);
-    rotatedCube.swapNumber(0,4);
-    rotatedCube.swapNumber(1,3);
-    rotatedCube.swapNumber(2,5);
+    rotatedCube.corners[0] = this->turnCornerRight(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[1] = this->turnCornerLeft(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[2] = this->turnCornerLeft(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[3] = this->replaceCorner(this->corners[5], rot);
+    rotatedCube.corners[4] = this->turnCornerRight(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[5] = this->replaceCorner(this->corners[3], rot);
+    rotatedCube.corners[6] = this->turnCornerLeft(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[7] = this->turnCornerRight(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.sides[0] = this->replaceSide(this->sides[5], rot);
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[7], rot));
+    rotatedCube.sides[2] = this->replaceSide(this->sides[11], rot);
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[9], rot));
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[4], rot));
+    rotatedCube.sides[5] = this->replaceSide(this->sides[0], rot);
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[8], rot));
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[1], rot));
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[6], rot));
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[3], rot));
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[10], rot));
+    rotatedCube.sides[11] = this->replaceSide(this->sides[2], rot);
     break;
   case 14:
     //Side 3 forwards rotate 2x
-    rotatedCube.setSideRotX(0, this, 0);
-    rotatedCube.setSideRotX(2, this, 2);
-    rotatedCube.setSideRotX(1, this, 3);
-    rotatedCube.setSideRotX(3, this, 1);
-    rotatedCube.setSide(4, this, 5);
-    rotatedCube.setSide(5, this, 4);
-    rotatedCube.swapNumber(1,3);
-    rotatedCube.swapNumber(4,5);
+    rotatedCube.corners[0] = this->turnCornerRight(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[1] = this->turnCornerRight(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[2] = this->turnCornerRight(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[3] = this->turnCornerRight(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[4] = this->turnCornerLeft(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[5] = this->turnCornerLeft(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[6] = this->turnCornerLeft(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[7] = this->turnCornerLeft(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[1], rot));
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[0], rot));
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[3], rot));
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[2], rot));
+    rotatedCube.sides[4] = this->replaceSide(this->sides[8], rot);
+    rotatedCube.sides[5] = this->replaceSide(this->sides[11], rot);
+    rotatedCube.sides[6] = this->replaceSide(this->sides[10], rot);
+    rotatedCube.sides[7] = this->replaceSide(this->sides[9], rot);
+    rotatedCube.sides[8] = this->replaceSide(this->sides[4], rot);
+    rotatedCube.sides[9] = this->replaceSide(this->sides[7], rot);
+    rotatedCube.sides[10] = this->replaceSide(this->sides[6], rot);
+    rotatedCube.sides[11] = this->replaceSide(this->sides[5], rot);
     break;
   case 15:
     //Side 3 forwards rotate right
-    rotatedCube.setSideRotLeft(0, this, 5);
-    rotatedCube.setSideRotRight(5, this, 0);
-    rotatedCube.setSideRotRight(1, this, 3);
-    rotatedCube.setSideRotLeft(3, this, 1);
-    rotatedCube.setSideRotLeft(2, this, 4);
-    rotatedCube.setSideRotRight(4, this, 2);
-    rotatedCube.swapNumber(0,5);
-    rotatedCube.swapNumber(1,3);
-    rotatedCube.swapNumber(2,4);
+    rotatedCube.corners[0] = this->turnCornerLeft(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[1] = this->replaceCorner(this->corners[7], rot);
+    rotatedCube.corners[2] = this->turnCornerRight(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[3] = this->turnCornerLeft(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[4] = this->turnCornerLeft(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[5] = this->turnCornerRight(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[6] = this->turnCornerRight(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[7] = this->replaceCorner(this->corners[1], rot);
+    rotatedCube.sides[0] = this->replaceSide(this->sides[9], rot);
+    rotatedCube.sides[1] = this->turnSide(this->replaceSide(this->sides[11], rot));
+    rotatedCube.sides[2] = this->replaceSide(this->sides[7], rot);
+    rotatedCube.sides[3] = this->turnSide(this->replaceSide(this->sides[5], rot));
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[10], rot));
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[3], rot));
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[6], rot));
+    rotatedCube.sides[7] = this->replaceSide(this->sides[2], rot);
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[8], rot));
+    rotatedCube.sides[9] = this->replaceSide(this->sides[0], rot);
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[4], rot));
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[1], rot));
     break;
   case 16:
     //Side 4 forwards
-    rotatedCube.setSideRotRight(0, this, 0);
-    rotatedCube.setSideRotX(4, this, 3);
-    rotatedCube.setSideRotX(3, this, 5);
-    rotatedCube.setSide(5, this, 1);
-    rotatedCube.setSide(1, this, 4);
-    rotatedCube.setSideRotLeft(2, this, 2);
-    rotatedCube.swapNumber(1,5,3,4);
+    rotatedCube.corners[0] = this->replaceCorner(this->corners[4], rot);
+    rotatedCube.corners[1] = this->turnCornerRight(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[2] = this->turnCornerLeft(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[3] = this->turnCornerLeft(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[4] = this->turnCornerRight(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[5] = this->turnCornerRight(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[6] = this->replaceCorner(this->corners[2], rot);
+    rotatedCube.corners[7] = this->turnCornerLeft(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[8], rot));
+    rotatedCube.sides[1] = this->replaceSide(this->sides[4], rot);
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[6], rot));
+    rotatedCube.sides[3] = this->replaceSide(this->sides[10], rot);
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[0], rot));
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[7], rot));
+    rotatedCube.sides[6] = this->replaceSide(this->sides[3], rot);
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[11], rot));
+    rotatedCube.sides[8] = this->replaceSide(this->sides[1], rot);
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[5], rot));
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[2], rot));
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[9], rot));
     break;
   case 17:
     //Side 4 forwards rotate left
-    rotatedCube.setSideRotLeft(3, this, 5);
-    rotatedCube.setSide(5, this, 0);
-    rotatedCube.setSideRotRight(0, this, 3);
-    rotatedCube.setSideRotX(4, this, 2);
-    rotatedCube.setSideRotLeft(2, this, 1);
-    rotatedCube.setSideRotLeft(1, this, 4);
-    rotatedCube.swapNumber(0,5,3);
-    rotatedCube.swapNumber(1,2,4);
+    rotatedCube.corners[0] = this->replaceCorner(this->corners[7], rot);
+    rotatedCube.corners[1] = this->turnCornerRight(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[2] = this->turnCornerLeft(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[3] = this->turnCornerLeft(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[4] = this->turnCornerRight(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[5] = this->turnCornerRight(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[6] = this->replaceCorner(this->corners[1], rot);
+    rotatedCube.corners[7] = this->turnCornerLeft(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[11], rot));
+    rotatedCube.sides[1] = this->replaceSide(this->sides[7], rot);
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[5], rot));
+    rotatedCube.sides[3] = this->replaceSide(this->sides[9], rot);
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[3], rot));
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[6], rot));
+    rotatedCube.sides[6] = this->replaceSide(this->sides[2], rot);
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[10], rot));
+    rotatedCube.sides[8] = this->replaceSide(this->sides[0], rot);
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[4], rot));
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[1], rot));
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[8], rot));
     break;
   case 18:
     //Side 4 forwards rotate 2x
-    rotatedCube.setSideRotRight(0, this, 2);
-    rotatedCube.setSideRotLeft(2, this, 0);
-    rotatedCube.setSideRotX(1, this, 4);
-    rotatedCube.setSideRotX(4, this, 1);
-    rotatedCube.setSide(3, this, 5);
-    rotatedCube.setSide(5, this, 3);
-    rotatedCube.swapNumber(0,2);
-    rotatedCube.swapNumber(1,4);
-    rotatedCube.swapNumber(3,5);
+    rotatedCube.corners[0] = this->replaceCorner(this->corners[6], rot);
+    rotatedCube.corners[1] = this->turnCornerRight(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[2] = this->turnCornerLeft(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[3] = this->turnCornerLeft(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[4] = this->turnCornerRight(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[5] = this->turnCornerRight(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[6] = this->replaceCorner(this->corners[0], rot);
+    rotatedCube.corners[7] = this->turnCornerLeft(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[10], rot));
+    rotatedCube.sides[1] = this->replaceSide(this->sides[6], rot);
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[4], rot));
+    rotatedCube.sides[3] = this->replaceSide(this->sides[8], rot);
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[2], rot));
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[5], rot));
+    rotatedCube.sides[6] = this->replaceSide(this->sides[1], rot);
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[9], rot));
+    rotatedCube.sides[8] = this->replaceSide(this->sides[3], rot);
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[7], rot));
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[0], rot));
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[11], rot));
     break;
   case 19:
     //Side 4 forwards rotate right
-    rotatedCube.setSideRotRight(1, this, 4);
-    rotatedCube.setSideRotX(4, this, 0);
-    rotatedCube.setSideRotRight(0, this, 1);
-    rotatedCube.setSideRotRight(3, this, 5);
-    rotatedCube.setSide(5, this, 2);
-    rotatedCube.setSideRotLeft(2, this, 3);
-    rotatedCube.swapNumber(0,4,1);
-    rotatedCube.swapNumber(2,5,3);
+    rotatedCube.corners[0] = this->replaceCorner(this->corners[5], rot);
+    rotatedCube.corners[1] = this->turnCornerRight(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[2] = this->turnCornerLeft(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[3] = this->turnCornerLeft(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[4] = this->turnCornerRight(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[5] = this->turnCornerRight(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[6] = this->replaceCorner(this->corners[3], rot);
+    rotatedCube.corners[7] = this->turnCornerLeft(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[9], rot));
+    rotatedCube.sides[1] = this->replaceSide(this->sides[5], rot);
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[7], rot));
+    rotatedCube.sides[3] = this->replaceSide(this->sides[11], rot);
+    rotatedCube.sides[4] = this->turnSide(this->replaceSide(this->sides[1], rot));
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[4], rot));
+    rotatedCube.sides[6] = this->replaceSide(this->sides[0], rot);
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[8], rot));
+    rotatedCube.sides[8] = this->replaceSide(this->sides[2], rot);
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[6], rot));
+    rotatedCube.sides[10] = this->turnSide(this->replaceSide(this->sides[3], rot));
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[10], rot));
     break;
   case 20:
     //Side 5 forwards
-    rotatedCube.setSideRotX(3, this, 4);
-    rotatedCube.setSide(4, this, 1);
-    rotatedCube.setSide(1, this, 5);
-    rotatedCube.setSide(5, this, 3);
-    rotatedCube.setSideRotLeft(0, this, 0);
-    rotatedCube.setSideRotRight(2, this, 2);
-    rotatedCube.swapNumber(5,1,4,3);
+    rotatedCube.corners[0] = this->turnCornerLeft(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[1] = this->turnCornerLeft(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[2] = this->replaceCorner(this->corners[6], rot);
+    rotatedCube.corners[3] = this->turnCornerRight(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[4] = this->replaceCorner(this->corners[0], rot);
+    rotatedCube.corners[5] = this->turnCornerLeft(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[6] = this->turnCornerRight(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[7] = this->turnCornerRight(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[4], rot));
+    rotatedCube.sides[1] = this->replaceSide(this->sides[8], rot);
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[10], rot));
+    rotatedCube.sides[3] = this->replaceSide(this->sides[6], rot);
+    rotatedCube.sides[4] = this->replaceSide(this->sides[1], rot);
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[9], rot));
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[2], rot));
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[5], rot));
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[0], rot));
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[11], rot));
+    rotatedCube.sides[10] = this->replaceSide(this->sides[3], rot);
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[7], rot));
     break;
   case 21:
     //Side 5 forwards rotate left
-    rotatedCube.setSideRotLeft(0, this, 1);
-    rotatedCube.setSideRotLeft(1, this, 5);
-    rotatedCube.setSideRotX(5, this, 0);
-    rotatedCube.setSideRotLeft(3, this, 4);
-    rotatedCube.setSide(4, this, 2);
-    rotatedCube.setSideRotRight(2, this, 3);
-    rotatedCube.swapNumber(5,1,0);
-    rotatedCube.swapNumber(2,4,3);
+    rotatedCube.corners[0] = this->turnCornerLeft(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.corners[1] = this->turnCornerLeft(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[2] = this->replaceCorner(this->corners[7], rot);
+    rotatedCube.corners[3] = this->turnCornerRight(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[4] = this->replaceCorner(this->corners[1], rot);
+    rotatedCube.corners[5] = this->turnCornerLeft(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[6] = this->turnCornerRight(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[7] = this->turnCornerRight(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[5], rot));
+    rotatedCube.sides[1] = this->replaceSide(this->sides[9], rot);
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[11], rot));
+    rotatedCube.sides[3] = this->replaceSide(this->sides[7], rot);
+    rotatedCube.sides[4] = this->replaceSide(this->sides[2], rot);
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[10], rot));
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[3], rot));
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[6], rot));
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[1], rot));
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[8], rot));
+    rotatedCube.sides[10] = this->replaceSide(this->sides[0], rot);
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[4], rot));
     break;
   case 22:
     //Side 5 forwards rotate 2x
-    rotatedCube.setSideRotX(5, this, 1);
-    rotatedCube.setSideRotX(1, this, 5);
-    rotatedCube.setSideRotLeft(0, this, 2);
-    rotatedCube.setSideRotRight(2, this, 0);
-    rotatedCube.setSide(3, this, 4);
-    rotatedCube.setSide(4, this, 3);
-    rotatedCube.swapNumber(5,1);
-    rotatedCube.swapNumber(2,0);
-    rotatedCube.swapNumber(3,4);
+    rotatedCube.corners[0] = this->turnCornerLeft(this->replaceCorner(this->corners[3], rot));
+    rotatedCube.corners[1] = this->turnCornerLeft(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[2] = this->replaceCorner(this->corners[4], rot);
+    rotatedCube.corners[3] = this->turnCornerRight(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[4] = this->replaceCorner(this->corners[2], rot);
+    rotatedCube.corners[5] = this->turnCornerLeft(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[6] = this->turnCornerRight(this->replaceCorner(this->corners[5], rot));
+    rotatedCube.corners[7] = this->turnCornerRight(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[6], rot));
+    rotatedCube.sides[1] = this->replaceSide(this->sides[10], rot);
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[8], rot));
+    rotatedCube.sides[3] = this->replaceSide(this->sides[4], rot);
+    rotatedCube.sides[4] = this->replaceSide(this->sides[3], rot);
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[11], rot));
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[0], rot));
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[7], rot));
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[2], rot));
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[9], rot));
+    rotatedCube.sides[10] = this->replaceSide(this->sides[1], rot);
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[5], rot));
     break;
   case 23:
     //Side 5 forwards rotate right
-    rotatedCube.setSideRotRight(2, this, 1);
-    rotatedCube.setSideRotRight(1, this, 5);
-    rotatedCube.setSideRotX(5, this, 2);
-    rotatedCube.setSide(4, this, 0);
-    rotatedCube.setSideRotLeft(0, this, 3);
-    rotatedCube.setSideRotRight(3, this, 4);
-    rotatedCube.swapNumber(5,1,2);
-    rotatedCube.swapNumber(3,0,4);
+    rotatedCube.corners[0] = this->turnCornerLeft(this->replaceCorner(this->corners[0], rot));
+    rotatedCube.corners[1] = this->turnCornerLeft(this->replaceCorner(this->corners[4], rot));
+    rotatedCube.corners[2] = this->replaceCorner(this->corners[5], rot);
+    rotatedCube.corners[3] = this->turnCornerRight(this->replaceCorner(this->corners[1], rot));
+    rotatedCube.corners[4] = this->replaceCorner(this->corners[3], rot);
+    rotatedCube.corners[5] = this->turnCornerLeft(this->replaceCorner(this->corners[7], rot));
+    rotatedCube.corners[6] = this->turnCornerRight(this->replaceCorner(this->corners[6], rot));
+    rotatedCube.corners[7] = this->turnCornerRight(this->replaceCorner(this->corners[2], rot));
+    rotatedCube.sides[0] = this->turnSide(this->replaceSide(this->sides[7], rot));
+    rotatedCube.sides[1] = this->replaceSide(this->sides[11], rot);
+    rotatedCube.sides[2] = this->turnSide(this->replaceSide(this->sides[9], rot));
+    rotatedCube.sides[3] = this->replaceSide(this->sides[5], rot);
+    rotatedCube.sides[4] = this->replaceSide(this->sides[0], rot);
+    rotatedCube.sides[5] = this->turnSide(this->replaceSide(this->sides[8], rot));
+    rotatedCube.sides[6] = this->turnSide(this->replaceSide(this->sides[1], rot));
+    rotatedCube.sides[7] = this->turnSide(this->replaceSide(this->sides[4], rot));
+    rotatedCube.sides[8] = this->turnSide(this->replaceSide(this->sides[3], rot));
+    rotatedCube.sides[9] = this->turnSide(this->replaceSide(this->sides[10], rot));
+    rotatedCube.sides[10] = this->replaceSide(this->sides[2], rot);
+    rotatedCube.sides[11] = this->turnSide(this->replaceSide(this->sides[6], rot));
     break;
   default:
     break;
-  }*/
+  }
   return rotatedCube;
 }
 
 
-void RubixCube20B::setSide(int side, RubixCube20B* other, int otherSide)
+__int8 RubixCube20B::replaceSide(__int8 side, int rot)
 {
-  /*this->colors[side][0] = other->colors[otherSide][0];            ///////////////TODOTODOTODOTODO
-  this->colors[side][1] = other->colors[otherSide][1];
-  this->colors[side][2] = other->colors[otherSide][2];
-  this->colors[side][3] = other->colors[otherSide][3];
-  this->colors[side][4] = other->colors[otherSide][4];
-  this->colors[side][5] = other->colors[otherSide][5];
-  this->colors[side][6] = other->colors[otherSide][6];
-  this->colors[side][7] = other->colors[otherSide][7];*/
+  return 0;
 }
 
 
-void RubixCube20B::setSideRotLeft(int side, RubixCube20B* other, int otherSide)
+__int8 RubixCube20B::replaceCorner(__int8 corner, int rot)
 {
-  /*this->colors[side][0] = other->colors[otherSide][2];             ///////////////TODOTODOTODOTODO
-  this->colors[side][1] = other->colors[otherSide][4];
-  this->colors[side][2] = other->colors[otherSide][7];
-  this->colors[side][3] = other->colors[otherSide][1];
-  this->colors[side][4] = other->colors[otherSide][6];
-  this->colors[side][5] = other->colors[otherSide][0];
-  this->colors[side][6] = other->colors[otherSide][3];
-  this->colors[side][7] = other->colors[otherSide][5];*/
+    return 0;
 }
 
 
-void RubixCube20B::setSideRotRight(int side, RubixCube20B* other, int otherSide)
+__int8 RubixCube20B::turnSide(__int8 side)
 {
-  /*this->colors[side][0] = other->colors[otherSide][5];            ///////////////TODOTODOTODOTODO
-  this->colors[side][1] = other->colors[otherSide][3];
-  this->colors[side][2] = other->colors[otherSide][0];
-  this->colors[side][3] = other->colors[otherSide][6];
-  this->colors[side][4] = other->colors[otherSide][1];
-  this->colors[side][5] = other->colors[otherSide][7];
-  this->colors[side][6] = other->colors[otherSide][4];
-  this->colors[side][7] = other->colors[otherSide][2];*/
+  if((side&1) == 1)
+    return side-1;
+  else
+    return side+1;
 }
 
-
-void RubixCube20B::setSideRotX(int side, RubixCube20B* other, int otherSide)
+__int8 RubixCube20B::turnCornerRight(__int8 corner)
 {
-  /*this->colors[side][0] = other->colors[otherSide][7];            ///////////////TODOTODOTODOTODO
-  this->colors[side][1] = other->colors[otherSide][6];
-  this->colors[side][2] = other->colors[otherSide][5];
-  this->colors[side][3] = other->colors[otherSide][4];
-  this->colors[side][4] = other->colors[otherSide][3];
-  this->colors[side][5] = other->colors[otherSide][2];
-  this->colors[side][6] = other->colors[otherSide][1];
-  this->colors[side][7] = other->colors[otherSide][0];*/
+  if((corner&3) < 2)
+    return corner+1;
+  else
+    return corner-2;
 }
 
-
-void RubixCube20B::swapNumber(int a, int b)
+__int8 RubixCube20B::turnCornerLeft(__int8 corner)
 {
-  /*for(int side=0; side<6; side++)            ///////////////TODOTODOTODOTODO
-  {
-    for(int square=0; square<8; square++)
-    {
-      if(this->colors[side][square] == a)
-        this->colors[side][square] = b;
-      else if(this->colors[side][square] == b)
-        this->colors[side][square] = a;
-    }
-  }*/
-}
-
-
-void RubixCube20B::swapNumber(int a, int b, int c)
-{
-  /*for(int side=0; side<6; side++)            ///////////////TODOTODOTODOTODO
-  {
-    for(int square=0; square<8; square++)
-    {
-      if(this->colors[side][square] == a)
-        this->colors[side][square] = b;
-      else if(this->colors[side][square] == b)
-        this->colors[side][square] = c;
-      else if(this->colors[side][square] == c)
-        this->colors[side][square] = a;
-    }
-  }*/
-}
-
-
-void RubixCube20B::swapNumber(int a, int b, int c, int d)
-{
-  /*for(int side=0; side<6; side++)            ///////////////TODOTODOTODOTODO
-  {
-    for(int square=0; square<8; square++)
-    {
-      if(this->colors[side][square] == a)
-        this->colors[side][square] = b;
-      else if(this->colors[side][square] == b)
-        this->colors[side][square] = c;
-      else if(this->colors[side][square] == c)
-        this->colors[side][square] = d;
-      else if(this->colors[side][square] == d)
-        this->colors[side][square] = a;
-    }
-  }*/
+  if((corner&3) > 0)
+    return corner-1;
+  else
+    return corner+2;
 }
 
 RubixCube20B::~RubixCube20B()
