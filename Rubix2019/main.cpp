@@ -13,7 +13,7 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress = false);
 int main()
 {
   //generateCubesVector(6);
-  generateCubesSet(10);
+  generateCubes20BSet(2);
 }
 
 void generateCubesVector(int maxGenerations, bool outputProgress)
@@ -263,46 +263,25 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
   auto chronoTimeStart = std::chrono::steady_clock::now();
   auto chronoTimeFinish = std::chrono::steady_clock::now();
   double timePassed;
-  CubeContainer child;
-  CubeContainer rotChild;
-  RubixCube* r;
-  RubixCube* lastChild;
-  CubeContainer c;
-  std::set<CubeContainer> rSet;
+  CubeContainer20B child;
+  CubeContainer20B rotChild;
+  RubixCube20B* r;
+  RubixCube20B* lastChild;
+  CubeContainer20B c;
+  std::set<CubeContainer20B> rSet;
   std::vector<int> gVector;
   std::vector<double> tVector;
-  RubixCube* trackGenerations[50];
+  RubixCube20B* trackGenerations[50];
   bool unique;
   bool moveUp;
   int generation;
   int totalPopulation;
 
-  __int8 arr[6][8] = {
-           {0, 0, 0,
-            0,    0,
-            0, 0, 0},
-                      {1, 1, 1,
-                       1,    1,
-                       1, 1, 1},
-                                {2, 2, 2,
-                                 2,    2,
-                                 2, 2, 2},
-                                          {3, 3, 3,
-                                           3,    3,
-                                           3, 3, 3},
-                      {4, 4, 4,
-                       4,    4,
-                       4, 4, 4},
-
-                      {5, 5, 5,
-                       5,    5,
-                       5, 5, 5}};
-
-
-  r = new RubixCube;
-  for(int side = 0; side<6; side++)
-    for(int square = 0; square<8; square++)
-      r->colors[side][square] = arr[side][square];
+  r = new RubixCube20B;
+  for(int side = 0; side<12; side++)
+      r->sides[side] = side*2+1;
+  for(int corner = 0; corner<8; corner++)
+      r->corners[corner] = corner*3+1;
   c.cube = r;
   trackGenerations[0] = r;
   rSet.insert(c);
@@ -321,9 +300,11 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
         lastChild = NULL;
         for(int move=0; move<12; move++)
         { //Create new children
-          child.cube = new RubixCube;
+          child.cube = new RubixCube20B;
           *(child.cube) = trackGenerations[generationForTracking-1]->returnChild(move);
           unique = true;
+          std::cout << "Child " << move << std::endl;
+          child.cube->print();
           for(int rot=0; rot<24 && unique; rot++)
           {
             rotChild = child.cube->returnRot(rot);
@@ -390,7 +371,7 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
     generation++;
   }
 
-  std::cout << std::endl << "generateCubesSet() done" << std::endl;
+  std::cout << std::endl << "generateCubes20BSet() done" << std::endl;
   for(unsigned int i=0; i<gVector.size(); i++)
     std::cout << "Generation " << i+1 << ": " << gVector[i] << " in " << tVector[i] << " seconds" << std::endl;
   delete rotChild.cube;

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "RubixCube20B.h"
 
 RubixCube20B::RubixCube20B()
@@ -66,18 +67,17 @@ bool RubixCube20B::operator>(const RubixCube20B& other)
   return false;
 }
 
-void RubixCube20B::print()        //////////////////////TODOTODOTODOTODO
+void RubixCube20B::print()
 {
-/*  std::cout << "       " << (int)(this->colors[4][0]) << " " << (int)(this->colors[4][1]) << " " << (int)(this->colors[4][2]) << std::endl;
-  std::cout << "       " << (int)(this->colors[4][3]) << " " <<                             "4 " << (int)(this->colors[4][4]) << std::endl;
-  std::cout << "       " << (int)(this->colors[4][5]) << " " << (int)(this->colors[4][6]) << " " << (int)(this->colors[4][7]) << std::endl << std::endl;
-  std::cout << (int)(this->colors[0][0]) << " " << (int)(this->colors[0][1]) << " " << (int)(this->colors[0][2]) << "  " << (int)(this->colors[1][0]) << " " << (int)(this->colors[1][1]) << " " << (int)(this->colors[1][2]) << "  " << (int)(this->colors[2][0]) << " " << (int)(this->colors[2][1]) << " " << (int)(this->colors[2][2]) << "  " << (int)(this->colors[3][0]) << " " << (int)(this->colors[3][1]) << " " << (int)(this->colors[3][2])<< std::endl;
-  std::cout << (int)(this->colors[0][3]) << " " <<                             "0 " << (int)(this->colors[0][4]) << "  " << (int)(this->colors[1][3]) << " " <<                             "1 " << (int)(this->colors[1][4]) << "  " << (int)(this->colors[2][3]) << " " <<                             "2 " << (int)(this->colors[2][4]) << "  " << (int)(this->colors[3][3]) << " " <<                             "3 " << (int)(this->colors[3][4])<< std::endl;
-  std::cout << (int)(this->colors[0][5]) << " " << (int)(this->colors[0][6]) << " " << (int)(this->colors[0][7]) << "  " << (int)(this->colors[1][5]) << " " << (int)(this->colors[1][6]) << " " << (int)(this->colors[1][7]) << "  " << (int)(this->colors[2][5]) << " " << (int)(this->colors[2][6]) << " " << (int)(this->colors[2][7]) << "  " << (int)(this->colors[3][5]) << " " << (int)(this->colors[3][6]) << " " << (int)(this->colors[3][7])<< std::endl << std::endl;
-  std::cout << "       " << (int)(this->colors[5][0]) << " " << (int)(this->colors[5][1]) << " " << (int)(this->colors[5][2]) << std::endl;
-  std::cout << "       " << (int)(this->colors[5][3]) << " " <<                             "5 " << (int)(this->colors[5][4]) << std::endl;
-  std::cout << "       " << (int)(this->colors[5][5]) << " " << (int)(this->colors[5][6]) << " " << (int)(this->colors[5][7]) << std::endl;
-*/
+  std::cout << "                " << std::setw(3) << (int)(this->sides[7]) << std::endl;
+  std::cout << "            " << std::setw(3) << (int)(this->sides[4]) << "     " << std::setw(3) << (int)(this->sides[6]) << std::endl;
+  std::cout << "                " << std::setw(3) << (int)(this->sides[5]) << std::endl;
+  std::cout << std::setw(3) << (int)(this->corners[0]) << "         " << std::setw(3) << (int)(this->corners[1]) << "         " << std::setw(3) << (int)(this->corners[2]) << "         " << std::setw(3) << (int)(this->corners[3]) << std::endl;
+  std::cout << std::setw(3) << (int)(this->sides[0])   << "         " << std::setw(3) << (int)(this->sides[1])   << "         " << std::setw(3) << (int)(this->sides[2])   << "         " << std::setw(3) << (int)(this->sides[3])   << std::endl;
+  std::cout << std::setw(3) << (int)(this->corners[4]) << "         " << std::setw(3) << (int)(this->corners[5]) << "         " << std::setw(3) << (int)(this->corners[6]) << "         " << std::setw(3) << (int)(this->corners[7]) << std::endl;
+  std::cout << "                " << std::setw(3) << (int)(this->sides[9]) << std::endl;
+  std::cout << "            " << std::setw(3) << (int)(this->sides[8]) << "     " << (int)(this->sides[10]) << std::endl;
+  std::cout << "                " << std::setw(3) << (int)(this->sides[11]) << std::endl;
 }
 
 
@@ -936,13 +936,1091 @@ RubixCube20B RubixCube20B::returnRot(int rot)
 
 __int8 RubixCube20B::replaceSide(__int8 side, int rot)
 {
+  __int8 color = side&254;
+  __int8 turn = side&1;
+  switch(rot)
+  {
+  case 0:
+    //Side 0 forwards
+    if(color == 3)
+			return 0 + turn;
+    if(color == 0)
+			return 1 + turn;
+    if(color == 1)
+			return 2 + turn;
+    if(color == 2)
+			return 3 + turn;
+    if(color == 7)
+			return 4 + turn;
+    if(color == 4)
+			return 5 + turn;
+    if(color == 5)
+			return 6 + turn;
+    if(color == 6)
+			return 7 + turn;
+    if(color == 11)
+			return 8 + turn;
+    if(color == 8)
+			return 9 + turn;
+    if(color == 9)
+			return 10 + turn;
+    if(color == 10)
+			return 11 + turn;
+    break;
+  case 1:
+    //Side 0 forwards rotate left
+    if(color == 6)
+			return 0 + turn;
+    if(color == 4)
+			return 1 + !turn;
+    if(color == 8)
+			return 2 + turn;
+    if(color == 10)
+			return 3 + !turn;
+    if(color == 5)
+			return 4 + !turn;
+    if(color == 1)
+			return 5 + turn;
+    if(color == 9)
+			return 6 + !turn;
+    if(color == 2)
+			return 7 + !turn;
+    if(color == 7)
+			return 8 + !turn;
+    if(color == 0)
+			return 9 + !turn;
+    if(color == 11)
+			return 10 + !turn;
+    if(color == 3)
+			return 11 + turn;
+    break;
+  case 2:
+    //Side 0 forwards rotate 2x
+    if(color == 2)
+			return 0 + !turn;
+    if(color == 1)
+			return 1 + !turn;
+    if(color == 0)
+			return 2 + !turn;
+    if(color == 3)
+			return 3 + !turn;
+    if(color == 9)
+			return 4 + turn;
+    if(color == 8)
+			return 5 + turn;
+    if(color == 11)
+			return 6 + turn;
+    if(color == 10)
+			return 7 + turn;
+    if(color == 5)
+			return 8 + turn;
+    if(color == 4)
+			return 9 + turn;
+    if(color == 7)
+			return 10 + turn;
+    if(color == 6)
+			return 11 + turn;
+    break;
+  case 3:
+    //Side 0 forwards rotate right
+    if(color == 10)
+			return 0 + turn;
+    if(color == 8)
+			return 1 + !turn;
+    if(color == 4)
+			return 2 + turn;
+    if(color == 6)
+			return 3 + !turn;
+    if(color == 11)
+			return 4 + !turn;
+    if(color == 0)
+			return 5 + !turn;
+    if(color == 7)
+			return 6 + !turn;
+    if(color == 3)
+			return 7 + turn;
+    if(color == 9)
+			return 8 + !turn;
+    if(color == 1)
+			return 9 + turn;
+    if(color == 5)
+			return 10 + !turn;
+    if(color == 2)
+			return 11 + !turn;
+    break;
+  case 4:
+    //Side 1 forwards
+    break;
+  case 5:
+    //Side 1 forwards rotate left
+    if(color == 7)
+			return 0 + turn;
+    if(color == 5)
+			return 1 + !turn;
+    if(color == 9)
+			return 2 + turn;
+    if(color == 11)
+			return 3 + !turn;
+    if(color == 6)
+			return 4 + !turn;
+    if(color == 2)
+			return 5 + turn;
+    if(color == 10)
+			return 6 + !turn;
+    if(color == 3)
+			return 7 + !turn;
+    if(color == 4)
+			return 8 + !turn;
+    if(color == 1)
+			return 9 + !turn;
+    if(color == 8)
+			return 10 + !turn;
+    if(color == 0)
+			return 11 + turn;
+    break;
+  case 6:
+    //Side 1 forwards rotate 2x
+    if(color == 3)
+			return 0 + !turn;
+    if(color == 2)
+			return 1 + !turn;
+    if(color == 1)
+			return 2 + !turn;
+    if(color == 0)
+			return 3 + !turn;
+    if(color == 10)
+			return 4 + turn;
+    if(color == 9)
+			return 5 + turn;
+    if(color == 8)
+			return 6 + turn;
+    if(color == 11)
+			return 7 + turn;
+    if(color == 6)
+			return 8 + turn;
+    if(color == 5)
+			return 9 + turn;
+    if(color == 4)
+			return 10 + turn;
+    if(color == 7)
+			return 11 + turn;
+    break;
+  case 7:
+    //Side 1 forwards rotate right
+    if(color == 11)
+			return 0 + turn;
+    if(color == 9)
+			return 1 + !turn;
+    if(color == 5)
+			return 2 + turn;
+    if(color == 7)
+			return 3 + !turn;
+    if(color == 8)
+			return 4 + !turn;
+    if(color == 1)
+			return 5 + !turn;
+    if(color == 4)
+			return 6 + !turn;
+    if(color == 0)
+			return 7 + turn;
+    if(color == 10)
+			return 8 + !turn;
+    if(color == 2)
+			return 9 + turn;
+    if(color == 6)
+			return 10 + !turn;
+    if(color == 3)
+			return 11 + !turn;
+    break;
+  case 8:
+    //Side 2 forwards
+    if(color == 1)
+			return 0 + turn;
+    if(color == 2)
+			return 1 + turn;
+    if(color == 3)
+			return 2 + turn;
+    if(color == 0)
+			return 3 + turn;
+    if(color == 5)
+			return 4 + turn;
+    if(color == 6)
+			return 5 + turn;
+    if(color == 7)
+			return 6 + turn;
+    if(color == 4)
+			return 7 + turn;
+    if(color == 9)
+			return 8 + turn;
+    if(color == 10)
+			return 9 + turn;
+    if(color == 11)
+			return 10 + turn;
+    if(color == 8)
+			return 11 + turn;
+    break;
+  case 9:
+    //Side 2 forwards rotate left
+    if(color == 4)
+			return 0 + turn;
+    if(color == 6)
+			return 1 + !turn;
+    if(color == 10)
+			return 2 + turn;
+    if(color == 8)
+			return 3 + !turn;
+    if(color == 7)
+			return 4 + !turn;
+    if(color == 3)
+			return 5 + turn;
+    if(color == 11)
+			return 6 + !turn;
+    if(color == 0)
+			return 7 + !turn;
+    if(color == 5)
+			return 8 + !turn;
+    if(color == 2)
+			return 9 + !turn;
+    if(color == 9)
+			return 10 + !turn;
+    if(color == 1)
+			return 11 + turn;
+    break;
+  case 10:
+    //Side 2 forwards rotate 2x
+    if(color == 0)
+			return 0 + !turn;
+    if(color == 3)
+			return 1 + !turn;
+    if(color == 2)
+			return 2 + !turn;
+    if(color == 1)
+			return 3 + !turn;
+    if(color == 11)
+			return 4 + turn;
+    if(color == 10)
+			return 5 + turn;
+    if(color == 9)
+			return 6 + turn;
+    if(color == 8)
+			return 7 + turn;
+    if(color == 7)
+			return 8 + turn;
+    if(color == 6)
+			return 9 + turn;
+    if(color == 5)
+			return 10 + turn;
+    if(color == 4)
+			return 11 + turn;
+    break;
+  case 11:
+    //Side 2 forwards rotate right
+    if(color == 8)
+			return 0 + turn;
+    if(color == 10)
+			return 1 + !turn;
+    if(color == 6)
+			return 2 + turn;
+    if(color == 4)
+			return 3 + !turn;
+    if(color == 9)
+			return 4 + !turn;
+    if(color == 2)
+			return 5 + !turn;
+    if(color == 5)
+			return 6 + !turn;
+    if(color == 1)
+			return 7 + turn;
+    if(color == 11)
+			return 8 + !turn;
+    if(color == 3)
+			return 9 + turn;
+    if(color == 7)
+			return 10 + !turn;
+    if(color == 0)
+			return 11 + !turn;
+    break;
+  case 12:
+    //Side 3 forwards
+    if(color == 2)
+			return 0 + turn;
+    if(color == 3)
+			return 1 + turn;
+    if(color == 0)
+			return 2 + turn;
+    if(color == 1)
+			return 3 + turn;
+    if(color == 6)
+			return 4 + turn;
+    if(color == 7)
+			return 5 + turn;
+    if(color == 4)
+			return 6 + turn;
+    if(color == 5)
+			return 7 + turn;
+    if(color == 10)
+			return 8 + turn;
+    if(color == 11)
+			return 9 + turn;
+    if(color == 8)
+			return 10 + turn;
+    if(color == 9)
+			return 11 + turn;
+    break;
+  case 13:
+    //Side 3 forwards rotate left
+    if(color == 5)
+			return 0 + turn;
+    if(color == 7)
+			return 1 + !turn;
+    if(color == 11)
+			return 2 + turn;
+    if(color == 9)
+			return 3 + !turn;
+    if(color == 4)
+			return 4 + !turn;
+    if(color == 0)
+			return 5 + turn;
+    if(color == 8)
+			return 6 + !turn;
+    if(color == 1)
+			return 7 + !turn;
+    if(color == 6)
+			return 8 + !turn;
+    if(color == 3)
+			return 9 + !turn;
+    if(color == 10)
+			return 10 + !turn;
+    if(color == 2)
+			return 11 + turn;
+    break;
+  case 14:
+    //Side 3 forwards rotate 2x
+    if(color == 1)
+			return 0 + !turn;
+    if(color == 0)
+			return 1 + !turn;
+    if(color == 3)
+			return 2 + !turn;
+    if(color == 2)
+			return 3 + !turn;
+    if(color == 8)
+			return 4 + turn;
+    if(color == 11)
+			return 5 + turn;
+    if(color == 10)
+			return 6 + turn;
+    if(color == 9)
+			return 7 + turn;
+    if(color == 4)
+			return 8 + turn;
+    if(color == 7)
+			return 9 + turn;
+    if(color == 6)
+			return 10 + turn;
+    if(color == 5)
+			return 11 + turn;
+    break;
+  case 15:
+    //Side 3 forwards rotate right
+    if(color == 9)
+			return 0 + turn;
+    if(color == 11)
+			return 1 + !turn;
+    if(color == 7)
+			return 2 + turn;
+    if(color == 5)
+			return 3 + !turn;
+    if(color == 10)
+			return 4 + !turn;
+    if(color == 3)
+			return 5 + !turn;
+    if(color == 6)
+			return 6 + !turn;
+    if(color == 2)
+			return 7 + turn;
+    if(color == 8)
+			return 8 + !turn;
+    if(color == 0)
+			return 9 + turn;
+    if(color == 4)
+			return 10 + !turn;
+    if(color == 1)
+			return 11 + !turn;
+    break;
+  case 16:
+    //Side 4 forwards
+    if(color == 8)
+			return 0 + !turn;
+    if(color == 4)
+			return 1 + turn;
+    if(color == 6)
+			return 2 + !turn;
+    if(color == 10)
+			return 3 + turn;
+    if(color == 0)
+			return 4 + !turn;
+    if(color == 7)
+			return 5 + !turn;
+    if(color == 3)
+			return 6 + turn;
+    if(color == 11)
+			return 7 + !turn;
+    if(color == 1)
+			return 8 + turn;
+    if(color == 5)
+			return 9 + !turn;
+    if(color == 2)
+			return 10 + !turn;
+    if(color == 9)
+			return 11 + !turn;
+    break;
+  case 17:
+    //Side 4 forwards rotate left
+    if(color == 11)
+			return 0 + !turn;
+    if(color == 7)
+			return 1 + turn;
+    if(color == 5)
+			return 2 + !turn;
+    if(color == 9)
+			return 3 + turn;
+    if(color == 3)
+			return 4 + !turn;
+    if(color == 6)
+			return 5 + !turn;
+    if(color == 2)
+			return 6 + turn;
+    if(color == 10)
+			return 7 + !turn;
+    if(color == 0)
+			return 8 + turn;
+    if(color == 4)
+			return 9 + !turn;
+    if(color == 1)
+			return 10 + !turn;
+    if(color == 8)
+			return 11 + !turn;
+    break;
+  case 18:
+    //Side 4 forwards rotate 2x
+    if(color == 10)
+			return 0 + !turn;
+    if(color == 6)
+			return 1 + turn;
+    if(color == 4)
+			return 2 + !turn;
+    if(color == 8)
+			return 3 + turn;
+    if(color == 2)
+			return 4 + !turn;
+    if(color == 5)
+			return 5 + !turn;
+    if(color == 1)
+			return 6 + turn;
+    if(color == 9)
+			return 7 + !turn;
+    if(color == 3)
+			return 8 + turn;
+    if(color == 7)
+			return 9 + !turn;
+    if(color == 0)
+			return 10 + !turn;
+    if(color == 11)
+			return 11 + !turn;
+    break;
+  case 19:
+    //Side 4 forwards rotate right
+    if(color == 9)
+			return 0 + !turn;
+    if(color == 5)
+			return 1 + turn;
+    if(color == 7)
+			return 2 + !turn;
+    if(color == 11)
+			return 3 + turn;
+    if(color == 1)
+			return 4 + !turn;
+    if(color == 4)
+			return 5 + !turn;
+    if(color == 0)
+			return 6 + turn;
+    if(color == 8)
+			return 7 + !turn;
+    if(color == 2)
+			return 8 + turn;
+    if(color == 6)
+			return 9 + !turn;
+    if(color == 3)
+			return 10 + !turn;
+    if(color == 10)
+			return 11 + !turn;
+    break;
+  case 20:
+    //Side 5 forwards
+    if(color == 4)
+			return 0 + !turn;
+    if(color == 8)
+			return 1 + turn;
+    if(color == 10)
+			return 2 + !turn;
+    if(color == 6)
+			return 3 + turn;
+    if(color == 1)
+			return 4 + turn;
+    if(color == 9)
+			return 5 + !turn;
+    if(color == 2)
+			return 6 + !turn;
+    if(color == 5)
+			return 7 + !turn;
+    if(color == 0)
+			return 8 + !turn;
+    if(color == 11)
+			return 9 + !turn;
+    if(color == 3)
+			return 10 + turn;
+    if(color == 7)
+			return 11 + !turn;
+    break;
+  case 21:
+    //Side 5 forwards rotate left
+    if(color == 5)
+			return 0 + !turn;
+    if(color == 9)
+			return 1 + turn;
+    if(color == 11)
+			return 2 + !turn;
+    if(color == 7)
+			return 3 + turn;
+    if(color == 2)
+			return 4 + turn;
+    if(color == 10)
+			return 5 + !turn;
+    if(color == 3)
+			return 6 + !turn;
+    if(color == 6)
+			return 7 + !turn;
+    if(color == 1)
+			return 8 + !turn;
+    if(color == 8)
+			return 9 + !turn;
+    if(color == 0)
+			return 10 + turn;
+    if(color == 4)
+			return 11 + !turn;
+    break;
+  case 22:
+    //Side 5 forwards rotate 2x
+    if(color == 6)
+			return 0 + !turn;
+    if(color == 10)
+			return 1 + turn;
+    if(color == 8)
+			return 2 + !turn;
+    if(color == 4)
+			return 3 + turn;
+    if(color == 3)
+			return 4 + turn;
+    if(color == 11)
+			return 5 + !turn;
+    if(color == 0)
+			return 6 + !turn;
+    if(color == 7)
+			return 7 + !turn;
+    if(color == 2)
+			return 8 + !turn;
+    if(color == 9)
+			return 9 + !turn;
+    if(color == 1)
+			return 10 + turn;
+    if(color == 5)
+			return 11 + !turn;
+    break;
+  case 23:
+    //Side 5 forwards rotate right
+    if(color == 7)
+			return 0 + !turn;
+    if(color == 11)
+			return 1 + turn;
+    if(color == 9)
+			return 2 + !turn;
+    if(color == 5)
+			return 3 + turn;
+    if(color == 0)
+			return 4 + turn;
+    if(color == 8)
+			return 5 + !turn;
+    if(color == 1)
+			return 6 + !turn;
+    if(color == 4)
+			return 7 + !turn;
+    if(color == 3)
+			return 8 + !turn;
+    if(color == 10)
+			return 9 + !turn;
+    if(color == 2)
+			return 10 + turn;
+    if(color == 6)
+			return 11 + !turn;
+    break;
+  default:
+    break;
+  }
   return 0;
 }
 
 
 __int8 RubixCube20B::replaceCorner(__int8 corner, int rot)
 {
-    return 0;
+  __int8 color = corner&252;
+  __int8 turn = corner&3;
+  switch(rot)
+  {
+  case 0:
+    //Side 0 forwards
+    if(color == 3)
+			return 0 + turn;
+    if(color == 0)
+			return 1 + turn;
+    if(color == 1)
+			return 2 + turn;
+    if(color == 2)
+			return 3 + turn;
+    if(color == 7)
+			return 4 + turn;
+    if(color == 4)
+			return 5 + turn;
+    if(color == 5)
+			return 6 + turn;
+    if(color == 6)
+			return 7 + turn;
+    break;
+  case 1:
+    //Side 0 forwards rotate left
+    if(color == 2)
+			return 0 + this->turnCornerLeft(turn);
+    if(color == 1)
+			return 1 + this->turnCornerRight(turn);
+    if(color == 5)
+			return 2 + this->turnCornerRight(turn);
+    if(color == 6)
+			return 3 + turn;
+    if(color == 3)
+			return 4 + this->turnCornerLeft(turn);
+    if(color == 0)
+			return 5 + turn;
+    if(color == 4)
+			return 6 + this->turnCornerRight(turn);
+    if(color == 7)
+			return 7 + this->turnCornerLeft(turn);
+    break;
+  case 2:
+    //Side 0 forwards rotate 2x
+    if(color == 6)
+			return 0 + this->turnCornerLeft(turn);
+    if(color == 5)
+			return 1 + this->turnCornerLeft(turn);
+    if(color == 4)
+			return 2 + this->turnCornerLeft(turn);
+    if(color == 7)
+			return 3 + this->turnCornerLeft(turn);
+    if(color == 2)
+			return 4 + this->turnCornerRight(turn);
+    if(color == 1)
+			return 5 + this->turnCornerRight(turn);
+    if(color == 0)
+			return 6 + this->turnCornerRight(turn);
+    if(color == 3)
+			return 7 + this->turnCornerRight(turn);
+    break;
+  case 3:
+    //Side 0 forwards rotate right
+    if(color == 7)
+			return 0 + this->turnCornerRight(turn);
+    if(color == 4)
+			return 1 + turn;
+    if(color == 0)
+			return 2 + this->turnCornerLeft(turn);
+    if(color == 3)
+			return 3 + this->turnCornerRight(turn);
+    if(color == 6)
+			return 4 + this->turnCornerRight(turn);
+    if(color == 5)
+			return 5 + this->turnCornerLeft(turn);
+    if(color == 1)
+			return 6 + this->turnCornerLeft(turn);
+    if(color == 2)
+			return 7 + turn;
+    break;
+  case 4:
+    //Side 1 forwards
+    break;
+  case 5:
+    //Side 1 forwards rotate left
+    if(color == 3)
+			return 0 + this->turnCornerLeft(turn);
+    if(color == 2)
+			return 1 + this->turnCornerRight(turn);
+    if(color == 6)
+			return 2 + this->turnCornerRight(turn);
+    if(color == 7)
+			return 3 + turn;
+    if(color == 0)
+			return 4 + this->turnCornerLeft(turn);
+    if(color == 1)
+			return 5 + turn;
+    if(color == 5)
+			return 6 + this->turnCornerRight(turn);
+    if(color == 4)
+			return 7 + this->turnCornerLeft(turn);
+    break;
+  case 6:
+    //Side 1 forwards rotate 2x
+    if(color == 7)
+			return 0 + this->turnCornerLeft(turn);
+    if(color == 6)
+			return 1 + this->turnCornerLeft(turn);
+    if(color == 5)
+			return 2 + this->turnCornerLeft(turn);
+    if(color == 4)
+			return 3 + this->turnCornerLeft(turn);
+    if(color == 3)
+			return 4 + this->turnCornerRight(turn);
+    if(color == 2)
+			return 5 + this->turnCornerRight(turn);
+    if(color == 1)
+			return 6 + this->turnCornerRight(turn);
+    if(color == 0)
+			return 7 + this->turnCornerRight(turn);
+    break;
+  case 7:
+    //Side 1 forwards rotate right
+    if(color == 4)
+			return 0 + this->turnCornerRight(turn);
+    if(color == 5)
+			return 1 + turn;
+    if(color == 1)
+			return 2 + this->turnCornerLeft(turn);
+    if(color == 0)
+			return 3 + this->turnCornerRight(turn);
+    if(color == 7)
+			return 4 + this->turnCornerRight(turn);
+    if(color == 6)
+			return 5 + this->turnCornerLeft(turn);
+    if(color == 2)
+			return 6 + this->turnCornerLeft(turn);
+    if(color == 3)
+			return 7 + turn;
+    break;
+  case 8:
+    //Side 2 forwards
+    if(color == 1)
+			return 0 + turn;
+    if(color == 2)
+			return 1 + turn;
+    if(color == 3)
+			return 2 + turn;
+    if(color == 0)
+			return 3 + turn;
+    if(color == 5)
+			return 4 + turn;
+    if(color == 6)
+			return 5 + turn;
+    if(color == 7)
+			return 6 + turn;
+    if(color == 4)
+			return 7 + turn;
+    break;
+  case 9:
+    //Side 2 forwards rotate left
+    if(color == 0)
+			return 0 + this->turnCornerLeft(turn);
+    if(color == 3)
+			return 1 + this->turnCornerRight(turn);
+    if(color == 7)
+			return 2 + this->turnCornerRight(turn);
+    if(color == 4)
+			return 3 + turn;
+    if(color == 1)
+			return 4 + this->turnCornerLeft(turn);
+    if(color == 2)
+			return 5 + turn;
+    if(color == 6)
+			return 6 + this->turnCornerRight(turn);
+    if(color == 5)
+			return 7 + this->turnCornerLeft(turn);
+    break;
+  case 10:
+    //Side 2 forwards rotate 2x
+    if(color == 4)
+			return 0 + this->turnCornerLeft(turn);
+    if(color == 7)
+			return 1 + this->turnCornerLeft(turn);
+    if(color == 6)
+			return 2 + this->turnCornerLeft(turn);
+    if(color == 5)
+			return 3 + this->turnCornerLeft(turn);
+    if(color == 0)
+			return 4 + this->turnCornerRight(turn);
+    if(color == 3)
+			return 5 + this->turnCornerRight(turn);
+    if(color == 2)
+			return 6 + this->turnCornerRight(turn);
+    if(color == 1)
+			return 7 + this->turnCornerRight(turn);
+    break;
+  case 11:
+    //Side 2 forwards rotate right
+    if(color == 5)
+			return 0 + this->turnCornerRight(turn);
+    if(color == 6)
+			return 1 + turn;
+    if(color == 2)
+			return 2 + this->turnCornerLeft(turn);
+    if(color == 1)
+			return 3 + this->turnCornerRight(turn);
+    if(color == 4)
+			return 4 + this->turnCornerRight(turn);
+    if(color == 7)
+			return 5 + this->turnCornerLeft(turn);
+    if(color == 3)
+			return 6 + this->turnCornerLeft(turn);
+    if(color == 0)
+			return 7 + turn;
+    break;
+  case 12:
+    //Side 3 forwards
+    if(color == 2)
+			return 0 + turn;
+    if(color == 3)
+			return 1 + turn;
+    if(color == 0)
+			return 2 + turn;
+    if(color == 1)
+			return 3 + turn;
+    if(color == 6)
+			return 4 + turn;
+    if(color == 7)
+			return 5 + turn;
+    if(color == 4)
+			return 6 + turn;
+    if(color == 5)
+			return 7 + turn;
+    break;
+  case 13:
+    //Side 3 forwards rotate left
+    if(color == 1)
+			return 0 + this->turnCornerLeft(turn);
+    if(color == 0)
+			return 1 + this->turnCornerRight(turn);
+    if(color == 4)
+			return 2 + this->turnCornerRight(turn);
+    if(color == 5)
+			return 3 + turn;
+    if(color == 2)
+			return 4 + this->turnCornerLeft(turn);
+    if(color == 3)
+			return 5 + turn;
+    if(color == 7)
+			return 6 + this->turnCornerRight(turn);
+    if(color == 6)
+			return 7 + this->turnCornerLeft(turn);
+    break;
+  case 14:
+    //Side 3 forwards rotate 2x
+    if(color == 5)
+			return 0 + this->turnCornerLeft(turn);
+    if(color == 4)
+			return 1 + this->turnCornerLeft(turn);
+    if(color == 7)
+			return 2 + this->turnCornerLeft(turn);
+    if(color == 6)
+			return 3 + this->turnCornerLeft(turn);
+    if(color == 1)
+			return 4 + this->turnCornerRight(turn);
+    if(color == 0)
+			return 5 + this->turnCornerRight(turn);
+    if(color == 3)
+			return 6 + this->turnCornerRight(turn);
+    if(color == 2)
+			return 7 + this->turnCornerRight(turn);
+    break;
+  case 15:
+    //Side 3 forwards rotate right
+    if(color == 6)
+			return 0 + this->turnCornerRight(turn);
+    if(color == 7)
+			return 1 + turn;
+    if(color == 3)
+			return 2 + this->turnCornerLeft(turn);
+    if(color == 2)
+			return 3 + this->turnCornerRight(turn);
+    if(color == 5)
+			return 4 + this->turnCornerRight(turn);
+    if(color == 4)
+			return 5 + this->turnCornerLeft(turn);
+    if(color == 0)
+			return 6 + this->turnCornerLeft(turn);
+    if(color == 1)
+			return 7 + turn;
+    break;
+  case 16:
+    //Side 4 forwards
+    if(color == 4)
+			return 0 + turn;
+    if(color == 0)
+			return 1 + this->turnCornerLeft(turn);
+    if(color == 3)
+			return 2 + this->turnCornerRight(turn);
+    if(color == 7)
+			return 3 + this->turnCornerRight(turn);
+    if(color == 5)
+			return 4 + this->turnCornerLeft(turn);
+    if(color == 1)
+			return 5 + this->turnCornerLeft(turn);
+    if(color == 2)
+			return 6 + turn;
+    if(color == 6)
+			return 7 + this->turnCornerRight(turn);
+    break;
+  case 17:
+    //Side 4 forwards rotate left
+    if(color == 7)
+			return 0 + turn;
+    if(color == 3)
+			return 1 + this->turnCornerLeft(turn);
+    if(color == 2)
+			return 2 + this->turnCornerRight(turn);
+    if(color == 6)
+			return 3 + this->turnCornerRight(turn);
+    if(color == 4)
+			return 4 + this->turnCornerLeft(turn);
+    if(color == 0)
+			return 5 + this->turnCornerLeft(turn);
+    if(color == 1)
+			return 6 + turn;
+    if(color == 5)
+			return 7 + this->turnCornerRight(turn);
+    break;
+  case 18:
+    //Side 4 forwards rotate 2x
+    if(color == 6)
+			return 0 + turn;
+    if(color == 2)
+			return 1 + this->turnCornerLeft(turn);
+    if(color == 1)
+			return 2 + this->turnCornerRight(turn);
+    if(color == 5)
+			return 3 + this->turnCornerRight(turn);
+    if(color == 7)
+			return 4 + this->turnCornerLeft(turn);
+    if(color == 3)
+			return 5 + this->turnCornerLeft(turn);
+    if(color == 0)
+			return 6 + turn;
+    if(color == 4)
+			return 7 + this->turnCornerRight(turn);
+    break;
+  case 19:
+    //Side 4 forwards rotate right
+    if(color == 5)
+			return 0 + turn;
+    if(color == 1)
+			return 1 + this->turnCornerLeft(turn);
+    if(color == 0)
+			return 2 + this->turnCornerRight(turn);
+    if(color == 4)
+			return 3 + this->turnCornerRight(turn);
+    if(color == 6)
+			return 4 + this->turnCornerLeft(turn);
+    if(color == 2)
+			return 5 + this->turnCornerLeft(turn);
+    if(color == 3)
+			return 6 + turn;
+    if(color == 7)
+			return 7 + this->turnCornerRight(turn);
+    break;
+  case 20:
+    //Side 5 forwards
+    if(color == 1)
+			return 0 + this->turnCornerRight(turn);
+    if(color == 5)
+			return 1 + this->turnCornerRight(turn);
+    if(color == 6)
+			return 2 + turn;
+    if(color == 2)
+			return 3 + this->turnCornerLeft(turn);
+    if(color == 0)
+			return 4 + turn;
+    if(color == 4)
+			return 5 + this->turnCornerRight(turn);
+    if(color == 7)
+			return 6 + this->turnCornerLeft(turn);
+    if(color == 3)
+			return 7 + this->turnCornerLeft(turn);
+    break;
+  case 21:
+    //Side 5 forwards rotate left
+    if(color == 2)
+			return 0 + this->turnCornerRight(turn);
+    if(color == 6)
+			return 1 + this->turnCornerRight(turn);
+    if(color == 7)
+			return 2 + turn;
+    if(color == 3)
+			return 3 + this->turnCornerLeft(turn);
+    if(color == 1)
+			return 4 + turn;
+    if(color == 5)
+			return 5 + this->turnCornerRight(turn);
+    if(color == 4)
+			return 6 + this->turnCornerLeft(turn);
+    if(color == 0)
+			return 7 + this->turnCornerLeft(turn);
+    break;
+  case 22:
+    //Side 5 forwards rotate 2x
+    if(color == 3)
+			return 0 + this->turnCornerRight(turn);
+    if(color == 7)
+			return 1 + this->turnCornerRight(turn);
+    if(color == 4)
+			return 2 + turn;
+    if(color == 0)
+			return 3 + this->turnCornerLeft(turn);
+    if(color == 2)
+			return 4 + turn;
+    if(color == 6)
+			return 5 + this->turnCornerRight(turn);
+    if(color == 5)
+			return 6 + this->turnCornerLeft(turn);
+    if(color == 1)
+			return 7 + this->turnCornerLeft(turn);
+    break;
+  case 23:
+    //Side 5 forwards rotate right
+    if(color == 0)
+			return 0 + this->turnCornerRight(turn);
+    if(color == 4)
+			return 1 + this->turnCornerRight(turn);
+    if(color == 5)
+			return 2 + turn;
+    if(color == 1)
+			return 3 + this->turnCornerLeft(turn);
+    if(color == 3)
+			return 4 + turn;
+    if(color == 7)
+			return 5 + this->turnCornerRight(turn);
+    if(color == 6)
+			return 6 + this->turnCornerLeft(turn);
+    if(color == 2)
+			return 7 + this->turnCornerLeft(turn);
+    break;
+  default:
+    break;
+  }
+  return 0;
 }
 
 

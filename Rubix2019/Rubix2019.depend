@@ -11,7 +11,7 @@
 1556568580 c:\users\rasun\documents\c++ projects\rubix2019\include\rubixcube.h
 	<inttypes.h>
 
-1558960459 source:c:\users\rasun\documents\cprojects\rubix2019\main.cpp
+1559495658 source:c:\users\rasun\documents\cprojects\rubix2019\main.cpp
 	<iostream>
 	<vector>
 	<set>
@@ -42,8 +42,9 @@
 	<iostream>
 	"RubixCube.h"
 
-1558960321 source:c:\users\rasun\documents\cprojects\rubix2019\src\rubixcube20b.cpp
+1559495356 source:c:\users\rasun\documents\cprojects\rubix2019\src\rubixcube20b.cpp
 	<iostream>
+	<iomanip>
 	"RubixCube20B.h"
 
 1559338219 c:\users\rasun\documents\cprojects\rubix2019\include\rubixcube20b.h
