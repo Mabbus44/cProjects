@@ -83,8 +83,11 @@ void RubixCube20B::print()
 
 RubixCube20B RubixCube20B::returnChild(int move)
 {
-  RubixCube20B child = *this;
+  RubixCube20B child;
   child.parent = this;
+  //move = move%14+10;
+  if((move >=0 && move <=6) || (move>=6 && move <=20))//0-3 & 6-9 bad
+    move =23;
   switch(move)
   {
   case 0:

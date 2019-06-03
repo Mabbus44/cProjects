@@ -317,21 +317,17 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
     {
       if(generation == generationForTracking)
       {
+        std::cout << "Creating offspring of gen " << generationForTracking-1 << " " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
         lastChild = NULL;
         for(int move=0; move<12; move++)
         { //Create new children
           child.cube = new RubixCube20B;
           *(child.cube) = trackGenerations[generationForTracking-1]->returnChild(move);
           unique = true;
-          /*if((generation==2 && (move==1 || move==5)) || (generation==1 && (move==0 || move==0)))
-          {
-            std::cout << "Child " << move << std::endl;
-            child.cube->print();
-          }*/
           for(int rot=0; rot<24 && unique; rot++)
           {
-            rotChild = child.cube->returnRot(rot);
-            if(rSet.find(rotChild) != rSet.end())
+            //rotChild = child.cube->returnRot(rot);
+            if(false && rSet.find(rotChild) != rSet.end())
             {
               unique = false;
               /*if(generation==2 && move==5)
@@ -357,7 +353,6 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
             debugCube[debugCubeIndex] = *(child.cube);
             debugCubeIndex++;
             lastChild = child.cube;
-            //std::cout << "Child " << move <<" Unique" << std::endl;
           }
           else
             delete child.cube;
@@ -369,12 +364,14 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
         { //If in repopulating generation go to next sibling.
           trackGenerations[generationForTracking-1] = trackGenerations[generationForTracking-1]->sibling;
           moveUp = false;
+          std::cout << "Moving to sibling " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
         }
         else
         { //If in repopulating and no sibling, move one generation up.
           if(generationForTracking>1)
             generationForTracking--;
           moveUp = true;
+          std::cout << "Move up (gen " << generationForTracking-1 << ") " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
         }
       }
       else
@@ -384,18 +381,21 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
           trackGenerations[generationForTracking] = trackGenerations[generationForTracking-1]->firstChild;
           generationForTracking++;
           moveUp = false;
-        }
+          std::cout << "Moving to child (gen " << generationForTracking-1 << ") " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
+       }
         else if(trackGenerations[generationForTracking-1]->sibling)
         { //If just moved up or no child, go to next sibling
           trackGenerations[generationForTracking-1] = trackGenerations[generationForTracking-1]->sibling;
           moveUp = false;
+          std::cout << "Moving to sibling (gen " << generationForTracking-1 << ") " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
         }
         else
-        { //If just moved up or no child and no sibling, move one generation up
+        { //If (just moved up or no child) and no sibling, move one generation up
           if(generationForTracking>1)
             generationForTracking--;
           moveUp = true;
-        }
+          std::cout << "Move up again (gen " << generationForTracking-1 << ") " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
+       }
       }
     }
     gVector.push_back(rSet.size() - totalPopulation);
