@@ -590,7 +590,7 @@ RubixCube RubixCube::returnRot(int rot)
     rotatedCube.setSideRotX(3, this, 4);
     rotatedCube.setSide(4, this, 1);
     rotatedCube.setSide(1, this, 5);
-    rotatedCube.setSide(5, this, 3);
+    rotatedCube.setSideRotX(5, this, 3);
     rotatedCube.setSideRotLeft(0, this, 0);
     rotatedCube.setSideRotRight(2, this, 2);
     rotatedCube.swapNumber(5,1,4,3);
