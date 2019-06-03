@@ -12,8 +12,8 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress = false);
 
 int main()
 {
-  //generateCubesVector(6);
-  generateCubes20BSet(4);
+  generateCubesSet(3);
+  generateCubes20BSet(3);
 }
 
 void generateCubesVector(int maxGenerations, bool outputProgress)
@@ -200,6 +200,7 @@ void generateCubesSet(int maxGenerations, bool outputProgress)
               trackGenerations[generationForTracking-1]->firstChild = child.cube;
             rSet.insert(child);
             lastChild = child.cube;
+            std::cout << "Child " << move <<" Unique" << std::endl;
           }
           else
             delete child.cube;
@@ -277,12 +278,17 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
   int generation;
   int totalPopulation;
 
+  RubixCube20B debugCube[20];
+  int debugCubeIndex = 0;
+
   r = new RubixCube20B;
   for(int side = 0; side<12; side++)
       r->sides[side] = side*2+1;
   for(int corner = 0; corner<8; corner++)
       r->corners[corner] = corner*4+1;
   c.cube = r;
+  debugCube[debugCubeIndex] = *r;
+  debugCubeIndex++;
   //r->print();
   trackGenerations[0] = r;
   rSet.insert(c);
@@ -304,21 +310,29 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
           child.cube = new RubixCube20B;
           *(child.cube) = trackGenerations[generationForTracking-1]->returnChild(move);
           unique = true;
-          /*if(move==0||move==0)
+          if((generation==2 && (move==1 || move==5)) || (generation==1 && (move==0 || move==0)))
           {
             std::cout << "Child " << move << std::endl;
             child.cube->print();
-          }*/
+            std::cout << "Child 0-move1 seems to be identical to child 0-move5-rot20 "
+          }
           for(int rot=0; rot<24 && unique; rot++)
           {
             rotChild = child.cube->returnRot(rot);
-            /*if(move==0)
-            {
-              std::cout << "rot " << rot << std::endl;
-              rotChild.cube->print();
-            }*/
             if(rSet.find(rotChild) != rSet.end())
+            {
               unique = false;
+              if(generation==2 && move==5)
+              {
+                for(int i=0; i<debugCubeIndex; i++)
+                {
+                  if(*(rotChild.cube) == debugCube[i])
+                    std::cout << "Identical to " << i << " ";
+                }
+                std::cout << "rot " << rot << std::endl;
+                rotChild.cube->print();
+              }
+            }
           }
           if(unique)
           {
@@ -328,7 +342,10 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
             else
               trackGenerations[generationForTracking-1]->firstChild = child.cube;
             rSet.insert(child);
+            debugCube[debugCubeIndex] = *(child.cube);
+            debugCubeIndex++;
             lastChild = child.cube;
+            std::cout << "Child " << move <<" Unique" << std::endl;
           }
           else
             delete child.cube;

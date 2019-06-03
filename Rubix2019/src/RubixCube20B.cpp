@@ -280,7 +280,7 @@ RubixCube20B RubixCube20B::returnChild(int move)
     child.corners[4] = this->corners[4];
     child.corners[5] = this->corners[5];
     child.corners[6] = this->corners[2];
-    child.corners[7] = this->turnCornerRight(this->corners[6]);
+    child.corners[7] = this->turnCornerLeft(this->corners[6]);
     child.sides[0] = this->sides[0];
     child.sides[1] = this->sides[1];
     child.sides[2] = this->turnSide(this->sides[6]);
