@@ -13,7 +13,7 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress = false);
 int main()
 {
   //generateCubesVector(6);
-  generateCubes20BSet(2);
+  generateCubes20BSet(4);
 }
 
 void generateCubesVector(int maxGenerations, bool outputProgress)
@@ -281,8 +281,9 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
   for(int side = 0; side<12; side++)
       r->sides[side] = side*2+1;
   for(int corner = 0; corner<8; corner++)
-      r->corners[corner] = corner*3+1;
+      r->corners[corner] = corner*4+1;
   c.cube = r;
+  //r->print();
   trackGenerations[0] = r;
   rSet.insert(c);
   gVector.push_back(1);
@@ -303,11 +304,19 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
           child.cube = new RubixCube20B;
           *(child.cube) = trackGenerations[generationForTracking-1]->returnChild(move);
           unique = true;
-          std::cout << "Child " << move << std::endl;
-          child.cube->print();
+          /*if(move==0||move==0)
+          {
+            std::cout << "Child " << move << std::endl;
+            child.cube->print();
+          }*/
           for(int rot=0; rot<24 && unique; rot++)
           {
             rotChild = child.cube->returnRot(rot);
+            /*if(move==0)
+            {
+              std::cout << "rot " << rot << std::endl;
+              rotChild.cube->print();
+            }*/
             if(rSet.find(rotChild) != rSet.end())
               unique = false;
           }

@@ -27,13 +27,14 @@
 	<iostream>
 	"RubixCube.h"
 
-1556810862 source:c:\users\a486071\documents\cprojects\rubix2019\main.cpp
+1559556647 source:c:\users\a486071\documents\cprojects\rubix2019\main.cpp
 	<iostream>
 	<vector>
 	<set>
 	<time.h>
 	<chrono>
 	"RubixCube.h"
+	"RubixCube20B.h"
 
 1556797553 c:\users\a486071\documents\cprojects\rubix2019\include\rubixcube.h
 	<inttypes.h>
@@ -48,4 +49,11 @@
 	"RubixCube20B.h"
 
 1559338219 c:\users\rasun\documents\cprojects\rubix2019\include\rubixcube20b.h
+
+1559552672 c:\users\a486071\documents\cprojects\rubix2019\include\rubixcube20b.h
+
+1559561297 source:c:\users\a486071\documents\cprojects\rubix2019\src\rubixcube20b.cpp
+	<iostream>
+	<iomanip>
+	"RubixCube20B.h"
 
