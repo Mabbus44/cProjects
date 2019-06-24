@@ -67,6 +67,22 @@ bool RubixCube20B::operator>(const RubixCube20B& other)
   return false;
 }
 
+int RubixCube20B::seb(RubixCube20B* other)
+{
+  for(int a=0; a<12; a++)
+  {
+    if(a<8 && this->corners[a] > other->corners[a])
+      return BIGGER;
+    if(a<8 && this->corners[a] < other->corners[a])
+      return SMALLER;
+    if(this->sides[a] > other->sides[a])
+      return BIGGER;
+    if(this->sides[a] < other->sides[a])
+      return SMALLER;
+  }
+  return EQUALS;
+}
+
 void RubixCube20B::print()
 {
   std::cout << "                " << std::setw(3) << (int)(this->sides[7]) << std::endl;
@@ -83,11 +99,8 @@ void RubixCube20B::print()
 
 RubixCube20B RubixCube20B::returnChild(int move)
 {
-  RubixCube20B child;
+  RubixCube20B child = *this;
   child.parent = this;
-  //move = move%14+10;
-  if((move >=0 && move <=6) || (move>=6 && move <=20))//0-3 & 6-9 bad
-    move =23;
   switch(move)
   {
   case 0:

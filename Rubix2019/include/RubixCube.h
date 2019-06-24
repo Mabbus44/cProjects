@@ -1,3 +1,8 @@
+#ifndef SEB
+enum SEB {SMALLER, EQUALS, BIGGER};
+#define SEB
+#endif // SEB
+
 #ifndef RUBIXCUBE_H
 #define RUBIXCUBE_H
 

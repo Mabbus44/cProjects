@@ -1,3 +1,8 @@
+#ifndef SEB
+enum SEB {SMALLER, EQUALS, BIGGER};
+#define SEB
+#endif // SEB
+
 #ifndef RUBIXCUBE20B_H
 #define RUBIXCUBE20B_H
 
@@ -16,6 +21,7 @@ class RubixCube20B
     bool operator==(const RubixCube20B& other);
     bool operator<(const RubixCube20B& other);
     bool operator>(const RubixCube20B& other);
+    int seb(RubixCube20B* other);
     void print();
     RubixCube20B returnChild(int move);
     RubixCube20B returnRot(int rot);

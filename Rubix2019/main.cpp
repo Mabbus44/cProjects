@@ -5,19 +5,22 @@
 #include <chrono>
 #include "RubixCube.h"
 #include "RubixCube20B.h"
+#include "BinaryNode.h"
 
-void generateCubesVector(int maxGenerations, bool outputProgress = false);
-void generateCubesSet(int maxGenerations, bool outputProgress = false);
-void generateCubes20BSet(int maxGenerations, bool outputProgress = false);
+void generateCubesVector(int maxGenerations);
+void generateCubesSet(int maxGenerations);
+void generateCubes20BSet(int maxGenerations);
+void generateCubes20BBinaryNode(int maxGenerations);
 
 int main()
 {
-  //generateCubesVector(6);
-  //generateCubesSet(8);
-  generateCubes20BSet(9);
+  //generateCubesVector(4);
+  //generateCubesSet(4);
+  //generateCubes20BSet(8);
+  generateCubes20BBinaryNode(9);
 }
 
-void generateCubesVector(int maxGenerations, bool outputProgress)
+void generateCubesVector(int maxGenerations)
 {
   auto chronoTimeStart = std::chrono::steady_clock::now();
   auto chronoTimeFinish = std::chrono::steady_clock::now();
@@ -31,7 +34,6 @@ void generateCubesVector(int maxGenerations, bool outputProgress)
   int parentIndex;
   int generation;
   int generationEnd;
-  int showNext =0;
 
   __int8 arr[6][8] = {
            {0, 0, 0,
@@ -82,32 +84,12 @@ void generateCubesVector(int maxGenerations, bool outputProgress)
         rVector.push_back(child);
     }
     parentIndex++;
-    if(parentIndex>showNext)
-    {
-      if(outputProgress)
-        std::cout << generation << ":" << parentIndex << "/" << generationEnd << std::endl;
-      showNext += (gVector[generation-1]/20+1);
-    }
     if(parentIndex > generationEnd)
     {
-      if(outputProgress)
-      {
-        int genPop = gVector[generation-1];
-        int newChildren = rVector.size() - generationEnd-1;
-        double fertility = (newChildren) / ((double)genPop*12.0)*100.0;
-        std::cout << std::endl << "Generation " << generation << std::endl;
-        std::cout << "Total population " << generationEnd+1 << std::endl;
-        std::cout << "Generation population " << genPop << std::endl;
-        std::cout << "New children " << newChildren << " (" << fertility << "%)" << std::endl;
-      }
       generation++;
       gVector.push_back(rVector.size() - generationEnd-1);
 
-      //time(&timeFinish);
-      //timePassed = difftime(timeFinish, timeStart);
       chronoTimeFinish = std::chrono::steady_clock::now();
-      //timePassed = std::chrono::duration_cast<std::chrono::seconds>(chronoTimeFinish - chronoTimeStart).count();
-      //timePassed  = (std::chrono::duration_cast<std::chrono::milliseconds>(chronoTimeFinish - chronoTimeStart).count())/1.0;
       timePassed = (std::chrono::duration_cast<std::chrono::microseconds>(chronoTimeFinish - chronoTimeStart).count())/1000000.0;
       tVector.push_back(timePassed);
       generationEnd = rVector.size()-1;
@@ -121,7 +103,7 @@ void generateCubesVector(int maxGenerations, bool outputProgress)
 }
 
 
-void generateCubesSet(int maxGenerations, bool outputProgress)
+void generateCubesSet(int maxGenerations)
 {
   auto chronoTimeStart = std::chrono::steady_clock::now();
   auto chronoTimeFinish = std::chrono::steady_clock::now();
@@ -258,7 +240,7 @@ void generateCubesSet(int maxGenerations, bool outputProgress)
 
     chronoTimeFinish = std::chrono::steady_clock::now();
     timePassed = (std::chrono::duration_cast<std::chrono::microseconds>(chronoTimeFinish - chronoTimeStart).count())/1000000.0;
-    std::cout << "Generation " << generation+1 << "/" << maxGenerations << ": " << rSet.size() - totalPopulation << " in " << timePassed << " seconds" << std::endl;
+    std::cout << "Generation " << generation+1 << "/" << maxGenerations << ": " << gVector[generation] << " in " << timePassed << " seconds" << std::endl;
 
     tVector.push_back(timePassed);
     generation++;
@@ -272,7 +254,7 @@ void generateCubesSet(int maxGenerations, bool outputProgress)
 }
 
 
-void generateCubes20BSet(int maxGenerations, bool outputProgress)
+void generateCubes20BSet(int maxGenerations)
 {
   auto chronoTimeStart = std::chrono::steady_clock::now();
   auto chronoTimeFinish = std::chrono::steady_clock::now();
@@ -291,18 +273,12 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
   int generation;
   int totalPopulation;
 
-  RubixCube20B debugCube[20];
-  int debugCubeIndex = 0;
-
   r = new RubixCube20B;
   for(int side = 0; side<12; side++)
       r->sides[side] = side*2+1;
   for(int corner = 0; corner<8; corner++)
       r->corners[corner] = corner*4+1;
   c.cube = r;
-  debugCube[debugCubeIndex] = *r;
-  debugCubeIndex++;
-  //r->print();
   trackGenerations[0] = r;
   rSet.insert(c);
   gVector.push_back(1);
@@ -317,7 +293,6 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
     {
       if(generation == generationForTracking)
       {
-        std::cout << "Creating offspring of gen " << generationForTracking-1 << " " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
         lastChild = NULL;
         for(int move=0; move<12; move++)
         { //Create new children
@@ -326,21 +301,9 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
           unique = true;
           for(int rot=0; rot<24 && unique; rot++)
           {
-            //rotChild = child.cube->returnRot(rot);
-            if(false && rSet.find(rotChild) != rSet.end())
-            {
+            rotChild = child.cube->returnRot(rot);
+            if(rSet.find(rotChild) != rSet.end())
               unique = false;
-              /*if(generation==2 && move==5)
-              {
-                for(int i=0; i<debugCubeIndex; i++)
-                {
-                  if(*(rotChild.cube) == debugCube[i])
-                    std::cout << "Identical to " << i << " ";
-                }
-                std::cout << "rot " << rot << std::endl;
-                rotChild.cube->print();
-              }*/
-            }
           }
           if(unique)
           {
@@ -350,8 +313,6 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
             else
               trackGenerations[generationForTracking-1]->firstChild = child.cube;
             rSet.insert(child);
-            debugCube[debugCubeIndex] = *(child.cube);
-            debugCubeIndex++;
             lastChild = child.cube;
           }
           else
@@ -364,14 +325,12 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
         { //If in repopulating generation go to next sibling.
           trackGenerations[generationForTracking-1] = trackGenerations[generationForTracking-1]->sibling;
           moveUp = false;
-          std::cout << "Moving to sibling " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
         }
         else
         { //If in repopulating and no sibling, move one generation up.
           if(generationForTracking>1)
             generationForTracking--;
           moveUp = true;
-          std::cout << "Move up (gen " << generationForTracking-1 << ") " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
         }
       }
       else
@@ -381,21 +340,18 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
           trackGenerations[generationForTracking] = trackGenerations[generationForTracking-1]->firstChild;
           generationForTracking++;
           moveUp = false;
-          std::cout << "Moving to child (gen " << generationForTracking-1 << ") " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
-       }
+        }
         else if(trackGenerations[generationForTracking-1]->sibling)
         { //If just moved up or no child, go to next sibling
           trackGenerations[generationForTracking-1] = trackGenerations[generationForTracking-1]->sibling;
           moveUp = false;
-          std::cout << "Moving to sibling (gen " << generationForTracking-1 << ") " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
         }
         else
-        { //If (just moved up or no child) and no sibling, move one generation up
+        { //If just moved up or no child and no sibling, move one generation up
           if(generationForTracking>1)
             generationForTracking--;
           moveUp = true;
-          std::cout << "Move up again (gen " << generationForTracking-1 << ") " << trackGenerations[generationForTracking-1] << " parent: " << trackGenerations[generationForTracking-1]->parent << std::endl;
-       }
+        }
       }
     }
     gVector.push_back(rSet.size() - totalPopulation);
@@ -403,7 +359,7 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
 
     chronoTimeFinish = std::chrono::steady_clock::now();
     timePassed = (std::chrono::duration_cast<std::chrono::microseconds>(chronoTimeFinish - chronoTimeStart).count())/1000000.0;
-    std::cout << "Generation " << generation+1 << "/" << maxGenerations << ": " << rSet.size() - totalPopulation << " in " << timePassed << " seconds" << std::endl;
+    std::cout << "Generation " << generation+1 << "/" << maxGenerations << ": " << gVector[generation] << " in " << timePassed << " seconds" << std::endl;
 
     tVector.push_back(timePassed);
     generation++;
@@ -414,4 +370,144 @@ void generateCubes20BSet(int maxGenerations, bool outputProgress)
     std::cout << "Generation " << i+1 << ": " << gVector[i] << " in " << tVector[i] << " seconds" << std::endl;
   delete rotChild.cube;
   std::cout << std::endl;
+}
+
+
+void generateCubes20BBinaryNode(int maxGenerations)
+{
+  auto chronoTimeStart = std::chrono::steady_clock::now();
+  auto chronoTimeFinish = std::chrono::steady_clock::now();
+  double timePassed;
+  RubixCube20B* child;
+  RubixCube20B rotChild;
+  RubixCube20B* r;
+  RubixCube20B* lastChild;
+  BinaryNode<RubixCube20B>* rSet = new BinaryNode<RubixCube20B>;
+  std::vector<int> gVector;
+  std::vector<double> tVector;
+  RubixCube20B* trackGenerations[50];
+  bool unique;
+  bool moveUp;
+  int generation;
+  int populationUpuntilLastGeneration;
+  int totalPopulation;
+
+  r = new RubixCube20B;
+  for(int side = 0; side<12; side++)
+      r->sides[side] = side*2+1;
+  for(int corner = 0; corner<8; corner++)
+      r->corners[corner] = corner*4+1;
+  trackGenerations[0] = r;
+  rSet->cubePointer = r;
+  gVector.push_back(1);
+  populationUpuntilLastGeneration = 1;
+  totalPopulation = 1;
+  tVector.push_back(0);
+  generation = 1;
+  /*std::cout << std::endl << std::endl << "Printing binary tree" << std::endl;
+  rSet->print();*/
+  while(generation < maxGenerations)
+  {
+    moveUp = false;
+    int generationForTracking = 1;
+    while(generationForTracking > 1 || !moveUp)
+    {
+      if(generation == generationForTracking)
+      {
+        lastChild = NULL;
+        for(int move=0; move<12; move++)
+        { //Create new children
+          child = new RubixCube20B;
+          *(child) = trackGenerations[generationForTracking-1]->returnChild(move);
+          unique = true;
+          for(int rot=0; rot<24 && unique; rot++)
+          {
+            rotChild = child->returnRot(rot);
+/*            if(move == 0 && rot == 4)
+              rotChild.print();
+            if(move == 1 && rot == 2)
+            {
+              rotChild.print();
+              std::cout << std::endl << std::endl << "Printing binary tree (move " << move << ")" << std::endl;
+              rSet->print(true);
+            }*/
+            if(rSet->find(&rotChild))
+              unique = false;
+//              std::cout << "move " << move << " rot " << rot << " taken" << std::endl;
+          }
+          if(unique)
+          {
+//            std::cout << "move " << move << " unique" << std::endl;
+            child->parent = trackGenerations[generationForTracking-1];
+            if(lastChild)
+              lastChild->sibling = child;
+            else
+              trackGenerations[generationForTracking-1]->firstChild = child;
+            rSet->insert(child);
+            lastChild = child;
+            totalPopulation++;
+            while(rSet->parent)
+              rSet = rSet->parent;
+            if(false)
+            {
+              std::cout << std::endl << std::endl << "Printing binary tree (move " << move << ")" << std::endl;
+              rSet->print();
+            }
+          }
+          else
+            delete child;
+        }
+      }
+      if(generation == generationForTracking)
+      {
+        if(trackGenerations[generationForTracking-1]->sibling)
+        { //If in repopulating generation go to next sibling.
+          trackGenerations[generationForTracking-1] = trackGenerations[generationForTracking-1]->sibling;
+          moveUp = false;
+        }
+        else
+        { //If in repopulating and no sibling, move one generation up.
+          if(generationForTracking>1)
+            generationForTracking--;
+          moveUp = true;
+        }
+      }
+      else
+      {
+        if(!moveUp && trackGenerations[generationForTracking-1]->firstChild)
+        { //If not in repopulating generation and did not recently move up and has a child, go to that child
+          trackGenerations[generationForTracking] = trackGenerations[generationForTracking-1]->firstChild;
+          generationForTracking++;
+          moveUp = false;
+        }
+        else if(trackGenerations[generationForTracking-1]->sibling)
+        { //If just moved up or no child, go to next sibling
+          trackGenerations[generationForTracking-1] = trackGenerations[generationForTracking-1]->sibling;
+          moveUp = false;
+        }
+        else
+        { //If just moved up or no child and no sibling, move one generation up
+          if(generationForTracking>1)
+            generationForTracking--;
+          moveUp = true;
+        }
+      }
+    }
+    gVector.push_back(totalPopulation - populationUpuntilLastGeneration);
+    populationUpuntilLastGeneration += gVector[generation];
+
+    chronoTimeFinish = std::chrono::steady_clock::now();
+    timePassed = (std::chrono::duration_cast<std::chrono::microseconds>(chronoTimeFinish - chronoTimeStart).count())/1000000.0;
+    std::cout << "Generation " << generation+1 << "/" << maxGenerations << ": " << gVector[generation] << " in " << timePassed << " seconds" << std::endl;
+
+    tVector.push_back(timePassed);
+    generation++;
+  }
+
+  std::cout << "generateCubes20BBinaryNode() done" << std::endl;
+  for(unsigned int i=0; i<gVector.size(); i++)
+    std::cout << "Generation " << i+1 << ": " << gVector[i] << " in " << tVector[i] << " seconds" << std::endl;
+  std::cout << std::endl;
+  //std::cout << std::endl << std::endl << "Printing binary tree" << std::endl;
+  //rSet->print();
 }
