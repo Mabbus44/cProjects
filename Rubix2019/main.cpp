@@ -6,18 +6,24 @@
 #include "RubixCube.h"
 #include "RubixCube20B.h"
 #include "BinaryNode.h"
+#include "FileHandler.h"
+//#include "RubixCube20BF.h"
+
+using namespace std;
 
 void generateCubesVector(int maxGenerations);
 void generateCubesSet(int maxGenerations);
 void generateCubes20BSet(int maxGenerations);
 void generateCubes20BBinaryNode(int maxGenerations);
+void generateCubes20BF(int maxGenerations);
 
 int main()
 {
   //generateCubesVector(4);
   //generateCubesSet(4);
   //generateCubes20BSet(8);
-  generateCubes20BBinaryNode(9);
+  //generateCubes20BBinaryNode(9);
+  generateCubes20BF(2);
 }
 
 void generateCubesVector(int maxGenerations)
@@ -169,21 +175,11 @@ void generateCubesSet(int maxGenerations)
           child.cube = new RubixCube;
           *(child.cube) = trackGenerations[generationForTracking-1]->returnChild(move);
           unique = true;
-          /*if((generation==2 && (move==1 || move==5)) || (generation==1 && (move==0 || move==0)))
-          {
-            std::cout << "Child " << move << std::endl;
-            child.cube->print();
-          }*/
           for(int rot=0; rot<24 && unique; rot++)
           {
             rotChild = child.cube->returnRot(rot);
             if(rSet.find(rotChild) != rSet.end())
               unique = false;
-            /*if(generation==2 && move==5 && rot==20)
-            {
-              std::cout << "rot " << rot << std::endl;
-              rotChild.cube->print();
-            }*/
           }
           if(unique)
           {
@@ -194,7 +190,6 @@ void generateCubesSet(int maxGenerations)
               trackGenerations[generationForTracking-1]->firstChild = child.cube;
             rSet.insert(child);
             lastChild = child.cube;
-            //std::cout << "Child " << move <<" Unique" << std::endl;
           }
           else
             delete child.cube;
@@ -404,8 +399,6 @@ void generateCubes20BBinaryNode(int maxGenerations)
   totalPopulation = 1;
   tVector.push_back(0);
   generation = 1;
-  /*std::cout << std::endl << std::endl << "Printing binary tree" << std::endl;
-  rSet->print();*/
   while(generation < maxGenerations)
   {
     moveUp = false;
@@ -423,21 +416,11 @@ void generateCubes20BBinaryNode(int maxGenerations)
           for(int rot=0; rot<24 && unique; rot++)
           {
             rotChild = child->returnRot(rot);
-/*            if(move == 0 && rot == 4)
-              rotChild.print();
-            if(move == 1 && rot == 2)
-            {
-              rotChild.print();
-              std::cout << std::endl << std::endl << "Printing binary tree (move " << move << ")" << std::endl;
-              rSet->print(true);
-            }*/
             if(rSet->find(&rotChild))
               unique = false;
-//              std::cout << "move " << move << " rot " << rot << " taken" << std::endl;
           }
           if(unique)
           {
-//            std::cout << "move " << move << " unique" << std::endl;
             child->parent = trackGenerations[generationForTracking-1];
             if(lastChild)
               lastChild->sibling = child;
@@ -508,6 +491,12 @@ void generateCubes20BBinaryNode(int maxGenerations)
   for(unsigned int i=0; i<gVector.size(); i++)
     std::cout << "Generation " << i+1 << ": " << gVector[i] << " in " << tVector[i] << " seconds" << std::endl;
   std::cout << std::endl;
-  //std::cout << std::endl << std::endl << "Printing binary tree" << std::endl;
-  //rSet->print();
+}
+
+
+void generateCubes20BF(int maxGenerations)
+{
+  FileHandler* fileHandler = new FileHandler();
+  fileHandler->openCubeFile("cube.dat");
+  fileHandler->openNodeFile("node.dat");
 }

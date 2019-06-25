@@ -6,6 +6,7 @@ enum SEB {SMALLER, EQUALS, BIGGER};
 #ifndef RUBIXCUBE20B_H
 #define RUBIXCUBE20B_H
 
+#include <iomanip>
 
 class RubixCube20B
 {

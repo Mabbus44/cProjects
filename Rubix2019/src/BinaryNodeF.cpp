@@ -1,48 +1,20 @@
-#ifndef BINARYNODE_H
-#define BINARYNODE_H
-#include <list>
+/*#include "BinaryNodeF.h"
 
-using namespace std;
-
-template <class T>
-class BinaryNode
+BinaryNodeF::BinaryNodeF()
 {
-  public:
-    T* cubePointer;
-    BinaryNode* parent;
-    BinaryNode* smallerChild;
-    BinaryNode* biggerChild;
-    int height;
-    BinaryNode();
-    virtual ~BinaryNode();
-    bool find(T* other);
-    bool insert(T* newCube);
-    bool rotUp();
-    void print(bool verbose = false);
-
-  protected:
-
-  private:
-};
-
-template <class T>
-BinaryNode<T>::BinaryNode()
-{
-  cubePointer = NULL;
-  parent = NULL;
-  smallerChild = NULL;
-  biggerChild = NULL;
+  cubeAdress = 0;
+  parent = 0;
+  smallerChild = 0;
+  biggerChild = 0;
   height = 0;
 }
 
-template <class T>
-BinaryNode<T>::~BinaryNode()
+BinaryNodeF::~BinaryNodeF()
 {
   //dtor
 }
 
-template <class T>
-bool BinaryNode<T>::find(T* other)
+bool BinaryNodeF::find(RubixCube20BF* other)
 {
   int seb = this->cubePointer->seb(other);
   if(seb==SMALLER)
@@ -62,18 +34,17 @@ bool BinaryNode<T>::find(T* other)
   return true;  //seb==EQUALS
 }
 
-template <class T>
-bool BinaryNode<T>::insert(T* newCube)
+bool BinaryNodeF::insert(RubixCube20BF* newCube)
 {
-  BinaryNode* curr = this;
-  BinaryNode* lowestRoot = NULL;
+  BinaryNodeF* curr = this;
+  BinaryNodeF* lowestRoot = NULL;
   int seb;
   bool addRoots = false;
   bool done = false;
   int leftHeight;
   int rightHeight;
   int newHeight;
-  //list<BinaryNode*> rotList;
+  //list<BinaryNodeF*> rotList;
   int rotCount = 0;
   while(!done)
   {
@@ -91,7 +62,7 @@ bool BinaryNode<T>::insert(T* newCube)
     {
       if(leftHeight == 0)
       {
-        BinaryNode<T>* newNode = new BinaryNode<T>;
+        BinaryNodeF* newNode = new BinaryNodeF;
         newNode->parent = curr;
         newNode->cubePointer = newCube;
         curr->smallerChild = newNode;
@@ -128,7 +99,7 @@ bool BinaryNode<T>::insert(T* newCube)
     {
       if(rightHeight == 0)
       {
-        BinaryNode<T>* newNode = new BinaryNode<T>;
+        BinaryNodeF* newNode = new BinaryNodeF;
         newNode->parent = curr;
         newNode->cubePointer = newCube;
         curr->biggerChild = newNode;
@@ -198,13 +169,12 @@ bool BinaryNode<T>::insert(T* newCube)
   return true;
 }
 
-template <class T>
-bool BinaryNode<T>::rotUp()
+bool BinaryNodeF::rotUp()
 {
   int leftHeight, rightHeight, newHeight;
   if(!this->parent)
     return false;
-  BinaryNode* oldParent = this->parent;
+  BinaryNodeF* oldParent = this->parent;
   if(this == this->parent->biggerChild) //Left rotation
   {
   /*   P
@@ -212,7 +182,7 @@ bool BinaryNode<T>::rotUp()
      N   C
         / \
       SC   BC     */
-    BinaryNode* parentsParent = this->parent->parent;
+/*    BinaryNodeF* parentsParent = this->parent->parent;
     this->parent->biggerChild = this->smallerChild;
     if(this->smallerChild)
       this->smallerChild->parent = this->parent;
@@ -234,7 +204,7 @@ bool BinaryNode<T>::rotUp()
         C   N
        / \
      SC   BC       */
-    BinaryNode* parentsParent = this->parent->parent;
+/*    BinaryNodeF* parentsParent = this->parent->parent;
     this->parent->smallerChild = this->biggerChild;
     if(this->biggerChild)
       this->biggerChild->parent = this->parent;
@@ -266,8 +236,7 @@ bool BinaryNode<T>::rotUp()
   return true;
 }
 
-template <class T>
-void BinaryNode<T>::print(bool verbose)
+void BinaryNodeF::print(bool verbose)
 {
   std::cout << "Node: " << this << std::endl;
   std::cout << "Parent: " << parent << std::endl;
@@ -283,5 +252,4 @@ void BinaryNode<T>::print(bool verbose)
   if(biggerChild)
     biggerChild->print(verbose);
 }
-
-#endif // BINARYNODE_H
+*/

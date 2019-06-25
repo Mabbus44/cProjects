@@ -35,11 +35,17 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="include/BinaryNode.h" />
+		<Unit filename="include/BinaryNodeF.h" />
+		<Unit filename="include/FileHandler.h" />
 		<Unit filename="include/RubixCube.h" />
 		<Unit filename="include/RubixCube20B.h" />
+		<Unit filename="include/RubixCube20BF.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/BinaryNodeF.cpp" />
+		<Unit filename="src/FileHandler.cpp" />
 		<Unit filename="src/RubixCube.cpp" />
 		<Unit filename="src/RubixCube20B.cpp" />
+		<Unit filename="src/RubixCube20BF.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
