@@ -11,7 +11,7 @@
 1556568580 c:\users\rasun\documents\c++ projects\rubix2019\include\rubixcube.h
 	<inttypes.h>
 
-1561455911 source:c:\users\rasun\documents\cprojects\rubix2019\main.cpp
+1561622241 source:c:\users\rasun\documents\cprojects\rubix2019\main.cpp
 	<iostream>
 	<vector>
 	<set>
@@ -66,21 +66,32 @@
 1561450839 c:\users\rasun\documents\cprojects\rubix2019\include\binarynode.h
 	<list>
 
-1561453067 c:\users\rasun\documents\cprojects\rubix2019\include\rubixcube20bf.h
+1561616202 c:\users\rasun\documents\cprojects\rubix2019\include\rubixcube20bf.h
 	<iomanip>
 
-1561453067 source:c:\users\rasun\documents\cprojects\rubix2019\src\rubixcube20bf.cpp
+1561616202 source:c:\users\rasun\documents\cprojects\rubix2019\src\rubixcube20bf.cpp
+	<iostream>
 	<iomanip>
 	"RubixCube20BF.h"
 
-1561453067 source:c:\users\rasun\documents\cprojects\rubix2019\src\binarynodef.cpp
+1561616483 source:c:\users\rasun\documents\cprojects\rubix2019\src\binarynodef.cpp
+	<iostream>
+	"RubixCube20BF.h"
+	"FileHandler.h"
+	"BinaryNodeF.h"
 
-1561455824 source:c:\users\rasun\documents\cprojects\rubix2019\src\filehandler.cpp
+1561619543 source:c:\users\rasun\documents\cprojects\rubix2019\src\filehandler.cpp
 	<iostream>
 	<fstream>
 	<string>
 	"FileHandler.h"
 
-1561455807 c:\users\rasun\documents\cprojects\rubix2019\include\filehandler.h
+1561619397 c:\users\rasun\documents\cprojects\rubix2019\include\filehandler.h
 	<fstream>
+	"BinaryNodeF.h"
+	"RubixCube20BF.h"
+
+1561614909 c:\users\rasun\documents\cprojects\rubix2019\include\binarynodef.h
+	"rubixCube20BF.h"
+	"FileHandler.h"
 

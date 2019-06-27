@@ -1,4 +1,4 @@
-/*#include <iostream>
+#include <iostream>
 #include <iomanip>
 #include "RubixCube20BF.h"
 
@@ -19,7 +19,6 @@ RubixCube20BF& RubixCube20BF::operator=(const RubixCube20BF& other)
       this->corners[a] = other.corners[a];
     this->sides[a] = other.sides[a];
   }
-  this->parent = other.parent;
   return *this;
 }
 
@@ -84,17 +83,24 @@ int RubixCube20BF::seb(RubixCube20BF* other)
   return EQUALS;
 }
 
-void RubixCube20BF::print()
+void RubixCube20BF::print(bool verbose)
 {
-  std::cout << "                " << std::setw(3) << (int)(this->sides[7]) << std::endl;
-  std::cout << "            " << std::setw(3) << (int)(this->sides[4]) << "     " << std::setw(3) << (int)(this->sides[6]) << std::endl;
-  std::cout << "                " << std::setw(3) << (int)(this->sides[5]) << std::endl;
-  std::cout << std::setw(3) << (int)(this->corners[0]) << "         " << std::setw(3) << (int)(this->corners[1]) << "         " << std::setw(3) << (int)(this->corners[2]) << "         " << std::setw(3) << (int)(this->corners[3]) << std::endl;
-  std::cout << std::setw(3) << (int)(this->sides[0])   << "         " << std::setw(3) << (int)(this->sides[1])   << "         " << std::setw(3) << (int)(this->sides[2])   << "         " << std::setw(3) << (int)(this->sides[3])   << std::endl;
-  std::cout << std::setw(3) << (int)(this->corners[4]) << "         " << std::setw(3) << (int)(this->corners[5]) << "         " << std::setw(3) << (int)(this->corners[6]) << "         " << std::setw(3) << (int)(this->corners[7]) << std::endl;
-  std::cout << "                " << std::setw(3) << (int)(this->sides[9]) << std::endl;
-  std::cout << "            " << std::setw(3) << (int)(this->sides[8]) << "     " << (int)(this->sides[10]) << std::endl;
-  std::cout << "                " << std::setw(3) << (int)(this->sides[11]) << std::endl;
+  std::cout << "Cube adress: " << adress << std::endl;
+  std::cout << "Parent: " << parent << std::endl;
+  std::cout << "FirstChild: " << firstChild << std::endl;
+  std::cout << "Sibling: " << sibling << std::endl;
+  if(verbose)
+  {
+    std::cout << "                " << std::setw(3) << (int)(this->sides[7]) << std::endl;
+    std::cout << "            " << std::setw(3) << (int)(this->sides[4]) << "     " << std::setw(3) << (int)(this->sides[6]) << std::endl;
+    std::cout << "                " << std::setw(3) << (int)(this->sides[5]) << std::endl;
+    std::cout << std::setw(3) << (int)(this->corners[0]) << "         " << std::setw(3) << (int)(this->corners[1]) << "         " << std::setw(3) << (int)(this->corners[2]) << "         " << std::setw(3) << (int)(this->corners[3]) << std::endl;
+    std::cout << std::setw(3) << (int)(this->sides[0])   << "         " << std::setw(3) << (int)(this->sides[1])   << "         " << std::setw(3) << (int)(this->sides[2])   << "         " << std::setw(3) << (int)(this->sides[3])   << std::endl;
+    std::cout << std::setw(3) << (int)(this->corners[4]) << "         " << std::setw(3) << (int)(this->corners[5]) << "         " << std::setw(3) << (int)(this->corners[6]) << "         " << std::setw(3) << (int)(this->corners[7]) << std::endl;
+    std::cout << "                " << std::setw(3) << (int)(this->sides[9]) << std::endl;
+    std::cout << "            " << std::setw(3) << (int)(this->sides[8]) << "     " << (int)(this->sides[10]) << std::endl;
+    std::cout << "                " << std::setw(3) << (int)(this->sides[11]) << std::endl;
+  }
 }
 
 
@@ -2069,4 +2075,4 @@ RubixCube20BF::~RubixCube20BF()
 {
   //dtor
 }
-*/
+

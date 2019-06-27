@@ -1,4 +1,4 @@
-/*#ifndef SEB
+#ifndef SEB
 enum SEB {SMALLER, EQUALS, BIGGER};
 #define SEB
 #endif // SEB
@@ -13,10 +13,10 @@ class RubixCube20BF
   public:
     __int8 corners[8];
     __int8 sides[12];
-    int adress;
-    int parent;
-    int firstChild;
-    int sibling;
+    __int64 adress;
+    __int64 parent;
+    __int64 firstChild;
+    __int64 sibling;
 
     RubixCube20BF();
     RubixCube20BF& operator=(const RubixCube20BF& other);
@@ -24,7 +24,7 @@ class RubixCube20BF
     bool operator<(const RubixCube20BF& other);
     bool operator>(const RubixCube20BF& other);
     int seb(RubixCube20BF* other);
-    void print();
+    void print(bool verbose = false);
     RubixCube20BF returnChild(int move);
     RubixCube20BF returnRot(int rot);
     __int8 turnSide(__int8 side);
@@ -40,4 +40,4 @@ class RubixCube20BF
 };
 
 #endif // RUBIXCUBE20BF_H
-*/
+
