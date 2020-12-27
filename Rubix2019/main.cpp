@@ -16,7 +16,6 @@ void generateCubesSet(int maxGenerations);
 void generateCubes20BSet(int maxGenerations);
 void generateCubes20BBinaryNode(int maxGenerations);
 void generateCubes20BF(int maxGenerations);
-void printCubes(int cubeCount);
 void printCubes(int cubeCount, FileHandler* fh);
 
 int main()
@@ -505,10 +504,6 @@ void generateCubes20BF(int maxGenerations)
   __int64 statsInterval = 1;
   __int64 nextStats = 0;
   __int64 lastStats;
-  FileHandler* fh = new FileHandler();
-  fh->openCubeFile("cube.dat");
-  fh->openNodeFile("node.dat");
-  fh->openStatsFile("stats.dat");
 
   RubixCube20BF* child;
   RubixCube20BF rotChild;
@@ -523,7 +518,27 @@ void generateCubes20BF(int maxGenerations)
   __int64 totalPopulation;
   __int64 checkingCube;
 
+  FileHandler* fh = new FileHandler();
+  if(!fh->openStatsFile("stats.dat"))
+    return;
   fh->loadStats(&checkingCube, &totalPopulation, &populationUpuntilLastGeneration, &generation, true);
+  __int64 nextFileAt = CUBES_PER_FILE + 1;
+  __int64 tempCubeCount = totalPopulation;
+  int fileCount = 1;
+  while(tempCubeCount>CUBES_PER_FILE)
+  {
+    tempCubeCount-=CUBES_PER_FILE;
+    nextFileAt+=nextFileAt;
+    fileCount++;
+  }
+  for(int i=0; i<fileCount; i++)
+  {
+    if(!fh->openCubeFile("cube"))
+      return;
+    if(!fh->openNodeFile("node"))
+      return;
+  }
+
   if(checkingCube == 1)
   {
     r = new RubixCube20BF;
@@ -570,7 +585,49 @@ void generateCubes20BF(int maxGenerations)
       }
       if(unique)
       {
+        for(int i2 = 0; i2<totalPopulation; i2++)
+        {
+          RubixCube20BF* tempCube = fh->loadCube(i2+1);
+          int zeroes = 0;
+          for(int i=0; i<12; i++)
+          {
+            if(tempCube->sides[i] == 0)
+              zeroes++;
+          }
+          if(zeroes > 1)
+            bool trrtlkn = true;
+          zeroes = 0;
+          for(int i=0; i<8; i++)
+          {
+            if(tempCube->corners[i] == 0)
+              zeroes++;
+          }
+          if(zeroes > 1)
+            bool trrtlkn = true;
+          delete tempCube;
+        }
         totalPopulation++;
+        if(totalPopulation == nextFileAt)
+        {
+          nextFileAt += CUBES_PER_FILE;
+          if(!fh->openCubeFile("cube"))
+            return;
+          if(!fh->openNodeFile("node"))
+            return;
+        }
+        /*if(totalPopulation >= 30)
+        {
+          RubixCube20BF* tempCube = fh->loadCube(30);
+          int zeroes = 0;
+          for(int i=0; i<12; i++)
+          {
+            if(cube->sides[i] == 0)
+              zeroes++;
+          }
+          if(zeroes > 1)
+            bool trrtlkn = true;
+          delete tempCube;
+        }*/
         child->parent = checkingCube;
         child->adress = totalPopulation;
         if(lastChild)
@@ -584,16 +641,16 @@ void generateCubes20BF(int maxGenerations)
         __int64 newTop = fh->loadNodeParent(topNode->adress);
         if(!newTop)
           newTop = topNode->adress;
-        delete topNode;
+       delete topNode;
         topNode = fh->loadNode(newTop);
       }
       else
         delete child;
     }
     delete cube;
-    if(checkingCube >= nextStats)
+    if(true || checkingCube >= nextStats)
     {
-      chronoTimeFinish = std::chrono::steady_clock::now();
+      /*chronoTimeFinish = std::chrono::steady_clock::now();
       timePassed = (std::chrono::duration_cast<std::chrono::seconds>(chronoTimeFinish - chronoTimeStart).count())/1.0;
 
       if(timePassed < 5.0)
@@ -602,10 +659,10 @@ void generateCubes20BF(int maxGenerations)
         statsInterval++;
       else
         statsInterval--;
-      nextStats = checkingCube+statsInterval;
-      cout << "Cubes checked: " << checkingCube << "/" << populationUpuntilLastGeneration << " (" << totalPopulation << ")(" << timePassed/((double)(checkingCube-lastStats)) << " c/s)" << endl;
-      lastStats = checkingCube;
-      chronoTimeStart = std::chrono::steady_clock::now();
+      nextStats = checkingCube+statsInterval;*/
+      cout << "Cubes checked: " << checkingCube << "/" << populationUpuntilLastGeneration << " (" << totalPopulation << ")"<<endl;//(" << timePassed/((double)(checkingCube-lastStats)) << " c/s)" << endl;
+/*      lastStats = checkingCube;
+      chronoTimeStart = std::chrono::steady_clock::now();*/
     }
     if(checkingCube >= populationUpuntilLastGeneration)
     {
@@ -626,24 +683,11 @@ void generateCubes20BF(int maxGenerations)
 
   std::cout << "generateCubes20BF() done" << std::endl;
 
-  fh->cubeFile.close();
-  fh->nodeFile.close();
+  for(unsigned int i=0; i<fh->cubeFile.size(); i++)
+    fh->cubeFile[i]->close();
+  for(unsigned int i=0; i<fh->nodeFile.size(); i++)
+    fh->nodeFile[i]->close();
   fh->statsFile.close();
-  delete fh;
-}
-
-void printCubes(int cubeCount)
-{
-  FileHandler* fh = new FileHandler();
-  fh->openCubeFile("cube.dat");
-  fh->openNodeFile("node.dat");
-  for(int i=0; i<cubeCount; i++)
-  {
-    BinaryNodeF* node = fh->loadNode(i+1);
-    node->print(fh, true);
-  }
-  fh->cubeFile.close();
-  fh->nodeFile.close();
   delete fh;
 }
 

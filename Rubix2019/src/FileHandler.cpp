@@ -18,16 +18,19 @@ FileHandler::~FileHandler()
 
 bool FileHandler::openNodeFile(string filename)
 {
-  nodeFile.open(filename, ios::in | ios::out | ios::binary);
-  if(!nodeFile.is_open())
+  filename = filename + to_string(nodeFile.size()+1) + ".dat";
+  fstream* file = new fstream();
+  nodeFile.push_back(file);
+  nodeFile[nodeFile.size()-1]->open(filename, ios::in | ios::out | ios::binary);
+  if(!nodeFile[nodeFile.size()-1]->is_open())
   {
     if(!createNodeFile(filename))
     {
       cout << "ERROR: Could not create file " << filename << endl;
       return false;
     }
-    nodeFile.open(filename, ios::in | ios::out | ios::binary);
-    if(!nodeFile.is_open())
+    nodeFile[nodeFile.size()-1]->open(filename, ios::in | ios::out | ios::binary);
+    if(!nodeFile[nodeFile.size()-1]->is_open())
     {
       cout << "ERROR: Could not open file " << filename << endl;
       return false;
@@ -38,7 +41,7 @@ bool FileHandler::openNodeFile(string filename)
     node->smallerChild = 0;
     node->biggerChild = 0;
     node->height = 0;
-    for(int i=0; i<20000000; i++)
+    for(int i=0; i<CUBES_PER_FILE; i++)
     {
       node->adress = i+1;
       saveNode(node);
@@ -51,16 +54,19 @@ bool FileHandler::openNodeFile(string filename)
 
 bool FileHandler::openCubeFile(string filename)
 {
-  cubeFile.open(filename, ios::in | ios::out | ios::binary);
-  if(!cubeFile.is_open())
+  filename = filename + to_string(nodeFile.size()+1) + ".dat";
+  fstream* file = new fstream;
+  cubeFile.push_back(file);
+  cubeFile[cubeFile.size()-1]->open(filename, ios::in | ios::out | ios::binary);
+  if(!cubeFile[cubeFile.size()-1]->is_open())
   {
     if(!createCubeFile(filename))
     {
       cout << "ERROR: Could not create file " << filename << endl;
       return false;
     }
-    cubeFile.open(filename, ios::in | ios::out | ios::binary);
-    if(!cubeFile.is_open())
+    cubeFile[cubeFile.size()-1]->open(filename, ios::in | ios::out | ios::binary);
+    if(!cubeFile[cubeFile.size()-1]->is_open())
     {
       cout << "ERROR: Could not open file " << filename << endl;
       return false;
@@ -74,7 +80,7 @@ bool FileHandler::openCubeFile(string filename)
         cube->sides[side] = 0;
     for(int corner = 0; corner<8; corner++)
         cube->corners[corner] = 0;
-    for(int i=0; i<20000000; i++)
+    for(int i=0; i<CUBES_PER_FILE; i++)
     {
       cube->adress = i+1;
       saveCube(cube);
@@ -115,19 +121,19 @@ bool FileHandler::openStatsFile(string filename)
 
 bool FileHandler::createNodeFile(string filename)
 {
-  nodeFile.open(filename, ios::out | ios::binary);
-  if(!nodeFile.is_open())
+  nodeFile[nodeFile.size()-1]->open(filename, ios::out | ios::binary);
+  if(!nodeFile[nodeFile.size()-1]->is_open())
     return false;
-  nodeFile.close();
+  nodeFile[nodeFile.size()-1]->close();
   return true;
 }
 
 bool FileHandler::createCubeFile(string filename)
 {
-  cubeFile.open(filename, ios::out | ios::binary);
-  if(!cubeFile.is_open())
+  cubeFile[cubeFile.size()-1]->open(filename, ios::out | ios::binary);
+  if(!cubeFile[cubeFile.size()-1]->is_open())
     return false;
-  cubeFile.close();
+  cubeFile[cubeFile.size()-1]->close();
   return true;
 }
 
@@ -142,121 +148,207 @@ bool FileHandler::createStatsFile(string filename)
 
 bool FileHandler::saveCube(RubixCube20BF* cube)
 {
-  cubeFile.seekp((cube->adress-1)*44);
-  cubeFile.write(cube->corners, 8);
-  cubeFile.write(cube->sides, 12);
-  cubeFile.write((char*)(&(cube->parent)), 8);
-  cubeFile.write((char*)(&(cube->firstChild)), 8);
-  cubeFile.write((char*)(&(cube->sibling)), 8);
+  int fileIndex = 0;
+  __int64 adress = cube->adress;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
+  cubeFile[fileIndex]->seekp((adress-1)*44);
+  cubeFile[fileIndex]->write(cube->corners, 8);
+  cubeFile[fileIndex]->write(cube->sides, 12);
+  cubeFile[fileIndex]->write((char*)(&(cube->parent)), 8);
+  cubeFile[fileIndex]->write((char*)(&(cube->firstChild)), 8);
+  cubeFile[fileIndex]->write((char*)(&(cube->sibling)), 8);
   return true;
 }
 
-bool FileHandler::saveCubeFirstChild(int adress, __int64 firstChild)
+bool FileHandler::saveCubeFirstChild(__int64 adress, __int64 firstChild)
 {
-  cubeFile.seekp((adress-1)*44+28);
-  cubeFile.write((char*)(&(firstChild)), 8);
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
+  cubeFile[fileIndex]->seekp((adress-1)*44+28);
+  cubeFile[fileIndex]->write((char*)(&(firstChild)), 8);
   return true;
 }
 
-bool FileHandler::saveCubeSibling(int adress, __int64 sibling)
+bool FileHandler::saveCubeSibling(__int64 adress, __int64 sibling)
 {
-  cubeFile.seekp((adress-1)*44+36);
-  cubeFile.write((char*)(&(sibling)), 8);
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
+  cubeFile[fileIndex]->seekp((adress-1)*44+36);
+  cubeFile[fileIndex]->write((char*)(&(sibling)), 8);
   return true;
 }
 
-RubixCube20BF* FileHandler::loadCube(int adress)
+RubixCube20BF* FileHandler::loadCube(__int64 adress)
 {
   RubixCube20BF* ret = new RubixCube20BF();
   ret->adress = adress;
-  cubeFile.seekg((adress-1)*44);
-  cubeFile.read(ret->corners, 8);
-  cubeFile.read(ret->sides, 12);
-  cubeFile.read((char*)(&(ret->parent)), 8);
-  cubeFile.read((char*)(&(ret->firstChild)), 8);
-  cubeFile.read((char*)(&(ret->sibling)), 8);
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
+  cubeFile[fileIndex]->seekg((adress-1)*44);
+  cubeFile[fileIndex]->read(ret->corners, 8);
+  cubeFile[fileIndex]->read(ret->sides, 12);
+  cubeFile[fileIndex]->read((char*)(&(ret->parent)), 8);
+  cubeFile[fileIndex]->read((char*)(&(ret->firstChild)), 8);
+  cubeFile[fileIndex]->read((char*)(&(ret->sibling)), 8);
   return ret;
 }
 
 bool FileHandler::saveNode(BinaryNodeF* node)
 {
-  nodeFile.seekp((node->adress-1)*32);
-  nodeFile.write((char*)(&(node->parent)), 8);
-  nodeFile.write((char*)(&(node->smallerChild)), 8);
-  nodeFile.write((char*)(&(node->biggerChild)), 8);
-  nodeFile.write((char*)(&(node->height)), 8);
+  int fileIndex = 0;
+  __int64 adress = node->adress;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
+  nodeFile[fileIndex]->seekp((adress-1)*32);
+  nodeFile[fileIndex]->write((char*)(&(node->parent)), 8);
+  nodeFile[fileIndex]->write((char*)(&(node->smallerChild)), 8);
+  nodeFile[fileIndex]->write((char*)(&(node->biggerChild)), 8);
+  nodeFile[fileIndex]->write((char*)(&(node->height)), 8);
   return true;
 }
 
-BinaryNodeF* FileHandler::loadNode(int adress)
+BinaryNodeF* FileHandler::loadNode(__int64 adress)
 {
   BinaryNodeF* ret = new BinaryNodeF();
   ret->adress = adress;
-  nodeFile.seekg((adress-1)*32);
-  nodeFile.read((char*)(&(ret->parent)), 8);
-  nodeFile.read((char*)(&(ret->smallerChild)), 8);
-  nodeFile.read((char*)(&(ret->biggerChild)), 8);
-  nodeFile.read((char*)(&(ret->height)), 8);
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
+  nodeFile[fileIndex]->seekg((adress-1)*32);
+  nodeFile[fileIndex]->read((char*)(&(ret->parent)), 8);
+  nodeFile[fileIndex]->read((char*)(&(ret->smallerChild)), 8);
+  nodeFile[fileIndex]->read((char*)(&(ret->biggerChild)), 8);
+  nodeFile[fileIndex]->read((char*)(&(ret->height)), 8);
   return ret;
 }
 
-__int64 FileHandler::loadNodeParent(int adress)
+__int64 FileHandler::loadNodeParent(__int64 adress)
 {
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
   int ret;
-  nodeFile.seekg((adress-1)*32);
-  nodeFile.read((char*)(&ret), 8);
+  nodeFile[fileIndex]->seekg((adress-1)*32);
+  nodeFile[fileIndex]->read((char*)(&ret), 8);
   return ret;
 }
 
-bool FileHandler::saveNodeParent(int adress, __int64 parent)
+bool FileHandler::saveNodeParent(__int64 adress, __int64 parent)
 {
-  nodeFile.seekp((adress-1)*32);
-  nodeFile.write((char*)(&(parent)), 8);
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
+  nodeFile[fileIndex]->seekp((adress-1)*32);
+  nodeFile[fileIndex]->write((char*)(&(parent)), 8);
   return true;
 }
 
-__int64 FileHandler::loadNodeSmallerChild(int adress)
+__int64 FileHandler::loadNodeSmallerChild(__int64 adress)
 {
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
   int ret;
-  nodeFile.seekg((adress-1)*32+8);
-  nodeFile.read((char*)(&ret), 8);
+  nodeFile[fileIndex]->seekg((adress-1)*32+8);
+  nodeFile[fileIndex]->read((char*)(&ret), 8);
   return ret;
 }
 
-bool FileHandler::saveNodeSmallerChild(int adress, __int64 SmallerChild)
+bool FileHandler::saveNodeSmallerChild(__int64 adress, __int64 SmallerChild)
 {
-  nodeFile.seekp((adress-1)*32+8);
-  nodeFile.write((char*)(&(SmallerChild)), 8);
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
+  nodeFile[fileIndex]->seekp((adress-1)*32+8);
+  nodeFile[fileIndex]->write((char*)(&(SmallerChild)), 8);
   return true;
 }
 
-__int64 FileHandler::loadNodeBiggerChild(int adress)
+__int64 FileHandler::loadNodeBiggerChild(__int64 adress)
 {
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
   int ret;
-  nodeFile.seekg((adress-1)*32+16);
-  nodeFile.read((char*)(&ret), 8);
+  nodeFile[fileIndex]->seekg((adress-1)*32+16);
+  nodeFile[fileIndex]->read((char*)(&ret), 8);
   return ret;
 }
 
-bool FileHandler::saveNodeBiggerChild(int adress, __int64 BiggerChild)
+bool FileHandler::saveNodeBiggerChild(__int64 adress, __int64 BiggerChild)
 {
-  nodeFile.seekp((adress-1)*32+16);
-  nodeFile.write((char*)(&(BiggerChild)), 8);
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
+  nodeFile[fileIndex]->seekp((adress-1)*32+16);
+  nodeFile[fileIndex]->write((char*)(&(BiggerChild)), 8);
   return true;
 }
 
-__int64 FileHandler::loadNodeHeight(int adress)
+__int64 FileHandler::loadNodeHeight(__int64 adress)
 {
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
   int ret;
-  nodeFile.seekg((adress-1)*32+24);
-  nodeFile.read((char*)(&ret), 8);
+  nodeFile[fileIndex]->seekg((adress-1)*32+24);
+  nodeFile[fileIndex]->read((char*)(&ret), 8);
   return ret;
 }
 
-bool FileHandler::saveNodeHeight(int adress, __int64 height)
+bool FileHandler::saveNodeHeight(__int64 adress, __int64 height)
 {
-  nodeFile.seekp((adress-1)*32+24);
-  nodeFile.write((char*)(&(height)), 8);
+  int fileIndex = 0;
+  while(adress>CUBES_PER_FILE)
+  {
+    fileIndex++;
+    adress-=CUBES_PER_FILE;
+  }
+  nodeFile[fileIndex]->seekp((adress-1)*32+24);
+  nodeFile[fileIndex]->write((char*)(&(height)), 8);
   return true;
 }
 

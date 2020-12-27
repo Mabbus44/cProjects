@@ -11,7 +11,7 @@
 1556568580 c:\users\rasun\documents\c++ projects\rubix2019\include\rubixcube.h
 	<inttypes.h>
 
-1561622241 source:c:\users\rasun\documents\cprojects\rubix2019\main.cpp
+1561716666 source:c:\users\rasun\documents\cprojects\rubix2019\main.cpp
 	<iostream>
 	<vector>
 	<set>
@@ -80,14 +80,15 @@
 	"FileHandler.h"
 	"BinaryNodeF.h"
 
-1561619543 source:c:\users\rasun\documents\cprojects\rubix2019\src\filehandler.cpp
+1561669332 source:c:\users\rasun\documents\cprojects\rubix2019\src\filehandler.cpp
 	<iostream>
 	<fstream>
 	<string>
 	"FileHandler.h"
 
-1561619397 c:\users\rasun\documents\cprojects\rubix2019\include\filehandler.h
+1561669056 c:\users\rasun\documents\cprojects\rubix2019\include\filehandler.h
 	<fstream>
+	<vector>
 	"BinaryNodeF.h"
 	"RubixCube20BF.h"
 
