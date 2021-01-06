@@ -1,6 +1,6 @@
 #ifndef FILEHANDLER_H
 #define FILEHANDLER_H
-#define CUBES_PER_FILE 200
+#define CUBES_PER_FILE 4000000
 #include <fstream>
 #include <vector>
 #include "BinaryNodeF.h"

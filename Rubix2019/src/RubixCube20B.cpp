@@ -85,6 +85,9 @@ int RubixCube20B::seb(RubixCube20B* other)
 
 void RubixCube20B::print()
 {
+  std::cout << "Parent: " << this->parent << std::endl;
+  std::cout << "FirstChild: " << this->firstChild << std::endl;
+  std::cout << "Sibling: " << this->sibling << std::endl;
   std::cout << "                " << std::setw(3) << (int)(this->sides[7]) << std::endl;
   std::cout << "            " << std::setw(3) << (int)(this->sides[4]) << "     " << std::setw(3) << (int)(this->sides[6]) << std::endl;
   std::cout << "                " << std::setw(3) << (int)(this->sides[5]) << std::endl;

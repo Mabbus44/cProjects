@@ -6,6 +6,7 @@ enum SEB {SMALLER, EQUALS, BIGGER};
 #ifndef RUBIXCUBE20BF_H
 #define RUBIXCUBE20BF_H
 #include <iomanip>
+#include "RubixCube20B.h"
 
 
 class RubixCube20BF
@@ -21,6 +22,7 @@ class RubixCube20BF
     RubixCube20BF();
     RubixCube20BF& operator=(const RubixCube20BF& other);
     bool operator==(const RubixCube20BF& other);
+    bool operator==(const RubixCube20B& other);
     bool operator<(const RubixCube20BF& other);
     bool operator>(const RubixCube20BF& other);
     int seb(RubixCube20BF* other);

@@ -35,6 +35,18 @@ bool RubixCube20BF::operator==(const RubixCube20BF& other)
   return true;
 }
 
+bool RubixCube20BF::operator==(const RubixCube20B& other)
+{
+  for(int a=0; a<12; a++)
+  {
+    if(a<8 && this->corners[a] != other.corners[a])
+      return false;
+    if(this->sides[a] != other.sides[a])
+      return false;
+  }
+  return true;
+}
+
 bool RubixCube20BF::operator<(const RubixCube20BF& other)
 {
   for(int a=0; a<12; a++)

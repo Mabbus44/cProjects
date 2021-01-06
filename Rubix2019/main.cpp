@@ -7,25 +7,29 @@
 #include "RubixCube20B.h"
 #include "BinaryNode.h"
 #include "FileHandler.h"
-//#include "RubixCube20BF.h"
+#include "RubixCube20BF.h"
 
 using namespace std;
 
 void generateCubesVector(int maxGenerations);
 void generateCubesSet(int maxGenerations);
 void generateCubes20BSet(int maxGenerations);
-void generateCubes20BBinaryNode(int maxGenerations);
-void generateCubes20BF(int maxGenerations);
-void printCubes(int cubeCount, FileHandler* fh);
+RubixCube20B* generateCubes20BBinaryNode(int maxGenerations);
+void generateCubes20BF();
+void compareCubesToFiles(RubixCube20B* cube);
+void printCubes(RubixCube20B* cube);
+void printCubesF();
 
 int main()
 {
-  //generateCubesVector(4);
-  //generateCubesSet(4);
-  //generateCubes20BSet(8);
-  //generateCubes20BBinaryNode(9);
-  generateCubes20BF(7);
-  //printCubes(2);
+  //generateCubesVector(7);
+  //generateCubesSet(9);
+  //generateCubes20BSet(9);
+  //generateCubes20BBinaryNode(8);
+  //generateCubes20BF();
+  compareCubesToFiles(generateCubes20BBinaryNode(7));
+  //printCubes(generateCubes20BBinaryNode(3));
+  //printCubesF();
 }
 
 void generateCubesVector(int maxGenerations)
@@ -370,7 +374,7 @@ void generateCubes20BSet(int maxGenerations)
 }
 
 
-void generateCubes20BBinaryNode(int maxGenerations)
+RubixCube20B* generateCubes20BBinaryNode(int maxGenerations)
 {
   auto chronoTimeStart = std::chrono::steady_clock::now();
   auto chronoTimeFinish = std::chrono::steady_clock::now();
@@ -493,10 +497,152 @@ void generateCubes20BBinaryNode(int maxGenerations)
   for(unsigned int i=0; i<gVector.size(); i++)
     std::cout << "Generation " << i+1 << ": " << gVector[i] << " in " << tVector[i] << " seconds" << std::endl;
   std::cout << std::endl;
+  return trackGenerations[0];
 }
 
 
-void generateCubes20BF(int maxGenerations)
+void compareCubesToFiles(RubixCube20B* cube)
+{
+  RubixCube20B* trackGenerations[50];
+  RubixCube20BF* trackGenerationsF[50];
+  bool moveUp;
+  bool comparedCube = true;
+  int compareGenration = 1;
+  FileHandler* fh = new FileHandler();
+  __int64 generation;
+  __int64 populationUpuntilLastGeneration;
+  __int64 totalPopulation;
+  __int64 checkingCube;
+
+  if(!fh->openStatsFile("C:\\cubes\\stats"))
+    return;
+  fh->loadStats(&checkingCube, &totalPopulation, &populationUpuntilLastGeneration, &generation, true);
+  __int64 nextFileAt = CUBES_PER_FILE + 1;
+  __int64 tempCubeCount = totalPopulation;
+  int fileCount = 1;
+  while(tempCubeCount>CUBES_PER_FILE)
+  {
+    tempCubeCount-=CUBES_PER_FILE;
+    nextFileAt+=nextFileAt;
+    fileCount++;
+  }
+  for(int i=0; i<fileCount; i++)
+  {
+    if(!fh->openCubeFile("C:\\cubes\\cube"))
+      return;
+    if(!fh->openNodeFile("C:\\cubes\\node"))
+      return;
+  }
+
+  if(checkingCube == 1)
+  {
+    std::cout << "No cubes to print, exiting compareCubesToFiles()" << std::endl;
+    return;
+  }
+
+  trackGenerations[0] = cube;
+  trackGenerationsF[0] = fh->loadCube(1);
+  for(int i=1; i<50; i++)
+  {
+    trackGenerations[i] = NULL;
+    trackGenerationsF[i] = NULL;
+  }
+  while(comparedCube)
+  {
+    comparedCube = false;
+    moveUp = false;
+    int generationForTracking = 1;
+    while(generationForTracking > 1 || !moveUp)
+    {
+      if(compareGenration == generationForTracking)
+      {//Compare cubes
+        if(!comparedCube)
+        {
+          std::cout << std::endl << "Generation " << compareGenration << std::endl;
+          comparedCube = true;
+        }
+        if(!(*(trackGenerations[generationForTracking-1]) == *(trackGenerations[generationForTracking-1])))
+        {
+          std::cout << "Cubes does not match!!" << std::endl;
+          std::cout << "FileCube:" << std::endl;
+          trackGenerationsF[generationForTracking-1]->print(true);
+          std::cout << "RawCube:" << std::endl;
+          trackGenerations[generationForTracking-1]->print();
+          return;
+        }
+      }
+      if(compareGenration == generationForTracking)
+      {
+        if(trackGenerationsF[generationForTracking-1]->sibling)
+        { //If in comparing generation go to next sibling.
+          if(!trackGenerations[generationForTracking-1]->sibling)
+          {
+            std::cout << "Cube does not have sibling while cubeF does" << std::endl;
+          }
+          __int64 sibling = trackGenerationsF[generationForTracking-1]->sibling;
+          delete trackGenerationsF[generationForTracking-1];
+          trackGenerationsF[generationForTracking-1] = fh->loadCube(sibling);
+          trackGenerations[generationForTracking-1] = trackGenerations[generationForTracking-1]->sibling;
+          moveUp = false;
+        }
+        else
+        { //If in comparing and no sibling, move one generation up.
+          if(trackGenerations[generationForTracking-1]->sibling)
+          {
+            std::cout << "CubeF does not have sibling while cube does" << std::endl;
+          }
+          if(generationForTracking>1)
+            generationForTracking--;
+          moveUp = true;
+        }
+      }
+      else
+      {
+        if(!moveUp && trackGenerationsF[generationForTracking-1]->firstChild)
+        { //If not in comparing generation and did not recently move up and has a child, go to that child
+          if(!trackGenerations[generationForTracking-1]->firstChild)
+          {
+            std::cout << "Cube does not have child while cubeF does" << std::endl;
+          }
+          __int64 firstChild = trackGenerationsF[generationForTracking-1]->firstChild;
+          delete trackGenerationsF[generationForTracking];
+          trackGenerationsF[generationForTracking] = fh->loadCube(firstChild);
+          trackGenerations[generationForTracking] = trackGenerations[generationForTracking-1]->firstChild;
+          generationForTracking++;
+          moveUp = false;
+        }
+        else if(trackGenerationsF[generationForTracking-1]->sibling)
+        { //If just moved up or no child, go to next sibling
+          if(!trackGenerations[generationForTracking-1]->sibling)
+          {
+            std::cout << "Cube does not have sibling while cubeF does" << std::endl;
+          }
+          __int64 sibling = trackGenerationsF[generationForTracking-1]->sibling;
+          delete trackGenerationsF[generationForTracking-1];
+          trackGenerationsF[generationForTracking-1] = fh->loadCube(sibling);
+          trackGenerations[generationForTracking-1] = trackGenerations[generationForTracking-1]->sibling;
+          moveUp = false;
+        }
+        else
+        { //If just moved up or no child and no sibling, move one generation up
+          if(trackGenerations[generationForTracking-1]->sibling || (!moveUp && trackGenerations[generationForTracking-1]->firstChild))
+          {
+            std::cout << "CubeF does not have sibling or child while cube does" << std::endl;
+          }
+          if(generationForTracking>1)
+            generationForTracking--;
+          moveUp = true;
+        }
+      }
+    }
+    compareGenration++;
+  }
+
+  std::cout << "compareCubesToFiles() done" << std::endl;
+}
+
+
+void generateCubes20BF()
 {
   auto chronoTimeStart = std::chrono::steady_clock::now();
   auto chronoTimeFinish = std::chrono::steady_clock::now();
@@ -519,7 +665,7 @@ void generateCubes20BF(int maxGenerations)
   __int64 checkingCube;
 
   FileHandler* fh = new FileHandler();
-  if(!fh->openStatsFile("stats.dat"))
+  if(!fh->openStatsFile("C:\\cubes\\stats"))
     return;
   fh->loadStats(&checkingCube, &totalPopulation, &populationUpuntilLastGeneration, &generation, true);
   __int64 nextFileAt = CUBES_PER_FILE + 1;
@@ -533,9 +679,9 @@ void generateCubes20BF(int maxGenerations)
   }
   for(int i=0; i<fileCount; i++)
   {
-    if(!fh->openCubeFile("cube"))
+    if(!fh->openCubeFile("C:\\cubes\\cube"))
       return;
-    if(!fh->openNodeFile("node"))
+    if(!fh->openNodeFile("C:\\cubes\\node"))
       return;
   }
 
@@ -585,49 +731,15 @@ void generateCubes20BF(int maxGenerations)
       }
       if(unique)
       {
-        for(int i2 = 0; i2<totalPopulation; i2++)
-        {
-          RubixCube20BF* tempCube = fh->loadCube(i2+1);
-          int zeroes = 0;
-          for(int i=0; i<12; i++)
-          {
-            if(tempCube->sides[i] == 0)
-              zeroes++;
-          }
-          if(zeroes > 1)
-            bool trrtlkn = true;
-          zeroes = 0;
-          for(int i=0; i<8; i++)
-          {
-            if(tempCube->corners[i] == 0)
-              zeroes++;
-          }
-          if(zeroes > 1)
-            bool trrtlkn = true;
-          delete tempCube;
-        }
         totalPopulation++;
         if(totalPopulation == nextFileAt)
         {
           nextFileAt += CUBES_PER_FILE;
-          if(!fh->openCubeFile("cube"))
+          if(!fh->openCubeFile("C:\\cubes\\cube"))
             return;
-          if(!fh->openNodeFile("node"))
+          if(!fh->openNodeFile("C:\\cubes\\node"))
             return;
         }
-        /*if(totalPopulation >= 30)
-        {
-          RubixCube20BF* tempCube = fh->loadCube(30);
-          int zeroes = 0;
-          for(int i=0; i<12; i++)
-          {
-            if(cube->sides[i] == 0)
-              zeroes++;
-          }
-          if(zeroes > 1)
-            bool trrtlkn = true;
-          delete tempCube;
-        }*/
         child->parent = checkingCube;
         child->adress = totalPopulation;
         if(lastChild)
@@ -679,9 +791,12 @@ void generateCubes20BF(int maxGenerations)
   cout << "Cubes checked: " << checkingCube-1 << endl;
   cout << "New cubes in this generation: " << totalPopulation-populationUpuntilLastGeneration << endl;
   cout << "Total cubes: " << totalPopulation << endl << endl;
+
   fh->saveStats(checkingCube, totalPopulation, populationUpuntilLastGeneration, generation);
 
   std::cout << "generateCubes20BF() done" << std::endl;
+
+  //printCubes(8, fh);
 
   for(unsigned int i=0; i<fh->cubeFile.size(); i++)
     fh->cubeFile[i]->close();
@@ -691,12 +806,179 @@ void generateCubes20BF(int maxGenerations)
   delete fh;
 }
 
-void printCubes(int cubeCount, FileHandler* fh)
+
+void printCubes(RubixCube20B* cube)
 {
-  for(int i=0; i<cubeCount; i++)
+  RubixCube20B* trackGenerations[50];
+  bool moveUp;
+  bool printedCube = true;
+  int printGenration = 1;
+  trackGenerations[0] = cube;
+  while(trackGenerations[0]->parent)
   {
-    BinaryNodeF* node = fh->loadNode(i+1);
-    node->print(fh, true);
-    cout << endl;
+    trackGenerations[0] = trackGenerations[0]->parent;
   }
+
+  while(printedCube)
+  {
+    printedCube = false;
+    moveUp = false;
+    int generationForTracking = 1;
+    while(generationForTracking > 1 || !moveUp)
+    {
+      if(printGenration == generationForTracking)
+      {//Print cube
+        if(!printedCube)
+        {
+          std::cout << "Generation " << printGenration << std::endl;
+          printedCube = true;
+        }
+        trackGenerations[generationForTracking-1]->print();
+      }
+      if(printGenration == generationForTracking)
+      {
+        if(trackGenerations[generationForTracking-1]->sibling)
+        { //If in printing generation go to next sibling.
+          trackGenerations[generationForTracking-1] = trackGenerations[generationForTracking-1]->sibling;
+          moveUp = false;
+        }
+        else
+        { //If in printing and no sibling, move one generation up.
+          if(generationForTracking>1)
+            generationForTracking--;
+          moveUp = true;
+        }
+      }
+      else
+      {
+        if(!moveUp && trackGenerations[generationForTracking-1]->firstChild)
+        { //If not in printing generation and did not recently move up and has a child, go to that child
+          trackGenerations[generationForTracking] = trackGenerations[generationForTracking-1]->firstChild;
+          generationForTracking++;
+          moveUp = false;
+        }
+        else if(trackGenerations[generationForTracking-1]->sibling)
+        { //If just moved up or no child, go to next sibling
+          trackGenerations[generationForTracking-1] = trackGenerations[generationForTracking-1]->sibling;
+          moveUp = false;
+        }
+        else
+        { //If just moved up or no child and no sibling, move one generation up
+          if(generationForTracking>1)
+            generationForTracking--;
+          moveUp = true;
+        }
+      }
+    }
+    printGenration++;
+  }
+
+  std::cout << "printCubes() done" << std::endl;
+}
+
+
+void printCubesF()
+{
+  RubixCube20BF* trackGenerations[50];
+  bool moveUp;
+  bool printedCube = true;
+  int printGenration = 1;
+  FileHandler* fh = new FileHandler();
+  __int64 generation;
+  __int64 populationUpuntilLastGeneration;
+  __int64 totalPopulation;
+  __int64 checkingCube;
+
+  if(!fh->openStatsFile("C:\\cubes\\stats"))
+    return;
+  fh->loadStats(&checkingCube, &totalPopulation, &populationUpuntilLastGeneration, &generation, true);
+  __int64 nextFileAt = CUBES_PER_FILE + 1;
+  __int64 tempCubeCount = totalPopulation;
+  int fileCount = 1;
+  while(tempCubeCount>CUBES_PER_FILE)
+  {
+    tempCubeCount-=CUBES_PER_FILE;
+    nextFileAt+=nextFileAt;
+    fileCount++;
+  }
+  for(int i=0; i<fileCount; i++)
+  {
+    if(!fh->openCubeFile("C:\\cubes\\cube"))
+      return;
+    if(!fh->openNodeFile("C:\\cubes\\node"))
+      return;
+  }
+
+  if(checkingCube == 1)
+  {
+    std::cout << "No cubes to print, exiting printCubesF()" << std::endl;
+  }
+
+  trackGenerations[0] = fh->loadCube(1);
+  for(int i=1; i<50; i++)
+  {
+    trackGenerations[i] = NULL;
+  }
+  while(printedCube)
+  {
+    printedCube = false;
+    moveUp = false;
+    int generationForTracking = 1;
+    while(generationForTracking > 1 || !moveUp)
+    {
+      if(printGenration == generationForTracking)
+      {//Print cube
+        if(!printedCube)
+        {
+          std::cout << std::endl << "Generation " << printGenration << std::endl;
+          printedCube = true;
+        }
+        trackGenerations[generationForTracking-1]->print(true);
+        std::cout << std::endl;
+      }
+      if(printGenration == generationForTracking)
+      {
+        if(trackGenerations[generationForTracking-1]->sibling)
+        { //If in printing generation go to next sibling.
+          __int64 sibling = trackGenerations[generationForTracking-1]->sibling;
+          delete trackGenerations[generationForTracking-1];
+          trackGenerations[generationForTracking-1] = fh->loadCube(sibling);
+          moveUp = false;
+        }
+        else
+        { //If in printing and no sibling, move one generation up.
+          if(generationForTracking>1)
+            generationForTracking--;
+          moveUp = true;
+        }
+      }
+      else
+      {
+        if(!moveUp && trackGenerations[generationForTracking-1]->firstChild)
+        { //If not in printing generation and did not recently move up and has a child, go to that child
+          __int64 firstChild = trackGenerations[generationForTracking-1]->firstChild;
+          delete trackGenerations[generationForTracking];
+          trackGenerations[generationForTracking] = fh->loadCube(firstChild);
+          generationForTracking++;
+          moveUp = false;
+        }
+        else if(trackGenerations[generationForTracking-1]->sibling)
+        { //If just moved up or no child, go to next sibling
+          __int64 sibling = trackGenerations[generationForTracking-1]->sibling;
+          delete trackGenerations[generationForTracking-1];
+          trackGenerations[generationForTracking-1] = fh->loadCube(sibling);
+          moveUp = false;
+        }
+        else
+        { //If just moved up or no child and no sibling, move one generation up
+          if(generationForTracking>1)
+            generationForTracking--;
+          moveUp = true;
+        }
+      }
+    }
+    printGenration++;
+  }
+
+  std::cout << "printCubesF() done" << std::endl;
 }

@@ -293,7 +293,7 @@ void BinaryNodeF::print(FileHandler* fh, bool verbose)
   if(verbose)
   {
     RubixCube20BF* cube = fh->loadCube(adress);
-    cube->print();
+    cube->print(true);
     delete cube;
   }
   else

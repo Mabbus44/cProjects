@@ -96,3 +96,64 @@
 	"rubixCube20BF.h"
 	"FileHandler.h"
 
+1609611789 source:c:\github\cprojects\rubix2019\src\binarynodef.cpp
+	<iostream>
+	"RubixCube20BF.h"
+	"FileHandler.h"
+	"BinaryNodeF.h"
+
+1609946223 c:\github\cprojects\rubix2019\include\rubixcube20bf.h
+	<iomanip>
+	"RubixCube20B.h"
+
+1609962961 c:\github\cprojects\rubix2019\include\filehandler.h
+	<fstream>
+	<vector>
+	"BinaryNodeF.h"
+	"RubixCube20BF.h"
+
+1609067961 c:\github\cprojects\rubix2019\include\binarynodef.h
+	"rubixCube20BF.h"
+	"FileHandler.h"
+
+1609962326 source:c:\github\cprojects\rubix2019\src\filehandler.cpp
+	<iostream>
+	<fstream>
+	<string>
+	"FileHandler.h"
+
+1609067961 source:c:\github\cprojects\rubix2019\src\rubixcube.cpp
+	<iostream>
+	"RubixCube.h"
+
+1609067961 c:\github\cprojects\rubix2019\include\rubixcube.h
+	<inttypes.h>
+
+1609958495 source:c:\github\cprojects\rubix2019\src\rubixcube20b.cpp
+	<iostream>
+	<iomanip>
+	"RubixCube20B.h"
+
+1609067961 c:\github\cprojects\rubix2019\include\rubixcube20b.h
+	<iomanip>
+
+1609946223 source:c:\github\cprojects\rubix2019\src\rubixcube20bf.cpp
+	<iostream>
+	<iomanip>
+	"RubixCube20BF.h"
+
+1609962810 source:c:\github\cprojects\rubix2019\main.cpp
+	<iostream>
+	<vector>
+	<set>
+	<time.h>
+	<chrono>
+	"RubixCube.h"
+	"RubixCube20B.h"
+	"BinaryNode.h"
+	"FileHandler.h"
+	"RubixCube20BF.h"
+
+1609067961 c:\github\cprojects\rubix2019\include\binarynode.h
+	<list>
+

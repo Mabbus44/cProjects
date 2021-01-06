@@ -43,7 +43,7 @@ bool FileHandler::openNodeFile(string filename)
     node->height = 0;
     for(int i=0; i<CUBES_PER_FILE; i++)
     {
-      node->adress = i+1;
+      node->adress = i+1 + (nodeFile.size()-1) * CUBES_PER_FILE;
       saveNode(node);
     }
     delete node;
@@ -54,7 +54,7 @@ bool FileHandler::openNodeFile(string filename)
 
 bool FileHandler::openCubeFile(string filename)
 {
-  filename = filename + to_string(nodeFile.size()+1) + ".dat";
+  filename = filename + to_string(cubeFile.size()+1) + ".dat";
   fstream* file = new fstream;
   cubeFile.push_back(file);
   cubeFile[cubeFile.size()-1]->open(filename, ios::in | ios::out | ios::binary);
@@ -82,7 +82,7 @@ bool FileHandler::openCubeFile(string filename)
         cube->corners[corner] = 0;
     for(int i=0; i<CUBES_PER_FILE; i++)
     {
-      cube->adress = i+1;
+      cube->adress = i+1 + (cubeFile.size()-1) * CUBES_PER_FILE;
       saveCube(cube);
     }
     delete cube;
@@ -93,6 +93,7 @@ bool FileHandler::openCubeFile(string filename)
 
 bool FileHandler::openStatsFile(string filename)
 {
+  filename = filename + ".dat";
   statsFile.open(filename, ios::in | ios::out | ios::binary);
   if(!statsFile.is_open())
   {
