@@ -1,0 +1,61 @@
+# depslib dependency file v1.0
+1489250831 source:c:\users\mabbus\documents\c++ projects\eulermain\main.cpp
+	<windows.h>
+	"eulerWindow.h"
+
+1489323687 source:c:\users\mabbus\documents\c++ projects\eulermain\eulerwindow.cpp
+	<tchar.h>
+	<windows.h>
+	<commctrl.h>
+	<string>
+	"eulerWindow.h"
+	<sstream>
+
+1489324205 c:\users\mabbus\documents\c++ projects\eulermain\eulerwindow.h
+	<string>
+	<commctrl.h>
+	"variable.h"
+
+1489269478 source:c:\users\mabbus\documents\c++ projects\eulermain\number.cpp
+	<stdint.h>
+	<stdlib.h>
+	<algorithm>
+	"number.h"
+
+1489269202 c:\users\mabbus\documents\c++ projects\eulermain\number.h
+	<stdint.h>
+	"variable.h"
+
+1489307380 c:\users\mabbus\documents\c++ projects\eulermain\variable.h
+	<string>
+
+1489309253 source:c:\users\mabbus\documents\c++ projects\eulermain\variable.cpp
+	"number.h"
+	"variable.h"
+
+1489254431 source:c:\users\rasun\documents\old\old documents\dokument 2018\c++ projects\eulermain\main.cpp
+	<windows.h>
+	"eulerWindow.h"
+
+1489327805 c:\users\rasun\documents\old\old documents\dokument 2018\c++ projects\eulermain\eulerwindow.h
+	<string>
+	<commctrl.h>
+	"variable.h"
+
+1489310980 c:\users\rasun\documents\old\old documents\dokument 2018\c++ projects\eulermain\variable.h
+	<string>
+
+1489273078 source:c:\users\rasun\documents\old\old documents\dokument 2018\c++ projects\eulermain\number.cpp
+	<stdint.h>
+	<stdlib.h>
+	<algorithm>
+	"number.h"
+
+1489272802 c:\users\rasun\documents\old\old documents\dokument 2018\c++ projects\eulermain\number.h
+	<stdint.h>
+	"variable.h"
+
+1489312853 source:c:\users\rasun\documents\old\old documents\dokument 2018\c++ projects\eulermain\variable.cpp
+	"number.h"
+	"variable.h"
+

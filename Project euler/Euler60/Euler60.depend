@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1466888545 source:c:\users\mabbus\documents\c++ projects\euler60\main.cpp
+	<iostream>
+	<math.h>
+	"C:/Users/Mabbus/Documents/c++ projects/Primelist/primelist.h"
+
+1466767314 c:\users\mabbus\documents\c++ projects\number\number.h
+	<stdint.h>
+
+1466766737 c:\users\mabbus\documents\c++ projects\primelist\primelist.h
+	<stdint.h>
+
+1466889056 source:c:\users\mabbus\documents\c++ projects\primelist\primelist.cpp
+	<iostream>
+	"primelist.h"
+
