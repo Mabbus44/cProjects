@@ -1,7 +1,0 @@
-# depslib dependency file v1.0
-1544728196 source:c:\users\rasun\documents\c++ projects\advent of code 2018\day02\main.cpp
-	<iostream>
-	<fstream>
-	<string>
-	<list>
-
