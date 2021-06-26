@@ -96,48 +96,48 @@
 	"rubixCube20BF.h"
 	"FileHandler.h"
 
-1609611789 source:c:\github\cprojects\rubix2019\src\binarynodef.cpp
+1609615389 source:c:\github\cprojects\rubix2019\src\binarynodef.cpp
 	<iostream>
 	"RubixCube20BF.h"
 	"FileHandler.h"
 	"BinaryNodeF.h"
 
-1609946223 c:\github\cprojects\rubix2019\include\rubixcube20bf.h
+1609949823 c:\github\cprojects\rubix2019\include\rubixcube20bf.h
 	<iomanip>
 	"RubixCube20B.h"
 
-1609962961 c:\github\cprojects\rubix2019\include\filehandler.h
+1609966561 c:\github\cprojects\rubix2019\include\filehandler.h
 	<fstream>
 	<vector>
 	"BinaryNodeF.h"
 	"RubixCube20BF.h"
 
-1609067961 c:\github\cprojects\rubix2019\include\binarynodef.h
+1609071561 c:\github\cprojects\rubix2019\include\binarynodef.h
 	"rubixCube20BF.h"
 	"FileHandler.h"
 
-1609962326 source:c:\github\cprojects\rubix2019\src\filehandler.cpp
+1609965926 source:c:\github\cprojects\rubix2019\src\filehandler.cpp
 	<iostream>
 	<fstream>
 	<string>
 	"FileHandler.h"
 
-1609067961 source:c:\github\cprojects\rubix2019\src\rubixcube.cpp
+1609071561 source:c:\github\cprojects\rubix2019\src\rubixcube.cpp
 	<iostream>
 	"RubixCube.h"
 
-1609067961 c:\github\cprojects\rubix2019\include\rubixcube.h
+1609071561 c:\github\cprojects\rubix2019\include\rubixcube.h
 	<inttypes.h>
 
-1609958495 source:c:\github\cprojects\rubix2019\src\rubixcube20b.cpp
+1609962095 source:c:\github\cprojects\rubix2019\src\rubixcube20b.cpp
 	<iostream>
 	<iomanip>
 	"RubixCube20B.h"
 
-1609067961 c:\github\cprojects\rubix2019\include\rubixcube20b.h
+1609071561 c:\github\cprojects\rubix2019\include\rubixcube20b.h
 	<iomanip>
 
-1609946223 source:c:\github\cprojects\rubix2019\src\rubixcube20bf.cpp
+1609949823 source:c:\github\cprojects\rubix2019\src\rubixcube20bf.cpp
 	<iostream>
 	<iomanip>
 	"RubixCube20BF.h"

@@ -22,12 +22,12 @@ void printCubesF();
 
 int main()
 {
-  //generateCubesVector(7);
-  //generateCubesSet(9);
-  //generateCubes20BSet(9);
-  //generateCubes20BBinaryNode(8);
-  //generateCubes20BF();
-  compareCubesToFiles(generateCubes20BBinaryNode(7));
+  generateCubesVector(6);
+  generateCubesSet(7);
+  generateCubes20BSet(8);
+  generateCubes20BBinaryNode(8);
+  generateCubes20BF();
+  //compareCubesToFiles(generateCubes20BBinaryNode(7));
   //printCubes(generateCubes20BBinaryNode(3));
   //printCubesF();
 }
