@@ -11,21 +11,22 @@ class Fraction
     Fraction(PrimeList* p, __int64 t, __int64 n);
     ~Fraction();
 
-    Fraction operator+(const Fraction& other);
-    Fraction operator-(const Fraction& other);
+    Fraction operator+(Fraction& other);
+    /*Fraction operator-(const Fraction& other);
     Fraction operator*(const Fraction& other);
-    Fraction operator/(const Fraction& other);
+    Fraction operator/(const Fraction& other);*/
 
     void setInteger(__int64 t);
     bool setFraction(__int64 t, __int64 n);
     void invert();
     void eliminate();
     void print(bool debug=false);
+    list<__int64> addLists(list<__int64>& l1, list<__int64>& l2);
 
   protected:
 
   private:
-    __int64 t, n;
+    list<__int64> t, n;
     PrimeList* p;
 };
 
