@@ -34,15 +34,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="include/Fraction.h" />
-		<Unit filename="include/PrimeList.h" />
+		<Unit filename="include/Number.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="src/Fraction.cpp" />
-		<Unit filename="src/PrimeList.cpp" />
-		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
-		</Extensions>
+		<Unit filename="src/Number.cpp" />
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
