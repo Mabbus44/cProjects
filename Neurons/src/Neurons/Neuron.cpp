@@ -209,13 +209,13 @@ void Neuron::reRollProperties(){
 void Neuron::draw(SDLWindow* window){
   switch(_family){
     case LOGIC_NEURON:
-      window->setDrawColor(0xFF, 0xFF, 0xFF);
+      window->setDrawColor(0x88, 0x88, 0x88);
       break;
     case SENSOR_NEURON:
       window->setDrawColor(0xFF, 0xFF, 0x00);
       break;
     case OUTPUT_NEURON:
-      window->setDrawColor(0x00, 0x00, 0x00);
+      window->setDrawColor(0x44, 0x44, 0xFF);
       break;
   }
   window->drawRect(_column*80-20, _level*40, 70, 30);
@@ -287,5 +287,5 @@ void Neuron::draw(SDLWindow* window){
       t="E";
       break;
   }
-  window->drawText(_column*80, _level*40, t);
+  window->drawText(_column*80, _level*40, t, { 0x00, 0x00, 0x00 });
 }

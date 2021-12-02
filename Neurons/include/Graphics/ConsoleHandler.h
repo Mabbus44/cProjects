@@ -17,6 +17,7 @@ class ConsoleHandler
     void createMap(vector<int> args);
     void initMap(vector<int> args);
     void deleteMap(vector<int> args);
+    void viewMap(vector<int> args);
     void runSimulationSteps(vector<int> args);
     void runSimulationGenerations(vector<int> args, bool copyMap=false);
     void outputMaps(vector<int> args);

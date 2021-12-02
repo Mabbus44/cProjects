@@ -37,10 +37,10 @@ const int REWIRE_NEURON_MIN = 1;
 const int REWIRE_NEURON_MAX = 3;
 const int REWIRE_NEURON_MIN_WIRES = 1;
 const int REWIRE_NEURON_MAX_WIRES = 2;
-const int HERBIVORE_START_FOOD = 20;
-const int CARNIVORE_START_FOOD = 20;
-const int HERBIVORE_EAT_FOOD = 5;
-const int CARNIVORE_EAT_FOOD = 5;
+const int HERBIVORE_START_FOOD = 200;
+const int CARNIVORE_START_FOOD = 200;
+const int HERBIVORE_EAT_FOOD = 50;
+const int CARNIVORE_EAT_FOOD = 50;
 const int EAT_PLANT_RANGE = 4;
 const int EAT_HERBIVORE_RANGE = 2;
 

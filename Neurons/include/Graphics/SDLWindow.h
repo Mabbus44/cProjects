@@ -17,9 +17,9 @@ class SDLWindow
     void renderPixels();
     void drawClear();
     void setDrawColor(int r, int g, int b);
-    void drawText(int x, int y, string text);
+    void drawText(int x, int y, string text, SDL_Color c);
     void drawRect(int x, int y, int w, int h);
-    void drawLine(int x1, int x2, int y1, int y2);
+    void drawLine(int x1, int y1, int x2, int y2);
     void render();
   private:
     SDL_Window* _window = NULL;

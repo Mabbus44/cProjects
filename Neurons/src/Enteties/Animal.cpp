@@ -312,11 +312,11 @@ void Animal::doAction(){
       break;
     case ON_MOVE_E:
       if(_posX<639)
-        _posY++;
+        _posX++;
       break;
     case ON_MOVE_W:
       if(_posX>0)
-        _posY--;
+        _posX--;
       break;
     case ON_EAT:
       if(_type == CARNIVORE)
@@ -330,6 +330,7 @@ void Animal::doAction(){
 }
 
 void Animal::drawNeurons(SDLWindow* window){
+  window->drawClear();
   for(Neuron* n : _neurons)
     n->draw(window);
   window->render();

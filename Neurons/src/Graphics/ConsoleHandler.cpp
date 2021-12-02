@@ -24,6 +24,7 @@ void ConsoleHandler::run(){
       cout << "create \t\tceates new map" << endl;
       cout << "delete i\tdeletes map with id i" << endl;
       cout << "init i \t\tinitializes map with id i" << endl;
+      cout << "viewmap i \t\tshows graphics for map i" << endl;
       cout << "runstep i j \truns map with id i for j simulation steps" << endl;
       cout << "rungen i j \truns map with id i for j simulation generations" << endl;
       cout << "rungencopy i j \truns copy of map with id i for j simulation generations" << endl;
@@ -36,6 +37,7 @@ void ConsoleHandler::run(){
       if(argSplit[0] == "create") createMap(argsToInt(argSplit[1]));
       if(argSplit[0] == "delete") deleteMap(argsToInt(argSplit[1]));
       if(argSplit[0] == "init") initMap(argsToInt(argSplit[1]));
+      if(argSplit[0] == "viewmap") viewMap(argsToInt(argSplit[1]));
       if(argSplit[0] == "runstep") runSimulationSteps(argsToInt(argSplit[1]));
       if(argSplit[0] == "rungen") runSimulationGenerations(argsToInt(argSplit[1]));
       if(argSplit[0] == "rungencopy") runSimulationGenerations(argsToInt(argSplit[1]), true);
@@ -81,6 +83,17 @@ void ConsoleHandler::initMap(vector<int> args){
 
 void ConsoleHandler::runSimulationSteps(vector<int> args){
   cout << "NOT YET IMPLEMENTED" << endl;
+}
+
+void ConsoleHandler::viewMap(vector<int> args){
+  Map* m;
+  int i=-1;
+  if(args.size()>0)
+    i=args[0];
+  if(!(m=getMap(i)))
+    return;
+    cout << "start window for map " << i << endl;
+  future<void> ret = async(&ConsoleHandler::runSimulation, this, m, 100, true);
 }
 
 void ConsoleHandler::runSimulationGenerations(vector<int> args, bool copyMap){

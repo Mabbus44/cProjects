@@ -62,8 +62,8 @@ void SDLWindow::renderPixels(){
   }
 }
 
-void SDLWindow::drawText(int x, int y, string text){
-  SDL_Surface* textSurface = TTF_RenderText_Solid( _font, text.c_str(), { 100, 100, 100 } );
+void SDLWindow::drawText(int x, int y, string text, SDL_Color c){
+  SDL_Surface* textSurface = TTF_RenderText_Solid( _font, text.c_str(),  c);
   if( textSurface == NULL ){
     cout << "Unable to render text surface! SDL_ttf Error: " << TTF_GetError() << endl;
     return;
@@ -91,7 +91,7 @@ void SDLWindow::drawRect(int x, int y, int w, int h){
   SDL_RenderFillRect( _renderer, &fillRect );
 }
 
-void SDLWindow::drawLine(int x1, int x2, int y1, int y2){
+void SDLWindow::drawLine(int x1, int y1, int x2, int y2){
   SDL_RenderDrawLine(_renderer, x1, y1, x2, y2);
 }
 

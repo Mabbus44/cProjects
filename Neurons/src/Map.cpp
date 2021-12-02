@@ -34,7 +34,7 @@ void Map::restart(){
   else{
     int i = 0;
     while(_herbivores.size()<HERBIVORES_PER_SIMULATION){
-      _herbivores.push_back(_bestHerbivores[i]->deepCopy(this, rand()%MAP_WIDTH, rand()%MAP_HEIGHT, i));
+      _herbivores.push_back(_bestHerbivores[i]->deepCopy(this, rand()%MAP_WIDTH, rand()%MAP_HEIGHT, HERBIVORE_START_FOOD, i));
       i++;
       if(i == (int)_bestHerbivores.size())
         i=0;
@@ -52,7 +52,7 @@ void Map::restart(){
   else{
     int i = 0;
     while(_carnivores.size()<CARNIVORES_PER_SIMULATION){
-      _carnivores.push_back(_bestCarnivores[i]->deepCopy(this, rand()%MAP_WIDTH, rand()%MAP_HEIGHT, i));
+      _carnivores.push_back(_bestCarnivores[i]->deepCopy(this, rand()%MAP_WIDTH, rand()%MAP_HEIGHT, CARNIVORE_START_FOOD, i));
       i++;
       if(i == (int)_bestCarnivores.size())
         i=0;
@@ -135,7 +135,7 @@ bool Map::oneTick(){
       delete _carnivores[i];
       _carnivores.erase(_carnivores.begin()+i);
       i--;
-      if((int)_carnivores.size() == SAVE_HERBIVORES){
+      if((int)_carnivores.size() == SAVE_CARNIVORES){
         for(Animal* c : _carnivores){
           _bestCarnivores.push_back(c->deepCopy(this));
         }
