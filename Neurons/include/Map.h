@@ -30,6 +30,7 @@ class Map
     vector<Plant*> plants(){return _plants;}
     vector<Animal*> bestCarnivores(){return _bestCarnivores;}
     vector<Animal*> bestHerbivores(){return _bestHerbivores;}
+    SDLWindow* runBy = NULL;
 
   protected:
     vector<Animal*> _carnivores;

@@ -28,6 +28,7 @@ class ConsoleHandler
     void drawMap(Map* m);
     void drawNeurons(Animal* a);
     Map* getMap(int& i);
+    SDLWindow mapWindow;
     vector<int> argsToInt(string args);
     vector<string> argsTostr(string args);
     vector<Map*> _maps;

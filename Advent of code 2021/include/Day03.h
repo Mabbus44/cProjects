@@ -4,6 +4,8 @@
 #include <vector>
 #include "Common.h"
 
+using namespace std;
+
 class Day03
 {
   public:

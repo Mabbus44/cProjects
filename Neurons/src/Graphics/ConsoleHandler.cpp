@@ -92,8 +92,12 @@ void ConsoleHandler::viewMap(vector<int> args){
     i=args[0];
   if(!(m=getMap(i)))
     return;
-    cout << "start window for map " << i << endl;
-  future<void> ret = async(&ConsoleHandler::runSimulation, this, m, 100, true);
+  if(mapWindow.isOpen()){
+    cout << "map " << i << " already open" << endl;
+    return;
+  }
+  cout << "starting window for map " << i << endl;
+  future<void> ret = async(&SDLWindow::drawMap, mapWindow, m);
 }
 
 void ConsoleHandler::runSimulationGenerations(vector<int> args, bool copyMap){
