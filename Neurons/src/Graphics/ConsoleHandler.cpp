@@ -42,6 +42,7 @@ void ConsoleHandler::run(){
       if(argSplit[0] == "rungen") runSimulationGenerations(argsToInt(argSplit[1]));
       if(argSplit[0] == "rungencopy") runSimulationGenerations(argsToInt(argSplit[1]), true);
       if(argSplit[0] == "output") outputMaps(argsToInt(argSplit[1]));
+      cout << "viewmap done" << endl;
     }
     cout << "Are you sure? (y/n)";
     getline(cin, ans2);
@@ -97,7 +98,8 @@ void ConsoleHandler::viewMap(vector<int> args){
     return;
   }
   cout << "starting window for map " << i << endl;
-  future<void> ret = async(&SDLWindow::drawMap, mapWindow, m);
+  future<void> ret = async(&SDLWindow::drawMap, &mapWindow, m);
+  cout << "started" << endl;
 }
 
 void ConsoleHandler::runSimulationGenerations(vector<int> args, bool copyMap){
