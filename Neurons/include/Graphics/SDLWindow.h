@@ -25,6 +25,7 @@ class SDLWindow
     void drawLine(int x1, int y1, int x2, int y2);
     void render();
     void drawMap(Map* m);
+    void drawNeuron(Map* m);
     bool isOpen(){return _open;}
     bool requestClose = false;
   private:

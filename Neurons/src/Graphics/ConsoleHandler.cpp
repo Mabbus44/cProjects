@@ -1,6 +1,4 @@
 #include "Graphics/ConsoleHandler.h"
-#include <thread>
-#include <future>
 
 using namespace std;
 
@@ -24,7 +22,7 @@ void ConsoleHandler::run(){
       cout << "create \t\tceates new map" << endl;
       cout << "delete i\tdeletes map with id i" << endl;
       cout << "init i \t\tinitializes map with id i" << endl;
-      cout << "viewmap i \t\tshows graphics for map i" << endl;
+      cout << "viewmap i \tshows graphics for map i" << endl;
       cout << "runstep i j \truns map with id i for j simulation steps" << endl;
       cout << "rungen i j \truns map with id i for j simulation generations" << endl;
       cout << "rungencopy i j \truns copy of map with id i for j simulation generations" << endl;
@@ -94,18 +92,17 @@ void ConsoleHandler::viewMap(vector<int> args){
   if(!(m=getMap(i)))
     return;
   if(mapWindow.isOpen()){
-    cout << "map " << i << " already open" << endl;
+    cout << "mapwindow already open" << endl;
     return;
   }
-  cout << "starting window for map " << i << endl;
-  future<void> ret = async(&SDLWindow::drawMap, &mapWindow, m);
-  cout << "started" << endl;
+  mapWindowRet = async(&SDLWindow::drawMap, &mapWindow, m);
+  neuronWindowRet = async(&SDLWindow::drawNeuron, &neuronWindow, m);
+  cout << "window for map " << i << " opened" << endl;
 }
 
 void ConsoleHandler::runSimulationGenerations(vector<int> args, bool copyMap){
   Map* m;
   int i=-1;
-  bool graphics=true;
   if(args.size()>0)
     i=args[0];
   if(!(m=getMap(i)))
@@ -113,8 +110,6 @@ void ConsoleHandler::runSimulationGenerations(vector<int> args, bool copyMap){
   int steps = 1;
   if(args.size()>1 && args[1]>0)
     steps=args[1];
-  if(args.size()>2)
-    graphics=args[2];
   if(copyMap){
     cout << "Copying map " << i << "..." << endl;
     m = m->deepCopy();
@@ -122,12 +117,8 @@ void ConsoleHandler::runSimulationGenerations(vector<int> args, bool copyMap){
     i = _maps.size()-1;
     cout << "Done" << endl;
   }
-  cout << "Running simulation map " << i << " for " << steps << " step(s)..." << endl;
-  if(graphics){
-    future<void> ret = async(&ConsoleHandler::runSimulation, this, m, steps, graphics);
-    ret.get();
-  }else
-    runSimulation(m, steps, graphics);
+  cout << "Running simulation map " << i << " for " << steps << " generation(s)..." << endl;
+  runSimulation(m, steps);
   cout << "Simulation complete" << endl;
 }
 
@@ -179,32 +170,22 @@ vector<string> ConsoleHandler::argsTostr(string args){
   return ret;
 }
 
-void ConsoleHandler::runSimulation(Map* m, int steps, bool show){
-  SDLWindow* w;
-  if(show)
-    w = new SDLWindow();
-  SDL_Event e;
+void ConsoleHandler::runSimulation(Map* m, int steps){
+  m->runningLogic = true;
+  m->allowDrawMap = true;
+  m->allowDrawNeurons = true;
   while(steps>0){
     cout << "Generations left: " << steps << endl;
-    while(m->oneTick()){
-      if(show)
-        m->draw(w);
-      SDL_PollEvent(&e);
+    bool done=false;
+    while(!done){
+      while((m->mapDrawnBy == &mapWindow && m->allowDrawMap==true) || (m->neuronsDrawnBy == &neuronWindow && m->allowDrawNeurons==true)){}
+      done = !m->oneTick();
+      m->allowDrawMap = true;
+      m->allowDrawNeurons = true;
     }
     steps--;
   }
-  if(show){
-    vector<Animal*> herbs =  m->bestHerbivores();
-    for(Animal* h: herbs){
-      h->prepareDrawNeurons();
-      SDL_PollEvent(&e);
-      while(e.type != SDL_QUIT && e.type != SDL_KEYDOWN){
-        SDL_PollEvent(&e);
-        h->drawNeurons(w);
-      }
-    }
-    delete w;
-  }
+  m->runningLogic = false;
 }
 
 void ConsoleHandler::outputMapsOneline(){
@@ -238,7 +219,6 @@ void ConsoleHandler::outputMaps(vector<int> args){
     cout << "herbi i j \toutputs information about herbivore i, j=(0-3, ONELINE, OVERVIEW, DEEP, ALL)" << endl;
     cout << "bestcarni i j \toutputs information about best carnivore i, j=(0-3, ONELINE, OVERVIEW, DEEP, ALL)" << endl;
     cout << "bestherbi i j \toutputs information about best herbivore i, j=(0-3, ONELINE, OVERVIEW, DEEP, ALL)" << endl;
-    cout << "draw \t\tdraws current map" << endl;
     cout << "run: ";
     getline(cin, ans);
     cout << endl;
@@ -247,10 +227,6 @@ void ConsoleHandler::outputMaps(vector<int> args){
       argSplit[0] == "herbi" ||
       argSplit[0] == "bestcarni" ||
       argSplit[0] == "bestherbi")outputAnimal(m, argSplit[0], argsToInt(argSplit[1]));
-    if(argSplit[0] == "draw"){
-      future<void> ret = async(&ConsoleHandler::drawMap, this, m);
-      ret.get();
-    }
   }
 }
 
@@ -290,17 +266,12 @@ void ConsoleHandler::outputAnimal(Map* m, string type, vector<int> args){
   while(ans!="q"){
     cout << "\n----------Animal menu----------(" << type << " " << animalId << ")" << endl;
     cout << "neuron i j \toutputs information about neuron i, j=(0-3, ONELINE, OVERVIEW, DEEP, ALL)" << endl;
-    cout << "draw \t\tdraws current map" << endl;
     cout << "mutate \t\tmutates animals neurons" << endl;
     cout << "run: ";
     getline(cin, ans);
     cout << endl;
     argSplit = argsTostr(ans);
     if(argSplit[0] == "neuron")outputNeuron(a, argsToInt(argSplit[1]));
-    if(argSplit[0] == "draw"){
-      future<void> ret = async(&ConsoleHandler::drawNeurons, this, a);
-      ret.get();
-    }
     if(argSplit[0] == "mutate"){
       cout << "mutating neurons..." << endl;
       a->mutateNeurons();
@@ -339,26 +310,5 @@ void ConsoleHandler::outputNeuron(Animal* a, vector<int> args){
     getline(cin, ans);
     cout << endl;
     argSplit = argsTostr(ans);
-  }
-}
-
-void ConsoleHandler::drawMap(Map* m){
-  SDLWindow w;
-  SDL_Event e;
-  SDL_PollEvent(&e);
-  while(e.type != SDL_QUIT && e.type != SDL_KEYDOWN){
-    SDL_PollEvent(&e);
-    m->draw(&w);
-  }
-}
-
-void ConsoleHandler::drawNeurons(Animal* a){
-  SDLWindow w;
-  SDL_Event e;
-  a->prepareDrawNeurons();
-  SDL_PollEvent(&e);
-  while(e.type != SDL_QUIT && e.type != SDL_KEYDOWN){
-    SDL_PollEvent(&e);
-    a->drawNeurons(&w);
   }
 }

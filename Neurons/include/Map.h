@@ -30,7 +30,11 @@ class Map
     vector<Plant*> plants(){return _plants;}
     vector<Animal*> bestCarnivores(){return _bestCarnivores;}
     vector<Animal*> bestHerbivores(){return _bestHerbivores;}
-    SDLWindow* runBy = NULL;
+    SDLWindow* mapDrawnBy = NULL;
+    SDLWindow* neuronsDrawnBy = NULL;
+    bool runningLogic = false;    //Set to true by consoleHandler while running simulation on map.
+    bool allowDrawMap = true;     //If runningLogic, map is only allowed to draw if true. ConsoleHandler is only allowed to simulate if false.
+    bool allowDrawNeurons = true;  //If runningLogic, map is only allowed to draw if true. ConsoleHandler is only allowed to simulate if false.
 
   protected:
     vector<Animal*> _carnivores;

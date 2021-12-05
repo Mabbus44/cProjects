@@ -17,6 +17,7 @@ SDLWindow::~SDLWindow(){
 }
 
 void SDLWindow::open(){
+	_open = true;
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 		cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
   _window = SDL_CreateWindow( "SDL Graphics", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN );
@@ -129,14 +130,80 @@ void SDLWindow::drawPixel(int x, int y, int r, int g, int b){
 }
 
 void SDLWindow::drawMap(Map* m){
-  m->runBy = this;
+  m->mapDrawnBy = this;
+  m->allowDrawMap = false;
   open();
   SDL_Event e;
   SDL_PollEvent(&e);
   while(e.type != SDL_QUIT && e.type != SDL_KEYDOWN && requestClose != true){
     SDL_PollEvent(&e);
-    m->draw(this);
+    if((m->runningLogic && m->allowDrawMap) || !m->runningLogic){
+      m->draw(this);
+      m->allowDrawMap = false;
+    }
   }
   close();
-  m->runBy = NULL;
+  m->mapDrawnBy = NULL;
+}
+
+void SDLWindow::drawNeuron(Map* m){
+  m->neuronsDrawnBy = this;
+  m->allowDrawNeurons = false;
+  int animalType = CARNIVORE_NEURON;
+  int animalIndex = m->carnivores().size();
+  open();
+  SDL_Event e;
+  SDL_PollEvent(&e);
+  while(e.type != SDL_QUIT && (e.type != SDL_KEYDOWN || e.key.keysym.sym != SDLK_ESCAPE) && requestClose != true){
+    if((m->runningLogic && m->allowDrawNeurons) || !m->runningLogic){
+      if(m->carnivores().size()>0 || m->herbivores().size()>0){
+        if(e.type == SDL_KEYDOWN && e.key.keysym.sym != SDLK_TAB)
+          animalIndex++;
+        if(e.type == SDL_KEYDOWN && e.key.keysym.sym != SDLK_LSHIFT)
+          animalIndex--;
+        switch(animalType){
+          case HERBIVORE_NEURON:
+            if(animalIndex >= (int)m->herbivores().size()){
+              if(m->carnivores().size()>0)
+                animalType = CARNIVORE_NEURON;
+              animalIndex=0;
+            }
+            if(animalIndex < 0){
+              if(m->carnivores().size()>0){
+                animalType = CARNIVORE_NEURON;
+                animalIndex=m->carnivores().size()-1;
+              }else
+                animalIndex=m->herbivores().size()-1;
+            }
+            break;
+          case CARNIVORE_NEURON:
+            if(animalIndex >= (int)m->carnivores().size()){
+              if(m->herbivores().size()>0)
+                animalType = HERBIVORE_NEURON;
+              animalIndex=0;
+            }
+            if(animalIndex < 0){
+              if(m->herbivores().size()>0){
+                animalType = HERBIVORE_NEURON;
+                animalIndex=m->herbivores().size()-1;
+              }else
+                animalIndex=m->carnivores().size()-1;
+            }
+            break;
+        }
+        switch(animalType){
+          case HERBIVORE_NEURON:
+            m->herbivores()[animalIndex]->drawNeurons(this);
+            break;
+          case CARNIVORE_NEURON:
+            m->carnivores()[animalIndex]->drawNeurons(this);
+            break;
+        }
+      }
+      m->allowDrawNeurons = false;
+    }
+    SDL_PollEvent(&e);
+  }
+  close();
+  m->neuronsDrawnBy = NULL;
 }
