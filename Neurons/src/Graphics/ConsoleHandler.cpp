@@ -3,9 +3,14 @@
 using namespace std;
 
 ConsoleHandler::ConsoleHandler(){
+  if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+    cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
+  if( TTF_Init() == -1 )
+    cout << "Warning: SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << endl;
 }
 
 ConsoleHandler::~ConsoleHandler(){
+	SDL_Quit();
 }
 
 void ConsoleHandler::run(){

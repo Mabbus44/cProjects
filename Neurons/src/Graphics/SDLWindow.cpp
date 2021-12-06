@@ -16,26 +16,22 @@ SDLWindow::~SDLWindow(){
 	delete[] _pixels;
 }
 
-void SDLWindow::open(){
+void SDLWindow::open(int windowHeight, int windowWidth){
 	_open = true;
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-		cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
-  _window = SDL_CreateWindow( "SDL Graphics", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN );
+  _window = SDL_CreateWindow( "SDL Graphics", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
   if( _window == NULL )
     cout << "Window could not be created! SDL_Error: " << SDL_GetError() << endl;
   _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (_renderer == NULL)
     cout << "Unable to create renderer: " << SDL_GetError() << endl;
-  SDL_RenderSetLogicalSize(_renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
-  _texture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, WINDOW_WIDTH, WINDOW_HEIGHT);
+  SDL_RenderSetLogicalSize(_renderer, windowWidth, windowHeight);
+  _texture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, windowWidth, windowHeight);
   if (_texture == NULL)
     cout << "Unable to create texture: " << SDL_GetError() << endl;
-  if( TTF_Init() == -1 )
-    cout << "Warning: SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << endl;
   _font = TTF_OpenFont( "fonts/OpenSans-Regular.ttf", 20 );
   if( _font == NULL )
     cout << "Warning: Failed to load lazy font! SDL_ttf Error: " << TTF_GetError() << endl;
-  for(int i=0; i<WINDOW_WIDTH*WINDOW_HEIGHT; i++){
+  for(int i=0; i<windowWidth*windowHeight; i++){
     _pixels[i*4] = 0xFF;
     _pixels[i*4+1] = 0xFF;
     _pixels[i*4+2] = 0xFF;
@@ -47,7 +43,6 @@ void SDLWindow::close(){
   SDL_DestroyTexture(_texture);
   SDL_DestroyRenderer(_renderer);
   SDL_DestroyWindow(_window);
-	SDL_Quit();
 	requestClose = false;
 }
 
@@ -115,6 +110,9 @@ void SDLWindow::render(){
 }
 
 void SDLWindow::drawPixel(int x, int y, int r, int g, int b){
+  if(x<0 || x>=WINDOW_WIDTH/2 || y<0 || y>=WINDOW_HEIGHT/2)
+    return;
+
   _pixels[(2*x+2*y*WINDOW_WIDTH)*4] = r;
   _pixels[(2*x+1+2*y*WINDOW_WIDTH)*4] = r;
   _pixels[(2*x+(2*y+1)*WINDOW_WIDTH)*4] = r;

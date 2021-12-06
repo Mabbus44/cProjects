@@ -5,6 +5,7 @@
 #include <SDL_ttf.h>
 #include <iostream>
 #include <vector>
+#include "Constants.h"
 class Map;
 
 using namespace std;
@@ -14,7 +15,7 @@ class SDLWindow
   public:
     SDLWindow();
     virtual ~SDLWindow();
-    void open();
+    void open(int windowHeight=WINDOW_HEIGHT, int windowWidth=WINDOW_WIDTH);
     void close();
     void drawPixel(int x, int y, int r, int g, int b);
     void renderPixels();
