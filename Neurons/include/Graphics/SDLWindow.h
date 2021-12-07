@@ -15,7 +15,7 @@ class SDLWindow
   public:
     SDLWindow();
     virtual ~SDLWindow();
-    void open(int windowHeight=WINDOW_HEIGHT, int windowWidth=WINDOW_WIDTH);
+    virtual void open(int windowHeight=WINDOW_HEIGHT, int windowWidth=WINDOW_WIDTH);
     void close();
     void drawPixel(int x, int y, int r, int g, int b);
     void renderPixels();
@@ -29,7 +29,7 @@ class SDLWindow
     void drawNeuron(Map* m);
     bool isOpen(){return _open;}
     bool requestClose = false;
-  private:
+  protected:
     SDL_Window* _window = NULL;
     SDL_Renderer* _renderer = NULL;
     SDL_Texture* _texture = NULL;
@@ -38,4 +38,17 @@ class SDLWindow
     bool _open = false;
 };
 
+class NeuronsWindow: SDLWindow{
+  public:
+    NeuronsWindow(){};
+    virtual ~NeuronsWindow(){};
+    virtual void open(int windowHeight=WINDOW_HEIGHT, int windowWidth=WINDOW_WIDTH);
+};
+
+class MapWindow: SDLWindow{
+  public:
+    MapWindow(){};
+    virtual ~MapWindow(){};
+    virtual void open(int windowHeight=WINDOW_HEIGHT, int windowWidth=WINDOW_WIDTH);
+};
 #endif // SDLWINDOW_H

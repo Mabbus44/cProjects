@@ -41,6 +41,7 @@
 		<Unit filename="include/Day04.h" />
 		<Unit filename="include/Day05.h" />
 		<Unit filename="include/Day06.h" />
+		<Unit filename="include/Day07.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Common.cpp" />
 		<Unit filename="src/Day01.cpp" />
@@ -49,6 +50,7 @@
 		<Unit filename="src/Day04.cpp" />
 		<Unit filename="src/Day05.cpp" />
 		<Unit filename="src/Day06.cpp" />
+		<Unit filename="src/Day07.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
