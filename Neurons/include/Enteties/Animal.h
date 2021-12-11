@@ -30,7 +30,7 @@ class Animal: public Entity
     int closestEntity(int type, int dir);
     void free();
     void prepareDrawNeurons();
-    void drawNeurons(SDLWindow* window);
+    void drawNeurons(NeuronsWindow* window);
     void output(string tab, int level);
     Neuron* getAction();
     vector<Neuron*> neurons(){return _neurons;}

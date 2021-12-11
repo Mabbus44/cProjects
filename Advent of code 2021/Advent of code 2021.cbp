@@ -42,6 +42,10 @@
 		<Unit filename="include/Day05.h" />
 		<Unit filename="include/Day06.h" />
 		<Unit filename="include/Day07.h" />
+		<Unit filename="include/Day08.h" />
+		<Unit filename="include/Day09.h" />
+		<Unit filename="include/Day10.h" />
+		<Unit filename="include/Day11.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Common.cpp" />
 		<Unit filename="src/Day01.cpp" />
@@ -51,6 +55,10 @@
 		<Unit filename="src/Day05.cpp" />
 		<Unit filename="src/Day06.cpp" />
 		<Unit filename="src/Day07.cpp" />
+		<Unit filename="src/Day08.cpp" />
+		<Unit filename="src/Day09.cpp" />
+		<Unit filename="src/Day10.cpp" />
+		<Unit filename="src/Day11.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

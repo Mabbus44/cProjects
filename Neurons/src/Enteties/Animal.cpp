@@ -329,7 +329,7 @@ void Animal::doAction(){
   }
 }
 
-void Animal::drawNeurons(SDLWindow* window){
+void Animal::drawNeurons(NeuronsWindow* window){
   prepareDrawNeurons();
   window->drawClear();
   for(Neuron* n : _neurons)

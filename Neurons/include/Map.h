@@ -19,7 +19,7 @@ class Map
     bool eatHerbivore(int x, int y);
     bool eatPlant(int x, int y);
     void restart();
-    void draw(SDLWindow* window);
+    void draw(MapWindow* window);
     void output(string tab, int level);
     Map* deepCopy();
     void deleteEnteties();

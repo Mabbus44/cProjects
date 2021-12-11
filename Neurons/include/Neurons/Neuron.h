@@ -34,7 +34,7 @@ class Neuron
     void replaceChild(Neuron* oldChild, Neuron* newChild);
     void replaceNeuron(Neuron* oldNeuron);
     bool inList(vector<Neuron*>& neuronList);
-    void draw(SDLWindow* window);
+    void draw(NeuronsWindow* window);
     void output(string tab, int level);
     void resetLevelColumn() {_level =0; _column=0;}
     void setLevel(int level); int getLevel(){return _level;}

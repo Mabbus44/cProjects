@@ -100,8 +100,8 @@ void ConsoleHandler::viewMap(vector<int> args){
     cout << "mapwindow already open" << endl;
     return;
   }
-  mapWindowRet = async(&SDLWindow::drawMap, &mapWindow, m);
-  neuronWindowRet = async(&SDLWindow::drawNeuron, &neuronWindow, m);
+  mapWindowRet = async(&MapWindow::drawMap, &mapWindow, m);
+  neuronWindowRet = async(&NeuronsWindow::drawNeuron, &neuronWindow, m);
   cout << "window for map " << i << " opened" << endl;
 }
 

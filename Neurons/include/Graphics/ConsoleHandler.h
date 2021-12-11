@@ -28,8 +28,8 @@ class ConsoleHandler
     void outputMapsOneline();
     void runSimulation(Map* m, int steps);
     Map* getMap(int& i);
-    SDLWindow mapWindow;
-    SDLWindow neuronWindow;
+    MapWindow mapWindow;
+    NeuronsWindow neuronWindow;
     future<void> mapWindowRet;
     future<void> neuronWindowRet;
     vector<int> argsToInt(string args);

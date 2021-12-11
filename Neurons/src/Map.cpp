@@ -201,7 +201,7 @@ bool Map::eatHerbivore(int x, int y){
   return false;
 }
 
-void Map::draw(SDLWindow* window){
+void Map::draw(MapWindow* window){
   for(Plant* p : _plants)
     p->draw(window);
   for(Animal* h : _herbivores)

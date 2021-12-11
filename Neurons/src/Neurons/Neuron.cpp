@@ -206,7 +206,7 @@ void Neuron::reRollProperties(){
   _bonus = (rand()%2001-1000)/1000.0;
 }
 
-void Neuron::draw(SDLWindow* window){
+void Neuron::draw(NeuronsWindow* window){
   switch(_family){
     case LOGIC_NEURON:
       window->setDrawColor(0x88, 0x88, 0x88);

@@ -17,38 +17,40 @@ class SDLWindow
     virtual ~SDLWindow();
     virtual void open(int windowHeight=WINDOW_HEIGHT, int windowWidth=WINDOW_WIDTH);
     void close();
-    void drawPixel(int x, int y, int r, int g, int b);
-    void renderPixels();
-    void drawClear();
-    void setDrawColor(int r, int g, int b);
-    void drawText(int x, int y, string text, SDL_Color c);
-    void drawRect(int x, int y, int w, int h);
-    void drawLine(int x1, int y1, int x2, int y2);
-    void render();
-    void drawMap(Map* m);
-    void drawNeuron(Map* m);
     bool isOpen(){return _open;}
     bool requestClose = false;
   protected:
     SDL_Window* _window = NULL;
     SDL_Renderer* _renderer = NULL;
     SDL_Texture* _texture = NULL;
-    TTF_Font* _font = NULL;
-    uint8_t* _pixels;
     bool _open = false;
 };
 
-class NeuronsWindow: SDLWindow{
+class NeuronsWindow: public SDLWindow{
   public:
     NeuronsWindow(){};
     virtual ~NeuronsWindow(){};
     virtual void open(int windowHeight=WINDOW_HEIGHT, int windowWidth=WINDOW_WIDTH);
+    void drawClear();
+    void setDrawColor(int r, int g, int b);
+    void drawText(int x, int y, string text, SDL_Color c);
+    void drawRect(int x, int y, int w, int h);
+    void drawLine(int x1, int y1, int x2, int y2);
+    void drawNeuron(Map* m);
+    void render();
+  protected:
+    TTF_Font* _font = NULL;
 };
 
-class MapWindow: SDLWindow{
+class MapWindow: public SDLWindow{
   public:
-    MapWindow(){};
-    virtual ~MapWindow(){};
+    MapWindow();
+    virtual ~MapWindow();
     virtual void open(int windowHeight=WINDOW_HEIGHT, int windowWidth=WINDOW_WIDTH);
+    void drawPixel(int x, int y, int r, int g, int b);
+    void renderPixels();
+    void drawMap(Map* m);
+  protected:
+    uint8_t* _pixels;
 };
 #endif // SDLWINDOW_H

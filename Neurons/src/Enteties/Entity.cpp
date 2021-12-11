@@ -58,7 +58,7 @@ void Entity::output(string tab, int level){
   }
 }
 
-void Entity::draw(SDLWindow* window){
+void Entity::draw(MapWindow* window){
   switch(_type){
     case CARNIVORE:
       window->drawPixel(_posX, _posY, 0xFF, 0, 0);

@@ -14,7 +14,7 @@ class Entity
     virtual ~Entity();
     bool isInDirection(int x, int y, int direction);
     int distance(int x, int y);
-    void draw(SDLWindow* window);
+    void draw(MapWindow* window);
     void output(string tab, int level);
 
   protected:
