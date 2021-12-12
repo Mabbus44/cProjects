@@ -16,6 +16,7 @@ class SDLWindow
     SDLWindow();
     virtual ~SDLWindow();
     virtual void open(int windowHeight=WINDOW_HEIGHT, int windowWidth=WINDOW_WIDTH);
+    virtual void resizeWindow(int windowHeight, int windowWidth);
     void close();
     bool isOpen(){return _open;}
     bool requestClose = false;
@@ -31,6 +32,7 @@ class NeuronsWindow: public SDLWindow{
     NeuronsWindow(){};
     virtual ~NeuronsWindow(){};
     virtual void open(int windowHeight=WINDOW_HEIGHT, int windowWidth=WINDOW_WIDTH);
+    virtual void resizeWindow(int windowHeight, int windowWidth);
     void drawClear();
     void setDrawColor(int r, int g, int b);
     void drawText(int x, int y, string text, SDL_Color c);
@@ -47,6 +49,7 @@ class MapWindow: public SDLWindow{
     MapWindow();
     virtual ~MapWindow();
     virtual void open(int windowHeight=WINDOW_HEIGHT, int windowWidth=WINDOW_WIDTH);
+    virtual void resizeWindow(int windowHeight, int windowWidth);
     void drawPixel(int x, int y, int r, int g, int b);
     void renderPixels();
     void drawMap(Map* m);

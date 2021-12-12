@@ -28,6 +28,19 @@ void SDLWindow::open(int windowHeight, int windowWidth){
     cout << "Unable to create texture: " << SDL_GetError() << endl;
 }
 
+void SDLWindow::resizeWindow(int windowHeight, int windowWidth){
+  cout << "windows resized" << endl;
+  SDL_DestroyTexture(_texture);
+  SDL_DestroyRenderer(_renderer);
+  _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  if (_renderer == NULL)
+    cout << "Unable to create renderer: " << SDL_GetError() << endl;
+  SDL_RenderSetLogicalSize(_renderer, windowWidth, windowHeight);
+  _texture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, windowWidth, windowHeight);
+  if (_texture == NULL)
+    cout << "Unable to create texture: " << SDL_GetError() << endl;
+}
+
 void SDLWindow::close(){
   SDL_DestroyTexture(_texture);
   SDL_DestroyRenderer(_renderer);
@@ -40,6 +53,10 @@ void NeuronsWindow::open(int windowHeight, int windowWidth){
   _font = TTF_OpenFont( "fonts/OpenSans-Regular.ttf", 20 );
   if( _font == NULL )
     cout << "Warning: Failed to load lazy font! SDL_ttf Error: " << TTF_GetError() << endl;
+}
+
+void NeuronsWindow::resizeWindow(int windowHeight, int windowWidth){
+  SDLWindow::resizeWindow(windowHeight, windowWidth);
 }
 
 void NeuronsWindow::drawClear(){
@@ -95,6 +112,13 @@ void NeuronsWindow::drawNeuron(Map* m){
         animalIndex--;
       if(e.key.keysym.sym == SDLK_q){
         animalType++;
+      }
+    }
+    if(e.type == SDL_WINDOWEVENT){
+      if(e.window.event==SDL_WINDOWEVENT_SIZE_CHANGED){
+        cout << e.window.windowID << endl;
+        cout << "windows reeeeeeeeeesized" << endl;
+        resizeWindow(e.window.data2, e.window.data1);
       }
     }
     if((m->runningLogic && m->allowDrawNeurons) || !m->runningLogic){
@@ -171,6 +195,20 @@ MapWindow::~MapWindow(){
 
 void MapWindow::open(int windowHeight, int windowWidth){
 	SDLWindow::open(windowHeight, windowWidth);
+  delete [] _pixels;
+  _pixels = new uint8_t[windowWidth * windowHeight * 4];
+  for(int i=0; i<windowWidth*windowHeight; i++){
+    _pixels[i*4] = 0xFF;
+    _pixels[i*4+1] = 0xFF;
+    _pixels[i*4+2] = 0xFF;
+    _pixels[i*4+3] = 0xFF;
+  }
+}
+
+void MapWindow::resizeWindow(int windowHeight, int windowWidth){
+	SDLWindow::open(windowHeight, windowWidth);
+  delete [] _pixels;
+  _pixels = new uint8_t[windowWidth * windowHeight * 4];
   for(int i=0; i<windowWidth*windowHeight; i++){
     _pixels[i*4] = 0xFF;
     _pixels[i*4+1] = 0xFF;
