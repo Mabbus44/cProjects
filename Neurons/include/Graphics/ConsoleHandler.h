@@ -4,10 +4,18 @@
 #include <iostream>
 #include <vector>
 #include "Map.h"
-#include <thread>
-#include <future>
 
 using namespace std;
+
+class Instruction{
+  public:
+    Instruction(){};
+    Instruction(const Instruction& other){inst=other.inst; args=other.args;}
+    Instruction(int inst, vector<int> args={}){this->inst=inst; this->args=args;}
+    ~Instruction(){};
+    int inst;
+    vector<int> args;
+};
 
 class ConsoleHandler
 {
@@ -15,6 +23,7 @@ class ConsoleHandler
     ConsoleHandler();
     virtual ~ConsoleHandler();
     void run();
+    vector<Instruction> instructions;
   private:
     void createMap(vector<int> args);
     void initMap(vector<int> args);
@@ -28,10 +37,6 @@ class ConsoleHandler
     void outputMapsOneline();
     void runSimulation(Map* m, int steps);
     Map* getMap(int& i);
-    MapWindow mapWindow;
-    NeuronsWindow neuronWindow;
-    future<void> mapWindowRet;
-    future<void> neuronWindowRet;
     vector<int> argsToInt(string args);
     vector<string> argsTostr(string args);
     vector<Map*> _maps;

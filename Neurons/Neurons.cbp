@@ -48,6 +48,7 @@
 		<Unit filename="include/Enteties/Herbivore.h" />
 		<Unit filename="include/Enteties/Plant.h" />
 		<Unit filename="include/Graphics/ConsoleHandler.h" />
+		<Unit filename="include/Graphics/Hub.h" />
 		<Unit filename="include/Graphics/SDLWindow.h" />
 		<Unit filename="include/Includes.h" />
 		<Unit filename="include/Map.h" />
@@ -70,6 +71,7 @@
 		<Unit filename="src/Enteties/Herbivore.cpp" />
 		<Unit filename="src/Enteties/Plant.cpp" />
 		<Unit filename="src/Graphics/ConsoleHandler.cpp" />
+		<Unit filename="src/Graphics/Hub.cpp" />
 		<Unit filename="src/Graphics/SDLWindow.cpp" />
 		<Unit filename="src/Map.cpp" />
 		<Unit filename="src/Neurons/LNAdd.cpp" />

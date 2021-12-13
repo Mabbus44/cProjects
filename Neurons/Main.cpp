@@ -5,17 +5,16 @@
 #include <time.h>
 #include <stdlib.h>
 #include "Map.h"
-#include <thread>
-#include <future>
 #include "Graphics/ConsoleHandler.h"
+#include "Graphics/Hub.h"
 
 using namespace std;
 
 int main( int argc, char* args2[] )
 {
   srand (time(NULL));
-  ConsoleHandler c;
-  c.run();
+  Hub h;
+  h.run();
   return 0;
 }
 

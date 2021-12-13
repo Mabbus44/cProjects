@@ -29,7 +29,6 @@ void SDLWindow::open(int windowHeight, int windowWidth){
 }
 
 void SDLWindow::resizeWindow(int windowHeight, int windowWidth){
-  cout << "windows resized" << endl;
   SDL_DestroyTexture(_texture);
   SDL_DestroyRenderer(_renderer);
   _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -106,6 +105,7 @@ void NeuronsWindow::drawNeuron(Map* m){
   SDL_PollEvent(&e);
   while(e.type != SDL_QUIT && (e.type != SDL_KEYDOWN || e.key.keysym.sym != SDLK_ESCAPE) && requestClose != true){
     if(e.type == SDL_KEYDOWN){
+      //cout << "Key " << e.key.keysym.sym << " neurons" << endl;
       if(e.key.keysym.sym == SDLK_w)
         animalIndex++;
       if(e.key.keysym.sym == SDLK_e)
@@ -114,11 +114,13 @@ void NeuronsWindow::drawNeuron(Map* m){
         animalType++;
       }
     }
+    //if(e.type == SDL_WINDOWEVENT && e.window.event==SDL_WINDOWEVENT_SIZE_CHANGED)
+      //cout << "Window " << (int)e.window.windowID << " neurons" << endl;
     if(e.type == SDL_WINDOWEVENT){
       if(e.window.event==SDL_WINDOWEVENT_SIZE_CHANGED){
-        cout << e.window.windowID << endl;
-        cout << "windows reeeeeeeeeesized" << endl;
-        resizeWindow(e.window.data2, e.window.data1);
+        //cout << e.window.windowID << endl;
+        //cout << "windows reeeeeeeeeesized" << endl;
+        //resizeWindow(e.window.data2, e.window.data1);
       }
     }
     if((m->runningLogic && m->allowDrawNeurons) || !m->runningLogic){
@@ -262,8 +264,14 @@ void MapWindow::drawMap(Map* m){
   open();
   SDL_Event e;
   SDL_PollEvent(&e);
-  while(e.type != SDL_QUIT && e.type != SDL_KEYDOWN && requestClose != true){
+  cout << "Write a number: ";
+  int a; cin >> a; cout << "you inputted " << a << endl;
+  while(e.type != SDL_QUIT /*&& e.type != SDL_KEYDOWN*/ && requestClose != true){
     SDL_PollEvent(&e);
+    //if(e.type == SDL_KEYDOWN)
+      //cout << "Key " << e.key.keysym.sym << " map" << endl;
+    if(e.type == SDL_WINDOWEVENT && e.window.event==SDL_WINDOWEVENT_SIZE_CHANGED)
+      cout << "Window " << (int)e.window.windowID << " map" << endl;
     if((m->runningLogic && m->allowDrawMap) || !m->runningLogic){
       m->draw(this);
       m->allowDrawMap = false;

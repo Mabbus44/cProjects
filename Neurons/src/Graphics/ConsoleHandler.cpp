@@ -17,6 +17,7 @@ void ConsoleHandler::run(){
   string ans;
   string ans2;
   vector<string> argSplit;
+  vector<int> args;
   createMap({});
   initMap({});
   while(ans2!="y"){
@@ -37,13 +38,16 @@ void ConsoleHandler::run(){
       getline(cin, ans);
       cout << endl;
       argSplit = argsTostr(ans);
-      if(argSplit[0] == "create") createMap(argsToInt(argSplit[1]));
-      if(argSplit[0] == "delete") deleteMap(argsToInt(argSplit[1]));
-      if(argSplit[0] == "init") initMap(argsToInt(argSplit[1]));
-      if(argSplit[0] == "viewmap") viewMap(argsToInt(argSplit[1]));
-      if(argSplit[0] == "runstep") runSimulationSteps(argsToInt(argSplit[1]));
-      if(argSplit[0] == "rungen") runSimulationGenerations(argsToInt(argSplit[1]));
-      if(argSplit[0] == "rungencopy") runSimulationGenerations(argsToInt(argSplit[1]), true);
+      args.clear();
+      if(argSplit.size()>0)
+        args = argsToInt(argSplit[1]);
+      if(argSplit[0] == "create") instructions.push_back(Instruction(CREATE_MAP, args));
+      if(argSplit[0] == "delete") instructions.push_back(Instruction(DELETE_MAP, args));
+      if(argSplit[0] == "init") instructions.push_back(Instruction(INIT_MAP, args));
+      if(argSplit[0] == "viewmap") instructions.push_back(Instruction(VIEW_MAP, args));
+      if(argSplit[0] == "runstep") instructions.push_back(Instruction(RUN_SIMULATION_STEPS, args));
+      if(argSplit[0] == "rungen") instructions.push_back(Instruction(RUN_SIMULATION_GENERATIONS, args));
+      if(argSplit[0] == "rungencopy") instructions.push_back(Instruction(CREATE_MAP, args));
       if(argSplit[0] == "output") outputMaps(argsToInt(argSplit[1]));
       cout << "viewmap done" << endl;
     }
@@ -90,7 +94,7 @@ void ConsoleHandler::runSimulationSteps(vector<int> args){
 }
 
 void ConsoleHandler::viewMap(vector<int> args){
-  Map* m;
+/*  Map* m;
   int i=-1;
   if(args.size()>0)
     i=args[0];
@@ -103,7 +107,8 @@ void ConsoleHandler::viewMap(vector<int> args){
   mapWindowRet = async(&MapWindow::drawMap, &mapWindow, m);
   neuronWindowRet = async(&NeuronsWindow::drawNeuron, &neuronWindow, m);
   cout << "window for map " << i << " opened" << endl;
-}
+  while(true){}
+*/}
 
 void ConsoleHandler::runSimulationGenerations(vector<int> args, bool copyMap){
   Map* m;
@@ -176,7 +181,7 @@ vector<string> ConsoleHandler::argsTostr(string args){
 }
 
 void ConsoleHandler::runSimulation(Map* m, int steps){
-  m->runningLogic = true;
+/*  m->runningLogic = true;
   m->allowDrawMap = true;
   m->allowDrawNeurons = true;
   while(steps>0){
@@ -191,7 +196,7 @@ void ConsoleHandler::runSimulation(Map* m, int steps){
     steps--;
   }
   m->runningLogic = false;
-}
+*/}
 
 void ConsoleHandler::outputMapsOneline(){
   for(int i=0 ; i<(int)_maps.size(); i++){
