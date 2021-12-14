@@ -22,13 +22,16 @@ class Hub
     void viewMap();
     void runSimulationSteps();
     void runSimulationGenerations();
+    void copyMap();
     void outputMaps();
     void outputAnimal();
     void outputNeuron();
     void parseConsoleInstruction();
+    Map* getMap(int& i);
     MapWindow mapWindow;
     NeuronsWindow neuronWindow;
     ConsoleHandler console;
+    vector<Map*> _maps;
 };
 
 #endif // HUB_H
