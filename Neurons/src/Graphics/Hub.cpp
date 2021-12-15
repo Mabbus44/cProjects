@@ -153,16 +153,16 @@ void Hub::outputMaps(){
 }
 
 void Hub::outputAnimal(){
-
+  Map* m=_maps[console.mapId];
   Animal* a;
   vector<Animal*> animals;
-  if(type == "carni")
+  if(console.animalType == "carni")
     animals = m->carnivores();
-  else if(type == "herbi")
+  else if(console.animalType == "herbi")
     animals = m->herbivores();
-  else if(type == "bestcarni")
+  else if(console.animalType == "bestcarni")
     animals = m->bestCarnivores();
-  else if(type == "bestherbi")
+  else if(console.animalType == "bestherbi")
     animals = m->bestHerbivores();
   else{
     cout << "Invalid animal group type: " << type << endl;
