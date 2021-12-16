@@ -331,10 +331,8 @@ void Animal::doAction(){
 
 void Animal::drawNeurons(NeuronsWindow* window){
   prepareDrawNeurons();
-  window->drawClear();
   for(Neuron* n : _neurons)
     n->draw(window);
-  window->render();
 }
 
 int Animal::closestEntity(int type, int dir){

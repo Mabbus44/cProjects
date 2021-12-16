@@ -15,10 +15,15 @@ SDLWindow::~SDLWindow(){
 }
 
 void SDLWindow::open(int windowHeight, int windowWidth){
+  if(_open)
+    return;
+  this->windowHeight = windowHeight;
+  this->windowWidth = windowWidth;
 	_open = true;
   _window = SDL_CreateWindow( "SDL Graphics", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
   if( _window == NULL )
     cout << "Window could not be created! SDL_Error: " << SDL_GetError() << endl;
+  windowId = SDL_GetWindowID(_window);
   _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (_renderer == NULL)
     cout << "Unable to create renderer: " << SDL_GetError() << endl;
@@ -29,6 +34,8 @@ void SDLWindow::open(int windowHeight, int windowWidth){
 }
 
 void SDLWindow::resizeWindow(int windowHeight, int windowWidth){
+  this->windowHeight = windowHeight;
+  this->windowWidth = windowWidth;
   SDL_DestroyTexture(_texture);
   SDL_DestroyRenderer(_renderer);
   _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -44,7 +51,8 @@ void SDLWindow::close(){
   SDL_DestroyTexture(_texture);
   SDL_DestroyRenderer(_renderer);
   SDL_DestroyWindow(_window);
-	requestClose = false;
+  keyFocus = false;
+  _open = false;
 }
 
 void NeuronsWindow::open(int windowHeight, int windowWidth){
@@ -56,11 +64,6 @@ void NeuronsWindow::open(int windowHeight, int windowWidth){
 
 void NeuronsWindow::resizeWindow(int windowHeight, int windowWidth){
   SDLWindow::resizeWindow(windowHeight, windowWidth);
-}
-
-void NeuronsWindow::drawClear(){
-  SDL_SetRenderDrawColor( _renderer, 0x00, 0x00, 0x00, 0xFF );
-  SDL_RenderClear(_renderer);
 }
 
 void NeuronsWindow::setDrawColor(int r, int g, int b){
@@ -95,92 +98,73 @@ void NeuronsWindow::drawText(int x, int y, string text, SDL_Color c){
   SDL_DestroyTexture( mTexture );
 }
 
-void NeuronsWindow::drawNeuron(Map* m){
-  m->neuronsDrawnBy = this;
-  m->allowDrawNeurons = false;
-  int animalType = HERBIVORE_NEURON;
-  int animalIndex = m->carnivores().size()-1;
-  open();
-  SDL_Event e;
-  SDL_PollEvent(&e);
-  while(e.type != SDL_QUIT && (e.type != SDL_KEYDOWN || e.key.keysym.sym != SDLK_ESCAPE) && requestClose != true){
-    if(e.type == SDL_KEYDOWN){
-      //cout << "Key " << e.key.keysym.sym << " neurons" << endl;
-      if(e.key.keysym.sym == SDLK_w)
-        animalIndex++;
-      if(e.key.keysym.sym == SDLK_e)
-        animalIndex--;
-      if(e.key.keysym.sym == SDLK_q){
-        animalType++;
-      }
-    }
-    //if(e.type == SDL_WINDOWEVENT && e.window.event==SDL_WINDOWEVENT_SIZE_CHANGED)
-      //cout << "Window " << (int)e.window.windowID << " neurons" << endl;
-    if(e.type == SDL_WINDOWEVENT){
-      if(e.window.event==SDL_WINDOWEVENT_SIZE_CHANGED){
-        //cout << e.window.windowID << endl;
-        //cout << "windows reeeeeeeeeesized" << endl;
-        //resizeWindow(e.window.data2, e.window.data1);
-      }
-    }
-    if((m->runningLogic && m->allowDrawNeurons) || !m->runningLogic){
-      int animalCount = 0;
-      if(animalType >= DRAW_NEURON_TYPE_COUNT)
-        animalType = 0;
-      switch(animalType){
-        case HERBIVORE_NEURON: animalCount = m->herbivores().size(); break;
-        case CARNIVORE_NEURON: animalCount = m->carnivores().size(); break;
-        case BEST_HERBIVORE_NEURON: animalCount = m->bestHerbivores().size(); break;
-        case BEST_CARNIVORE_NEURON: animalCount = m->bestCarnivores().size(); break;
-      }
-      if(animalIndex >= animalCount)
-        animalIndex=0;
-      if(animalIndex < 0)
-        animalIndex=animalCount-1;
-      switch(animalType){
-        case HERBIVORE_NEURON:
-          if(animalCount>0)
-            m->herbivores()[animalIndex]->drawNeurons(this);
-          else{
-            drawClear();
-            drawText(10,10, "No herbivores on map", {0xFF, 0x00, 0x00});
-            render();
-          }
-          break;
-        case CARNIVORE_NEURON:
-          if(animalCount>0)
-            m->carnivores()[animalIndex]->drawNeurons(this);
-          else{
-            drawClear();
-            drawText(10,10, "No carnivores on map", {0xFF, 0x00, 0x00});
-            render();
-          }
-          break;
-        case BEST_HERBIVORE_NEURON:
-          if(animalCount>0)
-            m->bestHerbivores()[animalIndex]->drawNeurons(this);
-          else{
-            drawClear();
-            drawText(10,10, "No best herbivores on map", {0xFF, 0x00, 0x00});
-            render();
-          }
-          break;
-        case BEST_CARNIVORE_NEURON:
-          if(animalCount>0)
-            m->bestCarnivores()[animalIndex]->drawNeurons(this);
-          else{
-            drawClear();
-            drawText(10,10, "No best carnivores on map", {0xFF, 0x00, 0x00});
-            render();
-          }
-          break;
-      }
-    }
-    m->allowDrawNeurons = false;
-    SDL_PollEvent(&e);
+void NeuronsWindow::changeAnimal(bool add){
+  if(add)
+    animalIndex++;
+  else
+    animalIndex--;
+  int animalCount;
+  switch(animalType){
+    case HERBIVORE_NEURON:
+      animalCount = mapRef->herbivores().size();
+      break;
+    case CARNIVORE_NEURON:
+      animalCount = mapRef->carnivores().size();
+      break;
+    case BEST_HERBIVORE_NEURON:
+      animalCount = mapRef->bestHerbivores().size();
+      break;
+    case BEST_CARNIVORE_NEURON:
+      animalCount = mapRef->bestCarnivores().size();
+      break;
   }
-  close();
-  m->neuronsDrawnBy = NULL;
+  if(animalIndex>=animalCount)
+    animalIndex = 0;
+  if(animalIndex<0)
+    animalIndex = animalCount-1;
+}
+
+void NeuronsWindow::changeAnimalType(bool add){
+  animalIndex = 0;
+  if(add)
+    animalType++;
+  else
+    animalType--;
+  if(animalType<0)
+    animalType = DRAW_NEURON_TYPE_COUNT-1;
+  if(animalType>=DRAW_NEURON_TYPE_COUNT)
+    animalType = 0;
+}
+
+void NeuronsWindow::prepareRender(){
+  SDL_SetRenderDrawColor( _renderer, 0x00, 0x00, 0x00, 0xFF );
+  SDL_RenderClear(_renderer);
+  switch(animalType){
+    case HERBIVORE_NEURON:
+      if(animalIndex>=0 && animalIndex<(int)mapRef->herbivores().size())
+        mapRef->herbivores()[animalIndex]->drawNeurons(this);
+      else
+        drawText(10,10, "No herbivores on map", {0xFF, 0x00, 0x00});
+      break;
+    case CARNIVORE_NEURON:
+      if(animalIndex>=0 && animalIndex<(int)mapRef->carnivores().size())
+        mapRef->carnivores()[animalIndex]->drawNeurons(this);
+      else
+        drawText(10,10, "No carnivores on map", {0xFF, 0x00, 0x00});
+      break;
+    case BEST_HERBIVORE_NEURON:
+      if(animalIndex>=0 && animalIndex<(int)mapRef->bestHerbivores().size())
+        mapRef->bestHerbivores()[animalIndex]->drawNeurons(this);
+      else
+        drawText(10,10, "No best herbivores on map", {0xFF, 0x00, 0x00});
+      break;
+    case BEST_CARNIVORE_NEURON:
+      if(animalIndex>=0 && animalIndex<(int)mapRef->bestCarnivores().size())
+        mapRef->bestCarnivores()[animalIndex]->drawNeurons(this);
+      else
+        drawText(10,10, "No best carnivores on map", {0xFF, 0x00, 0x00});
+      break;
+  }
 }
 
 void NeuronsWindow::render(){
@@ -188,27 +172,36 @@ void NeuronsWindow::render(){
 }
 
 MapWindow::MapWindow(){
-  _pixels = new uint8_t[WINDOW_WIDTH * WINDOW_HEIGHT * 4];
 }
 
 MapWindow::~MapWindow(){
-	delete[] _pixels;
+  if(_open)
+    delete[] _pixels;
 }
 
 void MapWindow::open(int windowHeight, int windowWidth){
+	if(_open)
+    return;
 	SDLWindow::open(windowHeight, windowWidth);
-  delete [] _pixels;
   _pixels = new uint8_t[windowWidth * windowHeight * 4];
   for(int i=0; i<windowWidth*windowHeight; i++){
     _pixels[i*4] = 0xFF;
     _pixels[i*4+1] = 0xFF;
     _pixels[i*4+2] = 0xFF;
     _pixels[i*4+3] = 0xFF;
+  }
+}
+
+void MapWindow::close(){
+  if(_open){
+    mapRef->pause = false;
+    delete[] _pixels;
+    SDLWindow::close();
   }
 }
 
 void MapWindow::resizeWindow(int windowHeight, int windowWidth){
-	SDLWindow::open(windowHeight, windowWidth);
+	SDLWindow::resizeWindow(windowHeight, windowWidth);
   delete [] _pixels;
   _pixels = new uint8_t[windowWidth * windowHeight * 4];
   for(int i=0; i<windowWidth*windowHeight; i++){
@@ -219,64 +212,46 @@ void MapWindow::resizeWindow(int windowHeight, int windowWidth){
   }
 }
 
-void MapWindow::renderPixels(){
+void MapWindow::prepareRender(){
+  for(int i=0; i<windowWidth*windowHeight; i++){
+    _pixels[i*4] = 0xFF;
+    _pixels[i*4+1] = 0xFF;
+    _pixels[i*4+2] = 0xFF;
+  }
+  mapRef->draw(this);
   int texture_pitch = 0;
   void* texture_pixels = NULL;
   if (SDL_LockTexture(_texture, NULL, &texture_pixels, &texture_pitch) != 0) {
       cout << "Unable to lock texture: " << SDL_GetError() << endl;
   }
   else {
-      memcpy(texture_pixels, _pixels, texture_pitch * WINDOW_HEIGHT);
+      memcpy(texture_pixels, _pixels, texture_pitch * windowHeight);
   }
   SDL_UnlockTexture(_texture);
   SDL_SetRenderDrawColor( _renderer, 0x00, 0x00, 0x00, 0xFF );
   SDL_RenderClear(_renderer);
   SDL_RenderCopy(_renderer, _texture, NULL, NULL);
+}
+
+void MapWindow::render(){
   SDL_RenderPresent(_renderer);
-  for(int i=0; i<WINDOW_WIDTH*WINDOW_HEIGHT; i++){
-    _pixels[i*4] = 0xFF;
-    _pixels[i*4+1] = 0xFF;
-    _pixels[i*4+2] = 0xFF;
-  }
 }
 
 void MapWindow::drawPixel(int x, int y, int r, int g, int b){
-  if(x<0 || x>=WINDOW_WIDTH/2 || y<0 || y>=WINDOW_HEIGHT/2)
+  if(x<0 || x>=windowWidth/2 || y<0 || y>=windowHeight/2)
     return;
 
-  _pixels[(2*x+2*y*WINDOW_WIDTH)*4] = r;
-  _pixels[(2*x+1+2*y*WINDOW_WIDTH)*4] = r;
-  _pixels[(2*x+(2*y+1)*WINDOW_WIDTH)*4] = r;
-  _pixels[(2*x+1+(2*y+1)*WINDOW_WIDTH)*4] = r;
-  _pixels[(2*x+2*y*WINDOW_WIDTH)*4+1] = g;
-  _pixels[(2*x+1+2*y*WINDOW_WIDTH)*4+1] = g;
-  _pixels[(2*x+(2*y+1)*WINDOW_WIDTH)*4+1] = g;
-  _pixels[(2*x+1+(2*y+1)*WINDOW_WIDTH)*4+1] = g;
-  _pixels[(2*x+2*y*WINDOW_WIDTH)*4+2] = b;
-  _pixels[(2*x+1+2*y*WINDOW_WIDTH)*4+2] = b;
-  _pixels[(2*x+(2*y+1)*WINDOW_WIDTH)*4+2] = b;
-  _pixels[(2*x+1+(2*y+1)*WINDOW_WIDTH)*4+2] = b;
+  _pixels[(2*x+2*y*windowWidth)*4] = r;
+  _pixels[(2*x+1+2*y*windowWidth)*4] = r;
+  _pixels[(2*x+(2*y+1)*windowWidth)*4] = r;
+  _pixels[(2*x+1+(2*y+1)*windowWidth)*4] = r;
+  _pixels[(2*x+2*y*windowWidth)*4+1] = g;
+  _pixels[(2*x+1+2*y*windowWidth)*4+1] = g;
+  _pixels[(2*x+(2*y+1)*windowWidth)*4+1] = g;
+  _pixels[(2*x+1+(2*y+1)*windowWidth)*4+1] = g;
+  _pixels[(2*x+2*y*windowWidth)*4+2] = b;
+  _pixels[(2*x+1+2*y*windowWidth)*4+2] = b;
+  _pixels[(2*x+(2*y+1)*windowWidth)*4+2] = b;
+  _pixels[(2*x+1+(2*y+1)*windowWidth)*4+2] = b;
 }
 
-void MapWindow::drawMap(Map* m){
-  m->mapDrawnBy = this;
-  m->allowDrawMap = false;
-  open();
-  SDL_Event e;
-  SDL_PollEvent(&e);
-  cout << "Write a number: ";
-  int a; cin >> a; cout << "you inputted " << a << endl;
-  while(e.type != SDL_QUIT /*&& e.type != SDL_KEYDOWN*/ && requestClose != true){
-    SDL_PollEvent(&e);
-    //if(e.type == SDL_KEYDOWN)
-      //cout << "Key " << e.key.keysym.sym << " map" << endl;
-    if(e.type == SDL_WINDOWEVENT && e.window.event==SDL_WINDOWEVENT_SIZE_CHANGED)
-      cout << "Window " << (int)e.window.windowID << " map" << endl;
-    if((m->runningLogic && m->allowDrawMap) || !m->runningLogic){
-      m->draw(this);
-      m->allowDrawMap = false;
-    }
-  }
-  close();
-  m->mapDrawnBy = NULL;
-}

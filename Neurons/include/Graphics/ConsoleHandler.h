@@ -24,13 +24,13 @@ class ConsoleHandler
     virtual ~ConsoleHandler();
     void run();
     vector<Instruction> instructions;
-    int mapId, animalType, animalId, neuronId;
+    int mapId, animalId, neuronId;
+    string animalType;
   private:
     void outputMaps(vector<int> args);
-    void outputAnimal(Map* m, string type, vector<int> args);
-    void outputNeuron(Animal* a, vector<int> args);
+    void outputAnimal(string type, vector<int> args);
+    void outputNeuron(vector<int> args);
     void outputMapsOneline();
-    void runSimulation(Map* m, int steps);
     vector<int> argsToInt(string args);
     vector<string> argsTostr(string args);
 };

@@ -18,8 +18,6 @@ void ConsoleHandler::run(){
   string ans2;
   vector<string> argSplit;
   vector<int> args;
-  createMap({});
-  initMap({});
   while(ans2!="y"){
     while(ans!="q"){
       cout << "\n\n\n\n----------Maps----------" << endl;
@@ -31,8 +29,9 @@ void ConsoleHandler::run(){
       cout << "viewmap i \tshows graphics for map i" << endl;
       cout << "runstep i j \truns map with id i for j simulation steps" << endl;
       cout << "rungen i j \truns map with id i for j simulation generations" << endl;
-      cout << "copy i \tcopy map with id i" << endl;
+      cout << "copy i \t\tcopy map with id i" << endl;
       cout << "output i j \toutputs information about map i, j=(0-3, ONELINE, OVERVIEW, DEEP, ALL)" << endl;
+      cout << "status \t\toutputs simulation status" << endl;
       cout << "q \t\tquits any menu" << endl;
       cout << "run: ";
       getline(cin, ans);
@@ -49,6 +48,7 @@ void ConsoleHandler::run(){
       if(argSplit[0] == "rungen") instructions.push_back(Instruction(RUN_SIMULATION_GENERATIONS, args));
       if(argSplit[0] == "copy") instructions.push_back(Instruction(COPY_MAP, args));
       if(argSplit[0] == "output") outputMaps(args);
+      if(argSplit[0] == "status") instructions.push_back(Instruction(OUTPUT_SIMULATION_STATUS, args));
       while(instructions.size()>0){};
     }
     cout << "Are you sure? (y/n)";
@@ -91,30 +91,9 @@ vector<string> ConsoleHandler::argsTostr(string args){
   return ret;
 }
 
-void ConsoleHandler::runSimulation(Map* m, int steps){
-/*  m->runningLogic = true;
-  m->allowDrawMap = true;
-  m->allowDrawNeurons = true;
-  while(steps>0){
-    cout << "Generations left: " << steps << endl;
-    bool done=false;
-    while(!done){
-      while((m->mapDrawnBy == &mapWindow && m->allowDrawMap==true) || (m->neuronsDrawnBy == &neuronWindow && m->allowDrawNeurons==true)){}
-      done = !m->oneTick();
-      m->allowDrawMap = true;
-      m->allowDrawNeurons = true;
-    }
-    steps--;
-  }
-  m->runningLogic = false;
-*/}
-
 void ConsoleHandler::outputMapsOneline(){
-  for(int i=0 ; i<(int)_maps.size(); i++){
-    cout << "Map " << i << ": ";
-    _maps[i]->output("", OUTPUT_ONELINE);
-    cout << endl;
-  }
+  instructions.push_back(Instruction(OUTPUT_MAPS_ONELINE, {}));
+  while(instructions.size()>0){};
 }
 
 void ConsoleHandler::outputMaps(vector<int> args){
@@ -123,7 +102,7 @@ void ConsoleHandler::outputMaps(vector<int> args){
   string ans;
   vector<string> argSplit;
   while(ans!="q"){
-    if(mapId>=0)
+    if(mapId==-1)
       return;
     cout << "\n----------Map menu----------(map " << mapId << ")" << endl;
     cout << "carni i j \toutputs information about carnivore i, j=(0-3, ONELINE, OVERVIEW, DEEP, ALL)" << endl;
@@ -143,13 +122,13 @@ void ConsoleHandler::outputMaps(vector<int> args){
 
 void ConsoleHandler::outputAnimal(string type, vector<int> args){
   if(type == "carni")
-    animalType = CARNIVORE;
+    animalType = type;
   else if(type == "herbi")
-    animalType = HERBIVORE;
+    animalType = type;
   else if(type == "bestcarni")
-    animalType = BEST_CARNIVORE;
+    animalType = type;
   else if(type == "bestherbi")
-    animalType = BEST_HERBIVORE;
+    animalType = type;
   else{
     cout << "Invalid animal group type: " << type << endl;
     return;
@@ -159,7 +138,7 @@ void ConsoleHandler::outputAnimal(string type, vector<int> args){
   string ans;
   vector<string> argSplit;
   while(ans!="q"){
-    if(animalId>=0)
+    if(animalId==-1)
       return;
     cout << "\n----------Animal menu----------(" << type << " " << animalId << ")" << endl;
     cout << "neuron i j \toutputs information about neuron i, j=(0-3, ONELINE, OVERVIEW, DEEP, ALL)" << endl;
@@ -168,39 +147,21 @@ void ConsoleHandler::outputAnimal(string type, vector<int> args){
     getline(cin, ans);
     cout << endl;
     argSplit = argsTostr(ans);
-    if(argSplit[0] == "neuron")outputNeuron(a, argsToInt(argSplit[1]));
+    if(argSplit[0] == "neuron")outputNeuron(argsToInt(argSplit[1]));
     if(argSplit[0] == "mutate"){
-      cout << "mutating neurons..." << endl;
-      a->mutateNeurons();
-      cout << "done" << endl;
-      a->output("", level);
+      instructions.push_back(Instruction(MUTATE_NEURONS, argsToInt(argSplit[1])));
     }
   }
 }
 
-void ConsoleHandler::outputNeuron(Animal* a, vector<int> args){
-  Neuron* n;
-  vector<Neuron*> neurons;
-  neurons = a->neurons();
-  int neuronId = neurons.size()-1;
-  int level = OUTPUT_OVERVIEW;
-  if(args.size()>0)
-    neuronId=args[0];
-  if(args.size()>1)
-    level=args[1];
-  if(neuronId<0 || neuronId>=(int)neurons.size()){
-    cout << neuronId << " is not a valid id" << endl;
-    return;
-  }
-  n = neurons[neuronId];
-  if(level<0 || level > 3){
-    cout << level << " is not a valid information level" << endl;
-    return;
-  }
+void ConsoleHandler::outputNeuron(vector<int> args){
+  instructions.push_back(Instruction(OUTPUT_NEURONS, args));
+  while(instructions.size()>0){};
   string ans;
   vector<string> argSplit;
-  n->output("", level);
   while(ans!="q"){
+    if(neuronId==-1)
+      return;
     cout << "\n----------Neuron menu----------(neuron " << neuronId << ")" << endl;
     cout << "(empty menu, write q to quit)" << endl;
     cout << "run: ";

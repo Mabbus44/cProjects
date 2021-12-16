@@ -144,9 +144,9 @@ bool Map::oneTick(){
   }
   if(_herbivores.size() == 0){
     _done = true;
-    return false;
+    return true;
   }
-  return true;
+  return false;
 }
 
 void Map::killHerbivore(Animal* target){
@@ -208,7 +208,6 @@ void Map::draw(MapWindow* window){
     h->draw(window);
   for(Animal* c : _carnivores)
     c->draw(window);
-  window->renderPixels();
 }
 
 int Map::closestEntity(int type, int dir, int x, int y){
