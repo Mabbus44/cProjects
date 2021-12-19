@@ -65,6 +65,10 @@ void Neuron::setColumn(vector<int>& columns){
       n->setColumn(columns);
 }
 
+void Neuron::multiplyColumn(vector<int>& columnDists){
+  _column = _column*columnDists[_level-1];
+}
+
 void Neuron::disconnect2way(){
   while(_parents.size()>0){
     _parents[0]->disconnectChild(this);
@@ -148,7 +152,7 @@ void Neuron::replaceNeuron(Neuron* oldNeuron){
 void Neuron::output(string tab, int level){
   switch(level){
     case OUTPUT_ONELINE:
-      cout << tab << "Address: " << this << " Level: " << _level << " Column: " << _column << " Index: " << index << " Type: " << _type << " Family: " << _family << " ComputeDone: " << _computeDone << " ComputeResult: " << _computeResult << " Parent: " << _parent << " Parents: " << _parents.size() << " Children: " << _children.size();
+      cout << tab << "Address: " << this << " Level: " << _level << " Column: " << _column << " Index: " << index << " Type: " << _type << " Family: " << _family << " ComputeId " << _computeId << " ComputeResult: " << _computeResult << " Parent: " << _parent << " Parents: " << _parents.size() << " Children: " << _children.size();
       break;
     case OUTPUT_OVERVIEW:
     case OUTPUT_DEEP:
@@ -159,7 +163,7 @@ void Neuron::output(string tab, int level){
       cout << tab << "Index: " << index << endl;
       cout << tab << "Type: " << _type << endl;
       cout << tab << "Family: " << _family << endl;
-      cout << tab << "ComputeDone: " << _computeDone << endl;
+      cout << tab << "ComputeId: " << _computeId << endl;
       cout << tab << "ComputeResult: " << _computeResult << endl;
       cout << tab << "Parent: " << _parent << endl;
       cout << tab << "Parents: " << _parents.size() << endl;
@@ -206,7 +210,9 @@ void Neuron::reRollProperties(){
   _bonus = (rand()%2001-1000)/1000.0;
 }
 
-void Neuron::draw(NeuronsWindow* window){
+void Neuron::draw(NeuronsWindow* window, int xOffset, int yOffset){
+  yOffset -= 50;
+  int yDist =150;
   switch(_family){
     case LOGIC_NEURON:
       window->setDrawColor(0x88, 0x88, 0x88);
@@ -218,10 +224,10 @@ void Neuron::draw(NeuronsWindow* window){
       window->setDrawColor(0x44, 0x44, 0xFF);
       break;
   }
-  window->drawRect(_column*80-20, _level*40, 70, 30);
+  window->drawRect(_column-20+xOffset, _level*yDist+yOffset, 70, 30);
   for(Neuron* c : _children)
-    window->drawLine(_column*80+15, _level*40+30, c->_column*80+15, c->_level*40);
-  string t;
+    window->drawLine(_column+15+xOffset, _level*yDist+30+yOffset, c->_column+15+xOffset, c->_level*yDist+yOffset);
+  string t, t2;
   switch(_type){
     case SN_GRASS_DIST_N:
       t="SGN";
@@ -259,6 +265,18 @@ void Neuron::draw(NeuronsWindow* window){
     case SN_CARNIVORE_DIST_W:
       t="SCW";
       break;
+    case SN_MAP_POSITION_XMIN:
+      t="SPXi";
+      break;
+    case SN_MAP_POSITION_XMAX:
+      t="SPXa";
+      break;
+    case SN_MAP_POSITION_YMIN:
+      t="SPYi";
+      break;
+    case SN_MAP_POSITION_YMAX:
+      t="SPYa";
+      break;
     case LN_OR:
       t="OR";
       break;
@@ -287,5 +305,9 @@ void Neuron::draw(NeuronsWindow* window){
       t="E";
       break;
   }
-  window->drawText(_column*80, _level*40, t, { 0x00, 0x00, 0x00 });
+  stringstream stream;
+  stream << fixed << setprecision(3) << _computeResult;
+  t2 = stream.str();
+  window->drawText(_column+xOffset, _level*yDist+yOffset-5, t, { 0x00, 0x00, 0x00 });
+  window->drawText(_column+xOffset, _level*yDist+yOffset+17, t2, { 0x00, 0x00, 0x00 }, 10);
 }

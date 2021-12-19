@@ -58,16 +58,16 @@ void Entity::output(string tab, int level){
   }
 }
 
-void Entity::draw(MapWindow* window){
+void Entity::draw(MapWindow* window, bool selected){
   switch(_type){
     case CARNIVORE:
-      window->drawPixel(_posX, _posY, 0xFF, 0, 0);
+      window->drawPixel(_posX, _posY, 0xFF, 0, 0, selected);
       break;
     case HERBIVORE:
-      window->drawPixel(_posX, _posY, 0, 0, 0xFF);
+      window->drawPixel(_posX, _posY, 0, 0, 0xFF, selected);
       break;
     case PLANT:
-      window->drawPixel(_posX, _posY, 0, 0xFF, 0);
+      window->drawPixel(_posX, _posY, 0, 0xFF, 0, selected);
       break;
   }
 }

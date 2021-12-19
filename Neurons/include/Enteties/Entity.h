@@ -14,8 +14,11 @@ class Entity
     virtual ~Entity();
     bool isInDirection(int x, int y, int direction);
     int distance(int x, int y);
-    void draw(MapWindow* window);
+    void draw(MapWindow* window, bool selected=false);
     void output(string tab, int level);
+    int index(){return _index;}
+    int posX(){return _posX;}
+    int posY(){return _posY;}
 
   protected:
     int _posX, _posY;

@@ -64,6 +64,7 @@
 		<Unit filename="include/Neurons/SNCarnivoreDist.h" />
 		<Unit filename="include/Neurons/SNGrassDist.h" />
 		<Unit filename="include/Neurons/SNHerbivoreDist.h" />
+		<Unit filename="include/Neurons/SNMapPosition.h" />
 		<Unit filename="include/Neurons/SensorNeuron.h" />
 		<Unit filename="src/Enteties/Animal.cpp" />
 		<Unit filename="src/Enteties/Carnivore.cpp" />
@@ -86,6 +87,7 @@
 		<Unit filename="src/Neurons/SNCarnivoreDist.cpp" />
 		<Unit filename="src/Neurons/SNGrassDist.cpp" />
 		<Unit filename="src/Neurons/SNHerbivoreDist.cpp" />
+		<Unit filename="src/Neurons/SNMapPosition.cpp" />
 		<Unit filename="src/Neurons/SensorNeuron.cpp" />
 		<Extensions />
 	</Project>

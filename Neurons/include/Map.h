@@ -25,15 +25,22 @@ class Map
     void deleteEnteties();
     void deleteBestEnteties();
     void free();
+    void changeSelectedAnimal(bool add);
+    void changeSelectedAnimalType(bool add);
+    void addHerbivoresToHistory();
     vector<Animal*> carnivores(){return _carnivores;}
     vector<Animal*> herbivores(){return _herbivores;}
     vector<Plant*> plants(){return _plants;}
     vector<Animal*> bestCarnivores(){return _bestCarnivores;}
     vector<Animal*> bestHerbivores(){return _bestHerbivores;}
+    Animal* getSelectedAnimal();
     SDLWindow* mapDrawnBy = NULL;
     SDLWindow* neuronsDrawnBy = NULL;
     bool pause=false;
     int runManual = 0;
+    int selectedAnimalType;
+    int selectedAnimalIndex;
+    vector<vector<Animal*>> herbivoreHistory;
 
   protected:
     vector<Animal*> _carnivores;
@@ -44,6 +51,7 @@ class Map
     bool _done;
     int _step;
     int _generation;
+    int _computeId=1;
 
   private:
 };

@@ -10,7 +10,7 @@ class LNOr: public LogicNeuron
     LNOr();
     LNOr(Animal* parent);
     virtual ~LNOr();
-    virtual double compute();
+    virtual double compute(int computeId);
     virtual Neuron* deepCopy(Animal* parent);
 
   protected:

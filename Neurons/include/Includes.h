@@ -8,6 +8,7 @@
 #include "Neurons/SNGrassDist.h"
 #include "Neurons/SNHerbivoreDist.h"
 #include "Neurons/SNCarnivoreDist.h"
+#include "Neurons/SNMapPosition.h"
 #include "Neurons/LNOr.h"
 #include "Neurons/LNAnd.h"
 #include "Neurons/LNGreaterThan.h"

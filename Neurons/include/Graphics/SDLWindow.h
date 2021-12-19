@@ -23,6 +23,7 @@ class SDLWindow
     bool isOpen(){return _open;}
     Uint32 windowId;
     bool keyFocus = false;
+    int xOffset=0, yOffset=0;
   protected:
     SDL_Window* _window = NULL;
     SDL_Renderer* _renderer = NULL;
@@ -39,18 +40,16 @@ class NeuronsWindow: public SDLWindow{
     virtual void resizeWindow(int windowHeight, int windowWidth);
     virtual void prepareRender();
     virtual void render();
+    virtual void close();
     void drawClear();
     void setDrawColor(int r, int g, int b);
-    void drawText(int x, int y, string text, SDL_Color c);
+    void drawText(int x, int y, string text, SDL_Color c, int fontSize=20);
     void drawRect(int x, int y, int w, int h);
     void drawLine(int x1, int y1, int x2, int y2);
-    void changeAnimal(bool add);
-    void changeAnimalType(bool add);
     Map* mapRef;
-    int animalType;
-    int animalIndex;
   protected:
     TTF_Font* _font = NULL;
+    TTF_Font* _smallFont = NULL;
 };
 
 class MapWindow: public SDLWindow{
@@ -62,7 +61,7 @@ class MapWindow: public SDLWindow{
     virtual void prepareRender();
     virtual void render();
     virtual void close();
-    void drawPixel(int x, int y, int r, int g, int b);
+    void drawPixel(int x, int y, int r, int g, int b, bool selected=false);
     Map* mapRef;
   protected:
     uint8_t* _pixels;

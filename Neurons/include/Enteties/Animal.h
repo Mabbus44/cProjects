@@ -20,9 +20,8 @@ class Animal: public Entity
     void connectNeuronToChildren(Neuron* n);
     void rewireNeuron(int index);
     void mutateNeurons();
-    void compute();
     virtual void eat(){}
-    void doAction();
+    void doAction(int computeId);
     void hunger(){_bellyFood--;}
     bool isDead(){return _bellyFood<=0;}
     Animal* deepCopy(Map* parent, int x=-1, int y=-1, int bellyFood=-1, int index=-1);
@@ -30,10 +29,12 @@ class Animal: public Entity
     int closestEntity(int type, int dir);
     void free();
     void prepareDrawNeurons();
-    void drawNeurons(NeuronsWindow* window);
+    void drawNeurons(NeuronsWindow* window, int xOffset, int yOffset);
     void output(string tab, int level);
-    Neuron* getAction();
+    Neuron* getAction(int computeId);
     vector<Neuron*> neurons(){return _neurons;}
+    bool selected = false;
+    int parentIndex=-1;
 
   protected:
     vector<Neuron*> _neurons;

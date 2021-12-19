@@ -14,14 +14,14 @@ LNAnd::~LNAnd()
   //dtor
 }
 
-double LNAnd::compute(){
-  if(_computeDone)
+double LNAnd::compute(int computeId){
+  if(_computeId==computeId)
     return _computeResult;
-  _computeDone = true;
+  _computeId = computeId;
   _computeResult = 1.0;
   for(Neuron* n : _parents)
-    if(n->compute() < _computeResult)
-      _computeResult = n->compute();
+    if(n->compute(computeId) < _computeResult)
+      _computeResult = n->compute(computeId);
   return _postCompute();
 }
 

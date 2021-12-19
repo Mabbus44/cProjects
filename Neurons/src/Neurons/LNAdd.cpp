@@ -14,13 +14,13 @@ LNAdd::~LNAdd()
   //dtor
 }
 
-double LNAdd::compute(){
-  if(_computeDone)
+double LNAdd::compute(int computeId){
+  if(_computeId==computeId)
     return _computeResult;
-  _computeDone = true;
+  _computeId = computeId;
   _computeResult = 0.0;
   for(Neuron* n : _parents)
-    _computeResult = _computeResult + n->compute();
+    _computeResult = _computeResult + n->compute(computeId);
   return _postCompute();
 }
 

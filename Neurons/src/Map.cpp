@@ -33,9 +33,11 @@ void Map::restart(){
   }
   else{
     int i = 0;
+    int newI = 0;
     while(_herbivores.size()<HERBIVORES_PER_SIMULATION){
-      _herbivores.push_back(_bestHerbivores[i]->deepCopy(this, rand()%MAP_WIDTH, rand()%MAP_HEIGHT, HERBIVORE_START_FOOD, i));
+      _herbivores.push_back(_bestHerbivores[i]->deepCopy(this, rand()%MAP_WIDTH, rand()%MAP_HEIGHT, HERBIVORE_START_FOOD, newI));
       i++;
+      newI++;
       if(i == (int)_bestHerbivores.size())
         i=0;
     }
@@ -51,9 +53,11 @@ void Map::restart(){
   }
   else{
     int i = 0;
+    int newI = 0;
     while(_carnivores.size()<CARNIVORES_PER_SIMULATION){
-      _carnivores.push_back(_bestCarnivores[i]->deepCopy(this, rand()%MAP_WIDTH, rand()%MAP_HEIGHT, CARNIVORE_START_FOOD, i));
+      _carnivores.push_back(_bestCarnivores[i]->deepCopy(this, rand()%MAP_WIDTH, rand()%MAP_HEIGHT, CARNIVORE_START_FOOD, newI));
       i++;
+      newI++;
       if(i == (int)_bestCarnivores.size())
         i=0;
     }
@@ -108,14 +112,11 @@ bool Map::oneTick(){
   if(_done)
     restart();
   _step++;
+  _computeId = 3-_computeId;
   for(Animal* h : _herbivores)
-    h->compute();
+    h->doAction(_computeId);
   for(Animal* c : _carnivores)
-    c->compute();
-  for(Animal* h : _herbivores)
-    h->doAction();
-  for(Animal* c : _carnivores)
-    c->doAction();
+    c->doAction(_computeId);
   for(int i=0; i<(int)_herbivores.size(); i++){
     if(_herbivores[i]->isDead()){
       _herbivores[i]->free();
@@ -208,6 +209,9 @@ void Map::draw(MapWindow* window){
     h->draw(window);
   for(Animal* c : _carnivores)
     c->draw(window);
+  Animal* a = getSelectedAnimal();
+  if(a)
+    a->draw(window, true);
 }
 
 int Map::closestEntity(int type, int dir, int x, int y){
@@ -309,4 +313,68 @@ Map* Map::deepCopy(){
 void Map::free(){
   deleteEnteties();
   deleteBestEnteties();
+}
+
+void Map::changeSelectedAnimal(bool add){
+  if(add)
+    selectedAnimalIndex++;
+  else
+    selectedAnimalIndex--;
+  int animalCount;
+  switch(selectedAnimalType){
+    case HERBIVORE_NEURON:
+      animalCount = herbivores().size();
+      break;
+    case CARNIVORE_NEURON:
+      animalCount = carnivores().size();
+      break;
+    case BEST_HERBIVORE_NEURON:
+      animalCount = bestHerbivores().size();
+      break;
+    case BEST_CARNIVORE_NEURON:
+      animalCount = bestCarnivores().size();
+      break;
+  }
+  if(selectedAnimalIndex>=animalCount)
+    selectedAnimalIndex = 0;
+  if(selectedAnimalIndex<0)
+    selectedAnimalIndex = animalCount-1;
+}
+
+void Map::changeSelectedAnimalType(bool add){
+  selectedAnimalIndex = 0;
+  if(add)
+    selectedAnimalType++;
+  else
+    selectedAnimalType--;
+  if(selectedAnimalType<0)
+    selectedAnimalType = DRAW_NEURON_TYPE_COUNT-1;
+  if(selectedAnimalType>=DRAW_NEURON_TYPE_COUNT)
+    selectedAnimalType = 0;
+}
+
+Animal* Map::getSelectedAnimal(){
+  switch(selectedAnimalType){
+    case HERBIVORE_NEURON:
+      if(selectedAnimalIndex>=0 && selectedAnimalIndex<(int)_herbivores.size())
+        return _herbivores[selectedAnimalIndex];
+      break;
+    case CARNIVORE_NEURON:
+      if(selectedAnimalIndex>=0 && selectedAnimalIndex<(int)_carnivores.size())
+        return _carnivores[selectedAnimalIndex];
+      break;
+    case BEST_HERBIVORE_NEURON:
+      if(selectedAnimalIndex>=0 && selectedAnimalIndex<(int)_bestHerbivores.size())
+        return _bestHerbivores[selectedAnimalIndex];
+      break;
+    case BEST_CARNIVORE_NEURON:
+      if(selectedAnimalIndex>=0 && selectedAnimalIndex<(int)_bestCarnivores.size())
+        return _bestCarnivores[selectedAnimalIndex];
+      break;
+  }
+  return NULL;
+}
+
+void Map::addHerbivoresToHistory(){
+
 }

@@ -15,10 +15,10 @@ SNGrassDist::~SNGrassDist()
   //dtor
 }
 
-double SNGrassDist::compute(){
-  if(_computeDone)
+double SNGrassDist::compute(int computeId){
+  if(_computeId==computeId)
     return _computeResult;
-  _computeDone = true;
+  _computeId = computeId;
   int dir;
   switch(_type){
     case SN_GRASS_DIST_N:

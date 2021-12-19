@@ -10,7 +10,7 @@ class SNGrassDist: public SensorNeuron
     SNGrassDist();
     SNGrassDist(Animal* parent, int type);
     virtual ~SNGrassDist();
-    virtual double compute();
+    virtual double compute(int computeId);
     virtual Neuron* deepCopy(Animal* parent);
 
   protected:

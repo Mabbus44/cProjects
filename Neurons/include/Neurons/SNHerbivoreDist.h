@@ -10,7 +10,7 @@ class SNHerbivoreDist: public SensorNeuron
     SNHerbivoreDist();
     SNHerbivoreDist(Animal* parent, int type);
     virtual ~SNHerbivoreDist();
-    virtual double compute();
+    virtual double compute(int computeId);
     virtual Neuron* deepCopy(Animal* parent);
 
   protected:

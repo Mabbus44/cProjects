@@ -10,7 +10,7 @@ class LNGreaterThan: public LogicNeuron
     LNGreaterThan();
     LNGreaterThan(Animal* parent);
     virtual ~LNGreaterThan();
-    virtual double compute();
+    virtual double compute(int computeId);
     virtual Neuron* deepCopy(Animal* parent);
 
   protected:

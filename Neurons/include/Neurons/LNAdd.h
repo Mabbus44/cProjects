@@ -10,7 +10,7 @@ class LNAdd: public LogicNeuron
     LNAdd();
     LNAdd(Animal* parent);
     virtual ~LNAdd();
-    virtual double compute();
+    virtual double compute(int computeId);
     virtual Neuron* deepCopy(Animal* parent);
 
   protected:

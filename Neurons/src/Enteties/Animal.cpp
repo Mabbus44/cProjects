@@ -41,6 +41,12 @@ void Animal::createRandomNeuron(bool connectChildren, bool connectParents, int c
     case SN_CARNIVORE_DIST_W:
       neuron = new SNCarnivoreDist(this, nodeType);
       break;
+    case SN_MAP_POSITION_XMIN:
+    case SN_MAP_POSITION_XMAX:
+    case SN_MAP_POSITION_YMIN:
+    case SN_MAP_POSITION_YMAX:
+      neuron = new SNMapPosition(this, nodeType);
+      break;
     case LN_OR:
       neuron = new LNOr(this);
       break;
@@ -77,7 +83,14 @@ void Animal::createRandomNeuron(bool connectChildren, bool connectParents, int c
 
 void Animal::connectNeuronToChildren(Neuron* n){
   vector<Neuron*> availableNeurons = _neurons;
-  int childCount = rand()%(CHILDREN_PER_NEURON_MAX-CHILDREN_PER_NEURON_MIN+1)+CHILDREN_PER_NEURON_MIN;
+  int childCount;
+  int rnd = rand()%CHILDREN_PER_NEURON_WEIGHT_TOT;
+  if(rnd<CHILDREN_PER_NEURON_WEIGHT_1)
+    childCount=1;
+  else if(rnd<(CHILDREN_PER_NEURON_WEIGHT_1+CHILDREN_PER_NEURON_WEIGHT_2))
+    childCount=2;
+  else
+    childCount=3;
   while(childCount>0 && n->freeChildConnection() && availableNeurons.size()>0){
     int candidate = rand()%availableNeurons.size();
     if(n == availableNeurons[candidate] || availableNeurons[candidate]->myOffspring(n) || !availableNeurons[candidate]->connectParent(n))
@@ -91,7 +104,14 @@ void Animal::connectNeuronToChildren(Neuron* n){
 
 void Animal::connectNeuronToParents(Neuron* n){
   vector<Neuron*> availableNeurons = _neurons;
-  int parentCount = rand()%(CHILDREN_PER_NEURON_MAX-CHILDREN_PER_NEURON_MIN+1)+CHILDREN_PER_NEURON_MIN;
+  int parentCount;
+  int rnd = rand()%CHILDREN_PER_NEURON_WEIGHT_TOT;
+  if(rnd<CHILDREN_PER_NEURON_WEIGHT_1)
+    parentCount=1;
+  else if(rnd<(CHILDREN_PER_NEURON_WEIGHT_1+CHILDREN_PER_NEURON_WEIGHT_2))
+    parentCount=2;
+  else
+    parentCount=3;
   while(parentCount>0 && n->freeParentConnection() && availableNeurons.size()>0){
     int candidate = rand()%availableNeurons.size();
     if(n == availableNeurons[candidate] || n->myOffspring(availableNeurons[candidate]) || !availableNeurons[candidate]->connectChild(n))
@@ -151,20 +171,28 @@ void Animal::prepareDrawNeurons(){
   for(Neuron* n : _neurons)
     if(n->parents().size() == 0)
       n->setColumn(columns);
+  int widestLevel=0;
+  for(int c: columns)
+    if(c>widestLevel)
+      widestLevel=c;
+  int minPixelsBetweenNeurons=80;
+  for(int& c: columns){
+    if(c>1)
+      c=(minPixelsBetweenNeurons*(widestLevel+1))/(c+1);
+    else
+      c=minPixelsBetweenNeurons*(widestLevel+1)/2;
+  }
+  for(Neuron* n: _neurons)
+    n->multiplyColumn(columns);
 }
 
-void Animal::compute(){
-  for(Neuron* n : _neurons)
-    n->compute();
-}
-
-Neuron* Animal::getAction(){
+Neuron* Animal::getAction(int computeId){
   Neuron* ret = NULL;
   double bestNeuronOutput = 0.0;
   for(Neuron* n : _neurons){
-    if(n->family() == OUTPUT_NEURON && n->compute() >= bestNeuronOutput){
+    if(n->family() == OUTPUT_NEURON && n->compute(computeId) >= bestNeuronOutput){
       ret = n;
-      bestNeuronOutput = n->compute();
+      bestNeuronOutput = n->compute(computeId);
     }
   }
   return ret;
@@ -234,6 +262,8 @@ Animal* Animal::deepCopy(Map* parent, int x, int y, int bellyFood, int index){
       newAnimal->_neurons[i]->connectChild(newAnimal->_neurons[children[i2]->index]);
     }
   }
+  newAnimal->selected = selected;
+  newAnimal->parentIndex = _index;
   return newAnimal;
 }
 
@@ -295,8 +325,8 @@ bool Animal::neuronSanityCheck(){
   return true;
 }
 
-void Animal::doAction(){
-  Neuron* neuron = getAction();
+void Animal::doAction(int computeId){
+  Neuron* neuron = getAction(computeId);
   hunger();
   if(!neuron)
     return;
@@ -307,11 +337,11 @@ void Animal::doAction(){
         _posY--;
       break;
     case ON_MOVE_S:
-      if(_posY<479)
+      if(_posY<MAP_HEIGHT)
         _posY++;
       break;
     case ON_MOVE_E:
-      if(_posX<639)
+      if(_posX<MAP_WIDTH)
         _posX++;
       break;
     case ON_MOVE_W:
@@ -329,10 +359,10 @@ void Animal::doAction(){
   }
 }
 
-void Animal::drawNeurons(NeuronsWindow* window){
+void Animal::drawNeurons(NeuronsWindow* window, int xOffset, int yOffset){
   prepareDrawNeurons();
   for(Neuron* n : _neurons)
-    n->draw(window);
+    n->draw(window, xOffset, yOffset);
 }
 
 int Animal::closestEntity(int type, int dir){

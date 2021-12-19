@@ -60,6 +60,17 @@ void NeuronsWindow::open(int windowHeight, int windowWidth){
   _font = TTF_OpenFont( "fonts/OpenSans-Regular.ttf", 20 );
   if( _font == NULL )
     cout << "Warning: Failed to load lazy font! SDL_ttf Error: " << TTF_GetError() << endl;
+  _smallFont = TTF_OpenFont( "fonts/OpenSans-Regular.ttf", 10 );
+  if( _smallFont == NULL )
+    cout << "Warning: Failed to load small lazy font! SDL_ttf Error: " << TTF_GetError() << endl;
+}
+
+void NeuronsWindow::close(){
+  if(_open){
+    TTF_CloseFont(_font);
+    TTF_CloseFont(_smallFont);
+    SDLWindow::close();
+  }
 }
 
 void NeuronsWindow::resizeWindow(int windowHeight, int windowWidth){
@@ -79,8 +90,12 @@ void NeuronsWindow::drawLine(int x1, int y1, int x2, int y2){
   SDL_RenderDrawLine(_renderer, x1, y1, x2, y2);
 }
 
-void NeuronsWindow::drawText(int x, int y, string text, SDL_Color c){
-  SDL_Surface* textSurface = TTF_RenderText_Solid( _font, text.c_str(),  c);
+void NeuronsWindow::drawText(int x, int y, string text, SDL_Color c, int fontSize){
+  SDL_Surface* textSurface;
+  if(fontSize==20)
+    textSurface=TTF_RenderText_Solid( _font, text.c_str(),  c);
+  else
+    textSurface=TTF_RenderText_Solid( _smallFont, text.c_str(),  c);
   if( textSurface == NULL ){
     cout << "Unable to render text surface! SDL_ttf Error: " << TTF_GetError() << endl;
     return;
@@ -98,72 +113,44 @@ void NeuronsWindow::drawText(int x, int y, string text, SDL_Color c){
   SDL_DestroyTexture( mTexture );
 }
 
-void NeuronsWindow::changeAnimal(bool add){
-  if(add)
-    animalIndex++;
-  else
-    animalIndex--;
-  int animalCount;
-  switch(animalType){
-    case HERBIVORE_NEURON:
-      animalCount = mapRef->herbivores().size();
-      break;
-    case CARNIVORE_NEURON:
-      animalCount = mapRef->carnivores().size();
-      break;
-    case BEST_HERBIVORE_NEURON:
-      animalCount = mapRef->bestHerbivores().size();
-      break;
-    case BEST_CARNIVORE_NEURON:
-      animalCount = mapRef->bestCarnivores().size();
-      break;
-  }
-  if(animalIndex>=animalCount)
-    animalIndex = 0;
-  if(animalIndex<0)
-    animalIndex = animalCount-1;
-}
-
-void NeuronsWindow::changeAnimalType(bool add){
-  animalIndex = 0;
-  if(add)
-    animalType++;
-  else
-    animalType--;
-  if(animalType<0)
-    animalType = DRAW_NEURON_TYPE_COUNT-1;
-  if(animalType>=DRAW_NEURON_TYPE_COUNT)
-    animalType = 0;
-}
-
 void NeuronsWindow::prepareRender(){
   SDL_SetRenderDrawColor( _renderer, 0x00, 0x00, 0x00, 0xFF );
   SDL_RenderClear(_renderer);
-  switch(animalType){
-    case HERBIVORE_NEURON:
-      if(animalIndex>=0 && animalIndex<(int)mapRef->herbivores().size())
-        mapRef->herbivores()[animalIndex]->drawNeurons(this);
-      else
+  Animal* animal = mapRef->getSelectedAnimal();
+  if(animal){
+    if(animal->selected)
+      drawText(240,10, "Selected", {0xFF, 0x00, 0x00});
+    switch(mapRef->selectedAnimalType){
+      case HERBIVORE_NEURON:
+        drawText(10,10, "Herbivore " + to_string(animal->index()), {0xFF, 0x00, 0x00});
+        break;
+      case CARNIVORE_NEURON:
+        drawText(10,10, "Carnivore " + to_string(animal->index()), {0xFF, 0x00, 0x00});
+        break;
+      case BEST_HERBIVORE_NEURON:
+        drawText(10,10, "Best herbivore " + to_string(animal->index()), {0xFF, 0x00, 0x00});
+        break;
+      case BEST_CARNIVORE_NEURON:
+        drawText(10,10, "Best carnivore " + to_string(animal->index()), {0xFF, 0x00, 0x00});
+        break;
+    }
+    animal->drawNeurons(this, xOffset, yOffset);
+  }
+  else{
+    switch(mapRef->selectedAnimalType){
+      case HERBIVORE_NEURON:
         drawText(10,10, "No herbivores on map", {0xFF, 0x00, 0x00});
-      break;
-    case CARNIVORE_NEURON:
-      if(animalIndex>=0 && animalIndex<(int)mapRef->carnivores().size())
-        mapRef->carnivores()[animalIndex]->drawNeurons(this);
-      else
+        break;
+      case CARNIVORE_NEURON:
         drawText(10,10, "No carnivores on map", {0xFF, 0x00, 0x00});
-      break;
-    case BEST_HERBIVORE_NEURON:
-      if(animalIndex>=0 && animalIndex<(int)mapRef->bestHerbivores().size())
-        mapRef->bestHerbivores()[animalIndex]->drawNeurons(this);
-      else
+        break;
+      case BEST_HERBIVORE_NEURON:
         drawText(10,10, "No best herbivores on map", {0xFF, 0x00, 0x00});
-      break;
-    case BEST_CARNIVORE_NEURON:
-      if(animalIndex>=0 && animalIndex<(int)mapRef->bestCarnivores().size())
-        mapRef->bestCarnivores()[animalIndex]->drawNeurons(this);
-      else
+        break;
+      case BEST_CARNIVORE_NEURON:
         drawText(10,10, "No best carnivores on map", {0xFF, 0x00, 0x00});
-      break;
+        break;
+    }
   }
 }
 
@@ -237,7 +224,7 @@ void MapWindow::render(){
   SDL_RenderPresent(_renderer);
 }
 
-void MapWindow::drawPixel(int x, int y, int r, int g, int b){
+void MapWindow::drawPixel(int x, int y, int r, int g, int b, bool selected){
   if(x<0 || x>=windowWidth/2 || y<0 || y>=windowHeight/2)
     return;
 
@@ -253,5 +240,59 @@ void MapWindow::drawPixel(int x, int y, int r, int g, int b){
   _pixels[(2*x+1+2*y*windowWidth)*4+2] = b;
   _pixels[(2*x+(2*y+1)*windowWidth)*4+2] = b;
   _pixels[(2*x+1+(2*y+1)*windowWidth)*4+2] = b;
+  if(selected){
+    if(x>0){
+      if(y>0){
+        _pixels[(2*x-1+(2*y-1)*windowWidth)*4] = r;
+        _pixels[(2*x-1+(2*y-1)*windowWidth)*4+1] = g;
+        _pixels[(2*x-1+(2*y-1)*windowWidth)*4+2] = b;
+      }
+      _pixels[(2*x-1+(2*y)*windowWidth)*4] = r;
+      _pixels[(2*x-1+(2*y)*windowWidth)*4+1] = g;
+      _pixels[(2*x-1+(2*y)*windowWidth)*4+2] = b;
+      _pixels[(2*x-1+(2*y+1)*windowWidth)*4] = r;
+      _pixels[(2*x-1+(2*y+1)*windowWidth)*4+1] = g;
+      _pixels[(2*x-1+(2*y+1)*windowWidth)*4+2] = b;
+      if(y<(windowHeight/2-1)){
+        _pixels[(2*x-1+(2*y+2)*windowWidth)*4] = r;
+        _pixels[(2*x-1+(2*y+2)*windowWidth)*4+1] = g;
+        _pixels[(2*x-1+(2*y+2)*windowWidth)*4+2] = b;
+      }
+    }
+    if(y>0){
+      _pixels[(2*x+(2*y-1)*windowWidth)*4] = r;
+      _pixels[(2*x+(2*y-1)*windowWidth)*4+1] = g;
+      _pixels[(2*x+(2*y-1)*windowWidth)*4+2] = b;
+      _pixels[(2*x+1+(2*y-1)*windowWidth)*4] = r;
+      _pixels[(2*x+1+(2*y-1)*windowWidth)*4+1] = g;
+      _pixels[(2*x+1+(2*y-1)*windowWidth)*4+2] = b;
+    }
+    if(x<(windowWidth/2-1)){
+      if(y>0){
+        _pixels[(2*x+2+(2*y-1)*windowWidth)*4] = r;
+        _pixels[(2*x+2+(2*y-1)*windowWidth)*4+1] = g;
+        _pixels[(2*x+2+(2*y-1)*windowWidth)*4+2] = b;
+      }
+      _pixels[(2*x+2+(2*y)*windowWidth)*4] = r;
+      _pixels[(2*x+2+(2*y)*windowWidth)*4+1] = g;
+      _pixels[(2*x+2+(2*y)*windowWidth)*4+2] = b;
+      _pixels[(2*x+2+(2*y+1)*windowWidth)*4] = r;
+      _pixels[(2*x+2+(2*y+1)*windowWidth)*4+1] = g;
+      _pixels[(2*x+2+(2*y+1)*windowWidth)*4+2] = b;
+      if(y<(windowHeight/2-1)){
+        _pixels[(2*x+2+(2*y+2)*windowWidth)*4] = r;
+        _pixels[(2*x+2+(2*y+2)*windowWidth)*4+1] = g;
+        _pixels[(2*x+2+(2*y+2)*windowWidth)*4+2] = b;
+      }
+    }
+    if(y<(windowHeight/2-1)){
+      _pixels[(2*x+(2*y+2)*windowWidth)*4] = r;
+      _pixels[(2*x+(2*y+2)*windowWidth)*4+1] = g;
+      _pixels[(2*x+(2*y+2)*windowWidth)*4+2] = b;
+      _pixels[(2*x+1+(2*y+2)*windowWidth)*4] = r;
+      _pixels[(2*x+1+(2*y+2)*windowWidth)*4+1] = g;
+      _pixels[(2*x+1+(2*y+2)*windowWidth)*4+2] = b;
+    }
+  }
 }
 

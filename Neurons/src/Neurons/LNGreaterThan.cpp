@@ -14,17 +14,17 @@ LNGreaterThan::~LNGreaterThan()
   //dtor
 }
 
-double LNGreaterThan::compute(){
-  if(_computeDone)
+double LNGreaterThan::compute(int computeId){
+  if(_computeId==computeId)
     return _computeResult;
-  _computeDone = true;
+  _computeId = computeId;
   if(_parents.size() == 0)
     _computeResult = 0.0;
   if(_parents.size() == 1)
-    _computeResult = _parents[0]->compute();
+    _computeResult = _parents[0]->compute(computeId);
   if(_parents.size() > 1){
-    if(_parents[0]->compute() > _parents[1]->compute())
-      _computeResult = _parents[0]->compute();
+    if(_parents[0]->compute(computeId) > _parents[1]->compute(computeId))
+      _computeResult = _parents[0]->compute(computeId);
     else
       _computeResult = 0.0;
   }

@@ -15,10 +15,10 @@ SNHerbivoreDist::~SNHerbivoreDist()
   //dtor
 }
 
-double SNHerbivoreDist::compute(){
-  if(_computeDone)
+double SNHerbivoreDist::compute(int computeId){
+  if(_computeId==computeId)
     return _computeResult;
-  _computeDone = true;
+  _computeId = computeId;
   int dir;
   switch(_type){
     case SN_HERBIVORE_DIST_N:

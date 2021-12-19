@@ -141,25 +141,48 @@ void Hub::handleKeyEvents(SDL_Event& e){
       if(mapWindow.isOpen() && mapWindow.keyFocus && mapWindow.mapRef->runManual<100)
         mapWindow.mapRef->runManual++;
       if(neuronWindow.isOpen() && neuronWindow.keyFocus)
-        neuronWindow.changeAnimalType(false);
+        neuronWindow.mapRef->changeSelectedAnimalType(false);
       break;
     case SDLK_w:
       if(mapWindow.isOpen() && mapWindow.keyFocus && mapWindow.mapRef->runManual<100)
         mapWindow.mapRef->runManual+=10;
       if(neuronWindow.isOpen() && neuronWindow.keyFocus)
-        neuronWindow.changeAnimalType(true);
+        neuronWindow.mapRef->changeSelectedAnimalType(true);
       break;
     case SDLK_a:
       if(neuronWindow.isOpen() && neuronWindow.keyFocus)
-        neuronWindow.changeAnimal(false);
+        neuronWindow.mapRef->changeSelectedAnimal(false);
       break;
     case SDLK_s:
       if(neuronWindow.isOpen() && neuronWindow.keyFocus)
-        neuronWindow.changeAnimal(true);
+        neuronWindow.mapRef->changeSelectedAnimal(true);
+      break;
+    case SDLK_z:
+      if(neuronWindow.isOpen() && neuronWindow.keyFocus){
+        Animal* a = neuronWindow.mapRef->getSelectedAnimal();
+        if(a)
+          a->selected = !a->selected;
+      }
       break;
     case SDLK_p:
       if(mapWindow.isOpen() && mapWindow.keyFocus)
         mapWindow.mapRef->pause = !mapWindow.mapRef->pause;
+      break;
+    case SDLK_LEFT:
+      if(neuronWindow.isOpen() && neuronWindow.keyFocus)
+        neuronWindow.xOffset += 10;
+      break;
+    case SDLK_RIGHT:
+      if(neuronWindow.isOpen() && neuronWindow.keyFocus)
+        neuronWindow.xOffset -= 10;
+      break;
+    case SDLK_UP:
+      if(neuronWindow.isOpen() && neuronWindow.keyFocus)
+        neuronWindow.yOffset += 10;
+      break;
+    case SDLK_DOWN:
+      if(neuronWindow.isOpen() && neuronWindow.keyFocus)
+        neuronWindow.yOffset -= 10;
       break;
   }
 }
@@ -227,8 +250,8 @@ void Hub::viewMap(vector<int> args){
   }
   if(!neuronWindow.isOpen()){
     neuronWindow.mapRef = m;
-    neuronWindow.animalType = HERBIVORE_NEURON;
-    neuronWindow.animalIndex = 0;
+    neuronWindow.mapRef->selectedAnimalType = HERBIVORE_NEURON;
+    neuronWindow.mapRef->selectedAnimalIndex = 0;
     neuronWindow.open();
   }
   cout << "window for map " << i << " opened" << endl;

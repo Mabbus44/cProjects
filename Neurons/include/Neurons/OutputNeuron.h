@@ -10,7 +10,7 @@ class OutputNeuron: public Neuron
     OutputNeuron();
     virtual ~OutputNeuron();
     virtual bool freeChildConnection();
-    virtual double compute();
+    virtual double compute(int computeId);
     virtual Neuron* addToCopy(Neuron* n);
 
   protected:

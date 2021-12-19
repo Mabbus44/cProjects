@@ -16,10 +16,10 @@ SNCarnivoreDist::~SNCarnivoreDist()
   //dtor
 }
 
-double SNCarnivoreDist::compute(){
-  if(_computeDone)
+double SNCarnivoreDist::compute(int computeId){
+  if(_computeId==computeId)
     return _computeResult;
-  _computeDone = true;
+  _computeId = computeId;
   int dir;
   switch(_type){
     case SN_CARNIVORE_DIST_N:
