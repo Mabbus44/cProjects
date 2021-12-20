@@ -74,7 +74,7 @@ void Day03::part2(string filename){
       commonDigit = 1;
     else
       commonDigit = 0;
-    for(int i=0; i<inputCopy.size() && oxygen==-1; i++){
+    for(int i=0; i<(int)inputCopy.size() && oxygen==-1; i++){
       if(inputCopy[i][digitIndex] != commonDigit){
         inputCopy.erase(inputCopy.begin()+i);
         i--;
@@ -106,7 +106,7 @@ void Day03::part2(string filename){
       commonDigit = 0;
     else
       commonDigit = 1;
-    for(int i=0; i<inputCopy.size() && co2==-1; i++){
+    for(int i=0; i<(int)inputCopy.size() && co2==-1; i++){
       if(inputCopy[i][digitIndex] != commonDigit){
         inputCopy.erase(inputCopy.begin()+i);
         i--;

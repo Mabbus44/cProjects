@@ -1,13 +1,13 @@
 #include <iostream>
 #include "Common.h"
-#include "Day19.h"
+#include "Day02.h"
 
 using namespace std;
 
 int main()
 {
-    Day19 d;
-    d.part1("input19.txt");
-    d.part2("input19.txt");
+    Day02 d;
+    d.part1("input02.txt");
+    d.part2("input02.txt");
     return 0;
 }

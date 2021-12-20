@@ -1,0 +1,7 @@
+part1: 372
+part2: 12241
+start: 66.301 s
+MyCoord -10, -11: 34.264 s
+otherMyCoord4 != 1,2,3: 25.854 s
+myCoord4ID-matches<coords.size-11: 25.315 s
+possibleMatch comp dist: 1.505 s
