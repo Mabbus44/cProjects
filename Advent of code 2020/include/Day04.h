@@ -4,6 +4,16 @@
 #include <vector>
 #include "Common.h"
 
+class Passport{
+public:
+  Passport(){}
+  virtual ~Passport(){}
+  void loadData(vector<string> input);
+  bool hasAllButCid();
+  bool hasAllButCidStrict();
+  void output();
+  string byr, iyr, eyr, hgt, hcl, ecl, pid, cid;
+};
 
 class Day04
 {

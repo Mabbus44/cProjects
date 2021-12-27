@@ -4,6 +4,20 @@
 #include <vector>
 #include "Common.h"
 
+class MyPassword{
+  public:
+  MyPassword(){}
+  MyPassword(vector<string>& vs);
+  MyPassword(const MyPassword& p){minLetters=p.minLetters; maxLetters=p.maxLetters; letter=p.letter; pass=p.pass;}
+  virtual ~MyPassword(){}
+  MyPassword& operator=(const MyPassword& p){minLetters=p.minLetters; maxLetters=p.maxLetters; letter=p.letter; pass=p.pass; return *this;}
+  void loadInput(vector<string>& vs);
+  bool valid();
+  bool valid2();
+  int minLetters, maxLetters;
+  char letter;
+  string pass;
+};
 
 class Day02
 {
