@@ -27,7 +27,6 @@ void Day05::part2(string filename){
   InputLoader loader(filename);
   vector<string> vs = loader.toVectorStr();
   vector<int> ids;
-  int max=0;
   for(string s:vs){
     int row=getRow(s);
     int seat=getSeat(s);

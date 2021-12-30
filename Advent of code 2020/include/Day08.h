@@ -4,6 +4,18 @@
 #include <vector>
 #include "Common.h"
 
+enum instructions {NOP, ACC, JMP};
+
+class Instruction{
+public:
+  Instruction(){};
+  Instruction(int i, int v, bool r=false){instruction=i; val=v; run=r;}
+  virtual ~Instruction(){};
+  void output();
+  int instruction;
+  int val;
+  bool run;
+};
 
 class Day08
 {

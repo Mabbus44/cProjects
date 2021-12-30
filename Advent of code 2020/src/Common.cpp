@@ -54,6 +54,18 @@ vector<int> InputLoader::toInt(vector<string> vs){
   return vi;
 }
 
+vector<int64_t> InputLoader::toBigInt(vector<string> vs){
+  vector<int64_t> vi;
+  for(string s:vs){
+    try{
+      vi.push_back(stoull(trim(s)));
+    }catch(...){
+      cout << "could not convert \"" << trim(s) << "\" to int" << endl;
+    }
+  }
+  return vi;
+}
+
 string InputLoader::ltrim(string s) {
   s.erase(s.begin(), find_if(s.begin(), s.end(),
     not1(ptr_fun<int, int>(isspace))));
