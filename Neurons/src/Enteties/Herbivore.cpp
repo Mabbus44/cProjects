@@ -11,7 +11,6 @@ Herbivore::Herbivore(Map* parent, int posX, int posY, int index, int bellyFood, 
     generateNeurons();
     for(Neuron* n:_neurons){
       connectNeuronToChildren(n);
-      connectNeuronToParents(n);
     }
   }
 }

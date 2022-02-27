@@ -55,6 +55,7 @@
 		<Unit filename="include/Neurons/LNAdd.h" />
 		<Unit filename="include/Neurons/LNAnd.h" />
 		<Unit filename="include/Neurons/LNGreaterThan.h" />
+		<Unit filename="include/Neurons/LNMem.h" />
 		<Unit filename="include/Neurons/LNOr.h" />
 		<Unit filename="include/Neurons/LogicNeuron.h" />
 		<Unit filename="include/Neurons/Neuron.h" />
@@ -78,6 +79,7 @@
 		<Unit filename="src/Neurons/LNAdd.cpp" />
 		<Unit filename="src/Neurons/LNAnd.cpp" />
 		<Unit filename="src/Neurons/LNGreaterThan.cpp" />
+		<Unit filename="src/Neurons/LNMem.cpp" />
 		<Unit filename="src/Neurons/LNOr.cpp" />
 		<Unit filename="src/Neurons/LogicNeuron.cpp" />
 		<Unit filename="src/Neurons/Neuron.cpp" />

@@ -13,6 +13,7 @@
 #include "Neurons/LNAnd.h"
 #include "Neurons/LNGreaterThan.h"
 #include "Neurons/LNAdd.h"
+#include "Neurons/LNMem.h"
 #include "Neurons/ONMove.h"
 #include "Neurons/ONEat.h"
 #include "Enteties/Entity.h"

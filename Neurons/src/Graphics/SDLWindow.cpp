@@ -57,10 +57,10 @@ void SDLWindow::close(){
 
 void NeuronsWindow::open(int windowHeight, int windowWidth){
   SDLWindow::open(windowHeight, windowWidth);
-  _font = TTF_OpenFont( "fonts/OpenSans-Regular.ttf", 20 );
+  _font = TTF_OpenFont( "fonts/OpenSans-Regular.ttf", 25 );
   if( _font == NULL )
     cout << "Warning: Failed to load lazy font! SDL_ttf Error: " << TTF_GetError() << endl;
-  _smallFont = TTF_OpenFont( "fonts/OpenSans-Regular.ttf", 10 );
+  _smallFont = TTF_OpenFont( "fonts/OpenSans-Regular.ttf", 15 );
   if( _smallFont == NULL )
     cout << "Warning: Failed to load small lazy font! SDL_ttf Error: " << TTF_GetError() << endl;
 }
@@ -134,7 +134,8 @@ void NeuronsWindow::prepareRender(){
         drawText(10,10, "Best carnivore " + to_string(animal->index()), {0xFF, 0x00, 0x00});
         break;
     }
-    animal->drawNeurons(this, xOffset, yOffset);
+    animal->drawNeurons(this, xOffset, yOffset, true);
+    animal->drawNeurons(this, xOffset, yOffset, false);
   }
   else{
     switch(mapRef->selectedAnimalType){

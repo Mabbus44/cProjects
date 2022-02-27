@@ -36,7 +36,7 @@ void SensorNeuron::distToResult(int dist){
     _computeResult = 1.0 - (double)(dist-_bestDistance) / (double)(_maxDistance-_bestDistance);
   else{
     if(_bestDistance == 0)
-      _computeResult = 1.0;
+      _computeResult = 0.0;
     else
       _computeResult = 1.0 - (double)(_bestDistance-dist) / (double)(_bestDistance);
   }

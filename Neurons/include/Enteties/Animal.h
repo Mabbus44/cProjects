@@ -29,12 +29,13 @@ class Animal: public Entity
     int closestEntity(int type, int dir);
     void free();
     void prepareDrawNeurons();
-    void drawNeurons(NeuronsWindow* window, int xOffset, int yOffset);
+    void drawNeurons(NeuronsWindow* window, int xOffset, int yOffset, bool drawLine);
     void output(string tab, int level);
     Neuron* getAction(int computeId);
     vector<Neuron*> neurons(){return _neurons;}
     bool selected = false;
     int parentIndex=-1;
+    Neuron* chosenAction;
 
   protected:
     vector<Neuron*> _neurons;

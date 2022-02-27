@@ -41,7 +41,7 @@ bool Neuron::freeChildConnection(){
 
 bool Neuron::myOffspring(Neuron* n){
   for(Neuron* c : _children)
-    if(n==c || c->myOffspring(n))
+    if(c->type() != LN_MEM && (n==c || c->myOffspring(n)))
       return true;
   return false;
 }
@@ -49,8 +49,12 @@ bool Neuron::myOffspring(Neuron* n){
 void Neuron::setLevel(int level){
   if(_level < level)
     _level = level;
-  for(Neuron* c : _children)
-    c->setLevel(_level+1);
+  for(Neuron* c : _children){
+    if(_type != LN_MEM)
+      c->setLevel(_level+1);
+    else
+      c->setLevel(1);
+  }
 }
 
 void Neuron::setColumn(vector<int>& columns){
@@ -210,9 +214,14 @@ void Neuron::reRollProperties(){
   _bonus = (rand()%2001-1000)/1000.0;
 }
 
-void Neuron::draw(NeuronsWindow* window, int xOffset, int yOffset){
-  yOffset -= 50;
+void Neuron::draw(NeuronsWindow* window, int xOffset, int yOffset, bool drawLine, bool chosenAction){
   int yDist =150;
+  int sizeX = 70;
+  int sizeY = 80;
+  int borderSize = 2;
+  int bigLineHeight = 25;
+  int smallLineHeight = 15;
+  int textPadding=8;
   switch(_family){
     case LOGIC_NEURON:
       window->setDrawColor(0x88, 0x88, 0x88);
@@ -224,10 +233,13 @@ void Neuron::draw(NeuronsWindow* window, int xOffset, int yOffset){
       window->setDrawColor(0x44, 0x44, 0xFF);
       break;
   }
-  window->drawRect(_column-20+xOffset, _level*yDist+yOffset, 70, 30);
-  for(Neuron* c : _children)
-    window->drawLine(_column+15+xOffset, _level*yDist+30+yOffset, c->_column+15+xOffset, c->_level*yDist+yOffset);
-  string t, t2;
+  if(drawLine){
+    for(Neuron* c : _children)
+      window->drawLine(_column+xOffset+sizeX/2, _level*yDist+yOffset+sizeY, c->_column+xOffset+sizeX/2, c->_level*yDist+yOffset);
+    return;
+  }
+  window->drawRect(_column+xOffset, _level*yDist+yOffset, sizeX, sizeY);
+  string t, t2, t3, t4;
   switch(_type){
     case SN_GRASS_DIST_N:
       t="SGN";
@@ -289,6 +301,9 @@ void Neuron::draw(NeuronsWindow* window, int xOffset, int yOffset){
     case LN_ADD:
       t="+";
       break;
+    case LN_MEM:
+      t="MEM";
+      break;
     case ON_MOVE_N:
       t="MN";
       break;
@@ -305,9 +320,22 @@ void Neuron::draw(NeuronsWindow* window, int xOffset, int yOffset){
       t="E";
       break;
   }
-  stringstream stream;
-  stream << fixed << setprecision(3) << _computeResult;
-  t2 = stream.str();
-  window->drawText(_column+xOffset, _level*yDist+yOffset-5, t, { 0x00, 0x00, 0x00 });
-  window->drawText(_column+xOffset, _level*yDist+yOffset+17, t2, { 0x00, 0x00, 0x00 }, 10);
+  stringstream stream2, stream3, stream4;
+  stream2 << "i*" << _factor << fixed << setprecision(3);
+  t2 = stream2.str();
+  stream3 << "+" << _bonus << fixed << setprecision(3);
+  t3 = stream3.str();
+  stream4 << "=" << fixed << setprecision(3) << _computeResult;
+  t4 = stream4.str();
+  window->drawText(_column+xOffset+textPadding, _level*yDist+yOffset, t, { 0x00, 0x00, 0x00 });
+  window->drawText(_column+xOffset+textPadding, _level*yDist+yOffset+bigLineHeight, t2, { 0x00, 0x00, 0x00 }, 10);
+  window->drawText(_column+xOffset+textPadding, _level*yDist+yOffset+bigLineHeight+smallLineHeight, t3, { 0x00, 0x00, 0x00 }, 10);
+  window->drawText(_column+xOffset+textPadding, _level*yDist+yOffset+bigLineHeight+smallLineHeight*2, t4, { 0x00, 0x00, 0x00 }, 10);
+  if(chosenAction){
+    window->setDrawColor(0xFF, 0xFF, 0x00);
+    window->drawRect(_column+xOffset, _level*yDist+yOffset, sizeX, borderSize);
+    window->drawRect(_column+xOffset, _level*yDist+yOffset+sizeY-borderSize, sizeX, borderSize);
+    window->drawRect(_column+xOffset, _level*yDist+yOffset, borderSize, sizeY);
+    window->drawRect(_column+xOffset+sizeX-borderSize, _level*yDist+yOffset, borderSize, sizeY);
+  }
 }

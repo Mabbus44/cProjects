@@ -20,10 +20,17 @@ double OutputNeuron::compute(int computeId){
   if(_computeId==computeId)
     return _computeResult;
   _computeId = computeId;
-  _computeResult = -1.0;
-  for(Neuron* n : _parents)
-    if(n->compute(computeId) > _computeResult)
-      _computeResult = n->compute(computeId);
+  if(_factor>0){
+    _computeResult = -1.0;
+    for(Neuron* n : _parents)
+      if(n->compute(computeId) > _computeResult)
+        _computeResult = n->compute(computeId);
+  }else{
+    _computeResult = 1.0;
+    for(Neuron* n : _parents)
+      if(n->compute(computeId) < _computeResult)
+        _computeResult = n->compute(computeId);
+  }
   return _postCompute();
 }
 

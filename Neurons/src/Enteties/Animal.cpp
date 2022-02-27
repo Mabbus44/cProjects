@@ -59,6 +59,9 @@ void Animal::createRandomNeuron(bool connectChildren, bool connectParents, int c
     case LN_ADD:
       neuron = new LNAdd(this);
       break;
+    case LN_MEM:
+      neuron = new LNMem(this);
+      break;
     case ON_MOVE_N:
     case ON_MOVE_S:
     case ON_MOVE_E:
@@ -93,7 +96,7 @@ void Animal::connectNeuronToChildren(Neuron* n){
     childCount=3;
   while(childCount>0 && n->freeChildConnection() && availableNeurons.size()>0){
     int candidate = rand()%availableNeurons.size();
-    if(n == availableNeurons[candidate] || availableNeurons[candidate]->myOffspring(n) || !availableNeurons[candidate]->connectParent(n))
+    if(n == availableNeurons[candidate] || (availableNeurons[candidate]->myOffspring(n) && n->type()!=LN_MEM) || !availableNeurons[candidate]->connectParent(n))
       availableNeurons.erase(availableNeurons.begin()+candidate);
     else{
       n->connectChild(availableNeurons[candidate]);
@@ -114,7 +117,7 @@ void Animal::connectNeuronToParents(Neuron* n){
     parentCount=3;
   while(parentCount>0 && n->freeParentConnection() && availableNeurons.size()>0){
     int candidate = rand()%availableNeurons.size();
-    if(n == availableNeurons[candidate] || n->myOffspring(availableNeurons[candidate]) || !availableNeurons[candidate]->connectChild(n))
+    if(n == availableNeurons[candidate] || (n->myOffspring(availableNeurons[candidate]) && n->type()!=LN_MEM) || !availableNeurons[candidate]->connectChild(n))
       availableNeurons.erase(availableNeurons.begin()+candidate);
     else{
       n->connectParent(availableNeurons[candidate]);
@@ -130,7 +133,7 @@ void Animal::rewireNeuron(int index){
   int parentCount = rand()%(REWIRE_NEURON_MAX_WIRES-REWIRE_NEURON_MIN_WIRES+1)+REWIRE_NEURON_MIN_WIRES;
   while(childCount>0 && availableNeurons.size()>0 && n->children().size()>0){
     int candidate = rand()%availableNeurons.size();
-    if(n == availableNeurons[candidate] || availableNeurons[candidate]->myOffspring(n) || !availableNeurons[candidate]->freeParentConnection())
+    if(n == availableNeurons[candidate] || (availableNeurons[candidate]->myOffspring(n) && n->type()!=LN_MEM) || !availableNeurons[candidate]->freeParentConnection())
       availableNeurons.erase(availableNeurons.begin()+candidate);
     else{
       n->freeChildConnection();
@@ -194,6 +197,11 @@ Neuron* Animal::getAction(int computeId){
       ret = n;
       bestNeuronOutput = n->compute(computeId);
     }
+  }
+  chosenAction = ret;
+  for(Neuron* n : _neurons){
+    if(n->type() == LN_MEM)
+      ((LNMem*)n)->computeMem(computeId);
   }
   return ret;
 }
@@ -359,10 +367,10 @@ void Animal::doAction(int computeId){
   }
 }
 
-void Animal::drawNeurons(NeuronsWindow* window, int xOffset, int yOffset){
+void Animal::drawNeurons(NeuronsWindow* window, int xOffset, int yOffset, bool drawLine){
   prepareDrawNeurons();
   for(Neuron* n : _neurons)
-    n->draw(window, xOffset, yOffset);
+    n->draw(window, xOffset, yOffset, drawLine, n==chosenAction);
 }
 
 int Animal::closestEntity(int type, int dir){
