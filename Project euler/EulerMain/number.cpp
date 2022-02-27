@@ -2,360 +2,653 @@
 #include <stdlib.h>
 #include <algorithm>
 #include "number.h"
+#include <iostream>
+#include <math.h>
 
 using namespace std;
 
-
-
-
 Number::Number(){
-  digitCount=1;
-  size=2;
-  digits = new int8_t[2];
-  digits[0]=1;                                  //Positive number
-  digits[1]=0;                                  //0
+  digits.push_back(0);
+  sign = 1;
 }
-
-
-
-
 
 Number::Number(const Number& number){
-  size = number.size;
-  digitCount = number.digitCount;
-  digits = new int8_t[size];
-  for(int i=0; i<size; i++){                    //Set digits
-    digits[i]=number.digits[i];
-  }
+  digits = number.digits;
+  sign = number.sign;
 }
 
-
-
-
-
-Number::Number(int size){
-  this->size = size;
-  if(this->size<2)
-    this->size = 2;
-  digitCount = 1;
-  digits = new int8_t[size];
-  digits[0]=1;                                  //Positive number
-  digits[1]=0;                                  //0
+Number::Number(int64_t number){
+  digits.clear();
+  sign = 1;
+  if(number<0){
+    number = 0-number;
+    sign = -1;
+  }
+  while(number>0){
+    digits.push_back(number%10);
+    number/=10;
+  }
+  if(digits.size() == 0)
+    digits.push_back(0);
 }
 
+Number::~Number(){}
 
-
-
-
-Number::~Number(){
-  delete[] digits;                              //Delete old digits
-}
-
-
-
-
-
-Number& Number::operator=(const int number){
-  int number2=number;
-  digitCount = 0;                               //Count digits in "number"
-  while(number2!=0){
-    number2/=10;
-    digitCount++;
+Number& Number::operator=(int64_t number){
+  digits.clear();
+  sign = 1;
+  if(number<0){
+    number = 0-number;
+    sign = -1;
   }
-  if(number==0)                                 //If number = 0 the general code dont work
-    digitCount = 1;
-  if(size<digitCount+1){                        //Delete old digits
-    delete[] digits;
-    size=digitCount+1;
-    digits = new int8_t[size];                  //Allocate memory for new digits
+  while(number>0){
+    digits.push_back(number%10);
+    number/=10;
   }
-  number2=number;
-  if(number2>=0){                               //Set positive/negative tag
-    digits[0] = 1;
-  }else{
-    digits[0] = -1;
-  }
-  for(int i=0; i<digitCount; i++){              //Set new digits to desired number
-    this->digits[i+1] = abs(number2-(number2/10)*10);
-    number2/=10;
-  }
+  if(digits.size() == 0)
+    digits.push_back(0);
   return *this;
 }
 
-
-
-
-
-Number& Number::operator=(const Number number){
-  if(number.digitCount+1>size){                 //If new number is bigger
-    delete[] digits;                            //Delete old digits
-    digits = new int8_t[number.digitCount+1];   //Allocate memory for new digits
-  }
-  digitCount = number.digitCount;               //Set size
-  size = digitCount+1;
-  for(int i=0; i<size; i++)                     //Set digits
-    digits[i]=number.digits[i];
+Number& Number::operator=(const Number& number){
+  digits = number.digits;
+  sign = number.sign;
   return *this;
 }
-
-
-
-
 
 Number Number::operator+(const Number& number){
-  int rest=0, sum, sign, size;
-  size=std::max(digitCount, number.digitCount)+2;                    //Calculate new size
-  if(digitCount>number.digitCount)                              //Check what sign result will be
-    sign = digits[0];
-  else if(digitCount<number.digitCount)
-    sign = number.digits[0];
-  else{                                                         //If digitCount is the same in the two numbers
-    sign=0;
-    int n=size-2;
-    while(sign==0){                                             //Check for the first digit that is bigger in one of the numbers
-      if(digits[n]>number.digits[n])
-        sign = digits[0];
-      else if(digits[n]<number.digits[n])
-        sign = number.digits[0];
-      n--;
-      if(n==0){                                                 //If all digits are the same check signs of the two numbers
-        if(digits[0]==number.digits[0])
-          sign = digits[0];
-        else
-          sign = 1;
+  Number result;
+  result.digits.clear();
+  int maxSize = max(digits.size(), number.digits.size());
+  int8_t carry=0;
+  for(int i=0; i<maxSize; i++){
+    result.digits.push_back(0);
+    if(i<(int)digits.size()){
+      if(sign==1)
+        result.digits.back() += digits[i];
+      else
+        result.digits.back() -= digits[i];
+    }
+    if(i<(int)number.digits.size()){
+      if(number.sign==1)
+        result.digits.back() += number.digits[i];
+      else
+        result.digits.back() -= number.digits[i];
+    }
+    result.digits.back() += carry;
+    carry = 0;
+    if(result.digits.back()>9){
+      result.digits.back() -= 10;
+      carry = 1;
+    }
+    if(result.digits.back()<0){
+      result.digits.back() += 10;
+      carry = -1;
+    }
+  }
+  if(carry==1)
+    result.digits.push_back(1);
+  if(carry==-1){
+    result.sign = -1;
+    result.digits.push_back(-1);
+    carry = 0;
+    for(int i=0; i<(int)result.digits.size(); i++){
+      result.digits[i] = 0-result.digits[i]+carry;
+      carry = 0;
+      if(result.digits[i]<0){
+        result.digits[i] += 10;
+        carry = -1;
       }
     }
   }
-
-  Number result(size);                                          //Allocate memory for new digits
-  result.digits[0] = sign;                                      //Set sign of result
-  result.digitCount = 0;                                        //Reset digitCount
-  for(int i=1; i<result.size; i++){                             //Add all digits
-    sum=rest;                                                   //Start with old rest
-    rest = 0;
-    if(i<digitCount+1)                                          //Add digit 1
-      sum+=digits[i]*digits[0];
-    if(i<number.digitCount+1)                                   //Add digit 2
-      sum+=number.digits[i]*number.digits[0];
-    if(result.digits[0]==1){                                    //If answer positive
-      while(sum>9){                                             //0 <= sum <= 9
-        sum-=10;
-        rest+=1;
-      }
-      while(sum<0){
-        sum+=10;
-        rest-=1;
-      }
-    }
-    if(result.digits[0]==-1){                                   //If answer negative
-      while(sum>0){                                             //-9 <= sum <= 0
-        sum-=10;
-        rest+=1;
-      }
-      while(sum<-9){
-        sum+=10;
-        rest-=1;
-      }
-      sum = -sum;                                               //Make sum positive
-    }
-    result.digits[i] = sum;                                     //Set digit in result
-    if(sum!=0)
-      result.digitCount = i;                                    //Calculate digitCount
-  }
-  if(result.digitCount == 0)
-    result.digitCount = 1;
+  trim(result);
   return result;
 }
-
-
-
-
 
 Number Number::operator-(const Number& number){
-  int rest=0, sum, sign, size;
-  size=std::max(digitCount, number.digitCount)+2;                    //Calculate new size
-  if(digitCount>number.digitCount)                              //Check what sign result will be
-    sign = digits[0];
-  else if(digitCount<number.digitCount)
-    sign = -number.digits[0];
-  else{                                                         //If digitCount is the same in the two numbers
-    sign=0;
-    int n=size-2;
-    while(sign==0){                                             //Check for the first digit that is bigger in one of the numbers
-      if(digits[n]>number.digits[n])
-        sign = digits[0];
-      else if(digits[n]<number.digits[n])
-        sign = -number.digits[0];
-      n--;
-      if(n==0){                                                 //If all digits are the same check signs of the two numbers
-        if(digits[0]== -number.digits[0])
-          sign = digits[0];
-        else
-          sign = 1;
+  Number result;
+  result.digits.clear();
+  int maxSize = max(digits.size(), number.digits.size());
+  int8_t carry=0;
+  for(int i=0; i<maxSize; i++){
+    result.digits.push_back(0);
+    if(i<(int)digits.size()){
+      if(sign==1)
+        result.digits.back() += digits[i];
+      else
+        result.digits.back() -= digits[i];
+    }
+    if(i<(int)number.digits.size()){
+      if(number.sign==1)
+        result.digits.back() -= number.digits[i];
+      else
+        result.digits.back() += number.digits[i];
+    }
+    result.digits.back() += carry;
+    carry=0;
+    if(result.digits.back()>9){
+      result.digits.back() -= 10;
+      carry = 1;
+    }
+    if(result.digits.back()<0){
+      result.digits.back() += 10;
+      carry = -1;
+    }
+  }
+  if(carry==1)
+    result.digits.push_back(1);
+  if(carry==-1){
+    result.sign = -1;
+    result.digits.push_back(-1);
+    carry = 0;
+    for(int i=0; i<(int)result.digits.size(); i++){
+      result.digits[i] = 0-result.digits[i]+carry;
+      carry = 0;
+      if(result.digits[i]<0){
+        result.digits[i] += 10;
+        carry = -1;
       }
     }
   }
-
-  Number result(size);                                          //Allocate memory for new digits
-  result.digits[0] = sign;                                      //Set sign of result
-  result.digitCount = 0;                                        //Reset digitCount
-  for(int i=1; i<result.size; i++){                             //Add all digits
-    sum=rest;                                                   //Start with old rest
-    rest = 0;
-    if(i<digitCount+1)                                          //Add digit 1
-      sum+=digits[i]*digits[0];
-    if(i<number.digitCount+1)                                   //Add digit 2
-      sum+=number.digits[i] * -number.digits[0];
-    if(result.digits[0]==1){                                    //If answer positive
-      while(sum>9){                                             //0 <= sum <= 9
-        sum-=10;
-        rest+=1;
-      }
-      while(sum<0){
-        sum+=10;
-        rest-=1;
-      }
-    }
-    if(result.digits[0]==-1){                                   //If answer negative
-      while(sum>0){                                             //-9 <= sum <= 0
-        sum-=10;
-        rest+=1;
-      }
-      while(sum<-9){
-        sum+=10;
-        rest-=1;
-      }
-      sum = -sum;                                               //Make sum positive
-    }
-    result.digits[i] = sum;                                     //Set digit in result
-    if(sum!=0)
-      result.digitCount = i;                                    //Calculate digitCount
-  }
-  if(result.digitCount == 0)
-    result.digitCount = 1;
+  trim(result);
   return result;
 }
-
-
-
-
 
 Number Number::operator*(const Number& number){
-  int rest=0, size;
-  size = digitCount + number.digitCount+1;                      //Calculate new size
-  if((digits[1]==0 && digitCount==1) || (number.digits[1]==0 && number.digitCount==1))                          //If one product is 0 result is 0
-    size = 2;
-
-  Number result(size);                                          //Allocate memory for new digits
-  if((digits[1]==0 && digitCount==1) || (number.digits[1]==0 && number.digitCount==1)){                         //If one product is 0 result is 0
-    result.digits[0] = 1;
-    result.digits[1] = 0;
-    result.digitCount = 1;
-    return result;
-  }
-  result.digits[0] = digits[0]*number.digits[0];                //Set sign of result
-  result.digitCount = 0;                                        //Reset digitCount
-  for(int i=1; i<result.size; i++)                              //Reset all digits in result
-    result.digits[i] = 0;
-  for(int i=1; i<digitCount+1; i++){                            //All digits of first number
-    for(int i2=1; i2<number.digitCount+1; i2++){                //All digits of second number
-      result.digits[i+i2-1] += digits[i] * number.digits[i2] + rest;    //Multiply 2 digits, add product + sum to result digit
-      rest = 0;                                                 //Reset rest
-      while(result.digits[i+i2-1] > 9){                         //0 <= Digit <= 9 and calculate rest
-        result.digits[i+i2-1] -= 10;
-        rest += 1;
+  int maxDigits = digits.size() + number.digits.size();
+  Number result;
+  result.digits.reserve(maxDigits);
+  for(int i=0; i<maxDigits; i++)
+    result.digits.push_back(0);
+  for(int i1=0; i1<(int)digits.size(); i1++){
+    for(int i2=0; i2<(int)number.digits.size(); i2++){
+      result.digits[i1+i2] += digits[i1]*number.digits[i2];
+      if(result.digits[i1+i2]>9){
+        result.digits[i1+i2+1] += result.digits[i1+i2]/10;
+        result.digits[i1+i2] = result.digits[i1+i2]%10;
       }
     }
-    result.digits[i+number.digitCount] += rest;                         //Add rest if there still is rest
-    rest = 0;                                                   //Reset rest
-    while(result.digits[i+number.digitCount-1] > 9){                            //0 <= Digit <= 9 and calculate rest
-      result.digits[i+number.digitCount-1] -= 10;
-      rest += 1;
-    }
   }
-  if(result.digits[result.size-1]>0)                            //If biggest digit is > 0
-    result.digitCount=result.size-1;                            //digitCount = digitCount of factors
-  else
-    result.digitCount=result.size-2;                            //else digitCount = digitCount of factors -1
+  result.sign = sign*number.sign;
+  trim(result);
   return result;
 }
 
-
-
-
-
-int Number::getDigitCount(){
-    return digitCount;
+int64_t Number::operator% (const int64_t number){
+  int rest=0;
+  for(int i=digits.size()-1; i>=0; i--){
+    rest *= 10;
+    rest = (rest+digits[i])%number;
+  }
+  return rest;
 }
 
+void Number::operator/= (const int number){
+  int rest=0;
+  int oldRest=0;
+  for(int i=digits.size()-1; i>=0; i--){
+    rest = (oldRest+digits[i])%number;
+    digits[i] = (oldRest+digits[i])/number;
+    oldRest=10*rest;
+  }
+  trim(*this);
+}
 
+void Number::operator+=(const Number& number){
+  int maxSize = max(digits.size(), number.digits.size());
+  for(int i=(int)digits.size(); i<(int)number.digits.size(); i++)
+    digits.push_back(0);
+  digits.push_back(0);
+  int8_t carry=0;
+  for(int i=0; i<maxSize; i++){
+    if(i<(int)number.digits.size()){
+      if(number.sign*sign==1)
+        digits[i] += number.digits[i];
+      else
+        digits[i] -= number.digits[i];
+    }
+    digits[i] += carry;
+    carry = 0;
+    if(digits[i]>9){
+      digits[i] -= 10;
+      carry = 1;
+    }
+    if(digits[i]<0){
+      digits[i] += 10;
+      carry = -1;
+    }
+  }
+  if(carry==1)
+    digits.back()=1;
+  if(carry==-1){
+    sign = sign*-1;
+    digits.back()=-1;
+    carry = 0;
+    for(int i=0; i<(int)digits.size(); i++){
+      digits[i] = 0-digits[i]+carry;
+      carry = 0;
+      if(digits[i]<0){
+        digits[i] += 10;
+        carry = -1;
+      }
+    }
+  }
+  trim(*this);
+}
 
+void Number::operator-=(const Number& number){
+  int maxSize = max(digits.size(), number.digits.size());
+  for(int i=(int)digits.size(); i<(int)number.digits.size(); i++)
+    digits.push_back(0);
+  digits.push_back(0);
+  int8_t carry=0;
+  for(int i=0; i<maxSize; i++){
+    if(i<(int)number.digits.size()){
+      if(number.sign*sign==1)
+        digits[i] -= number.digits[i];
+      else
+        digits[i] += number.digits[i];
+    }
+    digits[i] += carry;
+    carry = 0;
+    if(digits[i]>9){
+      digits[i] -= 10;
+      carry = 1;
+    }
+    if(digits[i]<0){
+      digits[i] += 10;
+      carry = -1;
+    }
+  }
+  if(carry==1)
+    digits.back()=1;
+  if(carry==-1){
+    sign = sign*-1;
+    digits.back()=-1;
+    carry = 0;
+    for(int i=0; i<(int)digits.size(); i++){
+      digits[i] = 0-digits[i]+carry;
+      carry = 0;
+      if(digits[i]<0){
+        digits[i] += 10;
+        carry = -1;
+      }
+    }
+  }
+  trim(*this);
+}
 
+bool Number::operator<(const Number& number) const{
+  if(sign==1 && number.sign==1){
+    if(digits.size()>number.digits.size())
+      return false;
+    if(digits.size()<number.digits.size())
+      return true;
+    for(int i=digits.size()-1; i>=0; i--){
+      if(digits[i]>number.digits[i])
+        return false;
+      if(digits[i]<number.digits[i])
+        return true;
+    }
+  }else if(sign==-1 && number.sign==1){
+    return true;
+  }else if(sign==1 && number.sign==-1){
+    return false;
+  }else{
+    if(digits.size()<number.digits.size())
+      return false;
+    if(digits.size()>number.digits.size())
+      return true;
+    for(int i=digits.size()-1; i>=0; i--){
+      if(digits[i]<number.digits[i])
+        return false;
+      if(digits[i]>number.digits[i])
+        return true;
+    }
+  }
+  return false;
+}
+
+bool Number::operator>(const Number& number) const{
+  if(sign==1 && number.sign==1){
+    if(digits.size()>number.digits.size())
+      return true;
+    if(digits.size()<number.digits.size())
+      return false;
+    for(int i=digits.size()-1; i>=0; i--){
+      if(digits[i]>number.digits[i])
+        return true;
+      if(digits[i]<number.digits[i])
+        return false;
+    }
+  }else if(sign==-1 && number.sign==1){
+    return false;
+  }else if(sign==1 && number.sign==-1){
+    return true;
+  }else{
+    if(digits.size()<number.digits.size())
+      return true;
+    if(digits.size()>number.digits.size())
+      return false;
+    for(int i=digits.size()-1; i>=0; i--){
+      if(digits[i]<number.digits[i])
+        return true;
+      if(digits[i]>number.digits[i])
+        return false;
+    }
+  }
+  return false;
+}
+
+bool Number::operator==(const Number& number) const{
+  if(digits.size() != number.digits.size() || sign != number.sign)
+    return false;
+  for(int i=0; i<(int)digits.size(); i++)
+    if(digits[i] != number.digits[i])
+      return false;
+  return true;
+}
+
+void Number::trim(Number& number){
+  for(int i=number.digits.size()-1; i>=0; i--){
+    if(number.digits[i] == 0)
+      number.digits.pop_back();
+    else
+      break;
+  }
+  if(number.digits.size()==0){
+    number.digits.push_back(0);
+    number.sign = 1;
+  }
+}
+
+Number Number::sqrt(){
+  if(digits.size() == 1 && (digits[0] == 1 || digits[0] == 0))
+    return *this;
+  Number adjust=(*this);
+  if(!(digits.size()==1 && (digits[0] == 2 || digits[0] == 3)))
+    adjust /=2;
+  Number result=adjust;
+  int finalDir=0;
+  while(true){
+    Number square = result*result;
+    if(square==(*this))
+      return result;
+    if(finalDir==0)
+      adjust /=2;
+    if(square>(*this)){
+      if((int)adjust.digits.size() == 1 && adjust.digits[0] == 1 && finalDir==0){
+        finalDir = -1;
+      }
+      result -= adjust;
+      if(finalDir==1)
+        return result;
+    }else{
+      if((int)adjust.digits.size() == 1 && adjust.digits[0] == 1 && finalDir==0){
+        finalDir = 1;
+      }
+      if(finalDir == -1)
+        return result;
+      result += adjust;
+    }
+  }
+}
+
+bool Number::sqrtAble(){
+  int newSize = (digits.size()+1)/2;
+  vector<int8_t> digitsCopy;
+  vector<int8_t> digitsCopyMinusDecided=digits;
+  vector<int8_t> newDigits(newSize);
+  int product;
+  bool tryAgain;
+  for(int primaryDigitId=newSize-1; primaryDigitId>=0; primaryDigitId--){
+    newDigits[primaryDigitId] = 9;
+    tryAgain = false;
+    do{
+      digitsCopy = digitsCopyMinusDecided;
+      tryAgain = false;
+      for(int secondaryDigitId=primaryDigitId; secondaryDigitId<newSize && !tryAgain; secondaryDigitId++){
+        if(primaryDigitId==secondaryDigitId)
+          product = newDigits[primaryDigitId]*newDigits[secondaryDigitId];
+        else
+          product = newDigits[primaryDigitId]*newDigits[secondaryDigitId]*2;
+        digitsCopy[primaryDigitId+secondaryDigitId]-=product%10;
+        product /= 10;
+        if(product>0 && primaryDigitId+secondaryDigitId+1>=(int)digitsCopy.size())
+          tryAgain=true;
+        else if(product>0){
+          digitsCopy[primaryDigitId+secondaryDigitId+1]-=product%10;
+          product /= 10;
+          if(product>0 && primaryDigitId+secondaryDigitId+2>=(int)digitsCopy.size())
+            tryAgain=true;
+          else if(product>0){
+            digitsCopy[primaryDigitId+secondaryDigitId+2]-=product;
+          }
+        }
+        while(digitsCopy[primaryDigitId+secondaryDigitId]<0){
+          digitsCopy[primaryDigitId+secondaryDigitId]+=10;
+          if(primaryDigitId+secondaryDigitId+1<(int)digitsCopy.size())
+            digitsCopy[primaryDigitId+secondaryDigitId+1]--;
+          else
+            tryAgain=true;
+        }
+      }
+      for(int secondaryDigitId=primaryDigitId+newSize; secondaryDigitId<(int)digitsCopy.size()-1; secondaryDigitId++){
+        while(digitsCopy[secondaryDigitId]<0){
+          digitsCopy[secondaryDigitId]+=10;
+          digitsCopy[secondaryDigitId+1]--;
+        }
+      }
+      if(digitsCopy.back()<0)
+        tryAgain=true;
+      if(tryAgain)
+        newDigits[primaryDigitId]--;
+    }while(tryAgain && newDigits[primaryDigitId]!=0);
+    if(newDigits[primaryDigitId]!=0)
+      digitsCopyMinusDecided = digitsCopy;
+  }
+  for(int8_t i: digitsCopyMinusDecided)
+    if(i!=0)
+      return false;
+  return true;
+}
+
+int Number::getDigitCount(){
+    return digits.size();
+}
+
+int64_t Number::getInt64(){
+  int64_t ans=0;
+  int64_t pow=1;
+  for(int i:digits){
+    ans+=i*pow;
+    pow*=10;
+  }
+  int64_t sign64t = sign;
+  return ans*sign64t;
+}
 
 int Number::digitalSum(){
   int result=0;
-  for(int i=1; i<=digitCount; i++)
+  for(int i=0; i<(int)digits.size(); i++)
     result+=digits[i];
   return result;
 }
 
-
-
-
-
 bool Number::isPalindrom(){
-  int pos=1;
-  while(pos<=digitCount/2){
-    if(digits[digitCount-pos+1] != digits[pos])
+  int pos=0;
+  while(pos<(int)digits.size()/2){
+    if(digits[digits.size()-pos-1] != digits[pos])
       return false;
     pos++;
   }
   return true;
 }
 
-
-
-
-
-bool Number::outputInfo(){
-/*  cout << "Size:" << size << " DigitCount:" << digitCount << " adress:" << &digits << endl;
-  cout << "Val:";
-  if(digits[0]==-1){                                    //Output positive/negative tag
-    cout << "-";
-  }
-  for(int i=digitCount-1; i>=0; i--){
-    cout << (int)digits[i+1];
-  }
-  cout << endl;*/
-  return true;
+void Number::outputInfo(){
+  outputNumber();
+  cout << endl;
 }
 
-
-
-
-
-bool Number::outputNumber(){
-/*  if(digits[0]==-1){                                    //Output positive/negative tag
+void Number::outputNumber(){
+  if(sign==-1)
     cout << "-";
+  for(int i=(int)digits.size()-1; i>=0; i--){
+    cout << (int)digits[i];
+    if(i>0 && i%3==0)
+      cout << ",";
   }
-  for(int i=digitCount-1; i>=0; i--){
-    cout << (int)digits[i+1];
-  }*/
-  return true;
 }
 
-
-
-
-
-bool Number::reverseDigits(){
-  int x, pos=1;
-  while(pos<=digitCount/2){
-    x = digits[digitCount-pos+1];
-    digits[digitCount-pos+1] = digits[pos];
+void Number::reverseDigits(){
+  int x, pos=0;
+  while(pos<(int)digits.size()/2){
+    x = digits[digits.size()-pos-1];
+    digits[digits.size()-pos-1] = digits[pos];
     digits[pos] = x;
     pos++;
   }
-  return true;
 }
 
+void numberTester(){
+  vector<int> values = {783,5,1,-1,0,1,0,-1,-493821,-432,5842123,432,0,483921,4883921,-1,-1,-234922,0,9499212,0,-432,-432,133,133,133};
+  int64_t a,b,c;
+  Number x,y,z;
+  bool fail=false;
+  for(int i=0; i<(int)values.size()-1; i++){
+    cout << "Testing value " << values[i] << " and " << values[i+1] << endl;
+
+    a = values[i];
+    x = values[i];
+    cout << "=" << values[i] << ", " << a << ", ";
+    x.outputNumber();
+    if(a!=x.getInt64()){
+      cout << " FAIL!!!!!!!";
+      fail=true;
+    }
+    cout << endl;
+
+    a = values[i];
+    b = a;
+    x = values[i];
+    y = x;
+    cout << "=(Number)" << values[i] << ", " << b << ", ";
+    y.outputNumber();
+    if(b!=y.getInt64()){
+      cout << " FAIL!!!!!!!";
+      fail=true;
+    }
+    cout << endl;
+
+    a = values[i];
+    b = values[i+1];
+    c = a+b;
+    x = values[i];
+    y = values[i+1];
+    z = x+y;
+    cout << values[i] << "+" << values[i+1] << ", " << c << ", ";
+    z.outputNumber();
+    if(c!=z.getInt64()){
+      cout << " FAIL!!!!!!!";
+      fail=true;
+    }
+    cout << endl;
+
+    c = a-b;
+    z = x-y;
+    cout << values[i] << "-" << values[i+1] << ", " << c << ", ";
+    z.outputNumber();
+    if(c!=z.getInt64()){
+      cout << " FAIL!!!!!!!";
+      fail=true;
+    }
+    cout << endl;
+
+    c = a*b;
+    z = x*y;
+    cout << values[i] << "*" << values[i+1] << ", " << c << ", ";
+    z.outputNumber();
+    if(c!=z.getInt64()){
+      cout << " FAIL!!!!!!!";
+      fail=true;
+    }
+    cout << endl;
+
+    if(values[i+1] != 0){
+      a/=b;
+      x/=b;
+      cout << values[i] << "/=" << values[i+1] << ", " << a << ", ";
+      x.outputNumber();
+      if(a!=x.getInt64()){
+        cout << " FAIL!!!!!!!";
+        fail=true;
+      }
+      cout << endl;
+    }
+
+    a = values[i];
+    x = values[i];
+    a+=b;
+    x+=y;
+    cout << values[i] << "+=" << values[i+1] << ", " << a << ", ";
+    x.outputNumber();
+    if(a!=x.getInt64()){
+      cout << " FAIL!!!!!!!";
+      fail=true;
+    }
+    cout << endl;
+
+    a = values[i];
+    x = values[i];
+    a-=b;
+    x-=y;
+    cout << values[i] << "-=" << values[i+1] << ", " << a << ", ";
+    x.outputNumber();
+    if(a!=x.getInt64()){
+      cout << " FAIL!!!!!!!";
+      fail=true;
+    }
+    cout << endl;
+
+    a = values[i];
+    x = values[i];
+    cout << values[i] << "<" << values[i+1] << ", " << (a<b) << ", " << (x<y);
+    if((a<b)!=(x<y)){
+      cout << " FAIL!!!!!!!";
+      fail=true;
+    }
+    cout << endl;
+
+    cout << values[i] << ">" << values[i+1] << ", " << (a>b) << ", " << (x>y);
+    if((a>b)!=(x>y)){
+      cout << " FAIL!!!!!!!";
+      fail=true;
+    }
+    cout << endl;
+
+    cout << values[i] << "==" << values[i+1] << ", " << (a==b) << ", " << (x==y);
+    if((a==b)!=(x==y)){
+      cout << " FAIL!!!!!!!";
+      fail=true;
+    }
+    cout << endl;
+
+    if(values[i] >= 0){
+      c = sqrt(a);
+      z = x.sqrt();
+      cout << "sqrt(" << values[i] << "), " << c << ", ";
+      z.outputNumber();
+      if(c!=z.getInt64()){
+        cout << " FAIL!!!!!!!";
+        fail=true;
+      }
+      cout << endl;
+    }
+
+    cout << endl;
+  }
+  if(fail)
+    cout << "At least one test failed!!!!!!!!!!" << endl;
+  else
+    cout << "All tests passed!" << endl;
+}

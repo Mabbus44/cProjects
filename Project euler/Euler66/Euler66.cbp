@@ -32,7 +32,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="../EulerMain/number.cpp" />
+		<Unit filename="../EulerMain/number.h" />
+		<Unit filename="../EulerMain/variable.cpp" />
+		<Unit filename="../EulerMain/variable.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="old.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

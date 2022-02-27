@@ -48,7 +48,7 @@ bool Variable::set(string type){
   if(content)
     delete[] content;
   this->type = type;
-  if(type.c_str() == "number"){
+  if(type.compare("number")==0){
     content = new Number();
   }else{
     return false;

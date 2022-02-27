@@ -1,32 +1,48 @@
 #include <stdint.h>
 #include "variable.h"
+#include <vector>
 
 #ifndef NUMBERRAZ
 #define NUMBERRAZ
 
+
+//Digit[0] is sign (1 or -1);
+//Digit[1] is least significant digit;
 class Number : public Variable
 {
 private:
-  int8_t* digits;                               //DigitsInNumber
-  int digitCount;                               //DigitCount in number
-  int size;                                     //Size of array
+  vector<int8_t> digits;
+  int8_t sign;
 
 public:
-  Number();                                     //Default constructor
-  Number(const Number& number);                 //Copy constructor
-  Number(int size);                             //Constructor that sets size
-  ~Number();                                    //Default deconstructor
-  Number& operator=(const int number);          //Number = Int
-  Number& operator=(const Number number);               //Number = Number
-  Number operator+(const Number& number);               //Number = Number+Number
-  Number operator-(const Number& number);               //Number = Number-Number
-  Number operator*(const Number& number);               //Number = Number*Number
-  int getDigitCount();                          //Returns digitCount
-  int digitalSum();                             //Returns the sum of all digits as a int
-  bool isPalindrom();                           //Returns true if number is palindrom
-  bool outputInfo();                            //Outputs info about number
-  bool outputNumber();                          //Outputs number
-  bool reverseDigits();                         //Reverses the order of the digits
+  Number();
+  Number(const Number& number);
+  Number(int64_t number);
+  ~Number();
+  Number& operator=(int64_t number);
+  Number& operator=(const Number& number);
+  Number operator+(const Number& number);
+  Number operator-(const Number& number);
+  Number operator*(const Number& number);
+  int64_t operator% (const int64_t number);
+  void operator/= (const int number);
+  void operator+=(const Number& number);
+  void operator-=(const Number& number);
+  bool operator<(const Number& number) const;
+  bool operator>(const Number& number) const;
+  bool operator==(const Number& number) const;
+  void trim(Number& number);
+  Number sqrt();
+  bool sqrtAble();
+  int getDigitCount();
+  int64_t getInt64();
+  int digitalSum();
+  bool isPalindrom();
+  void outputInfo();
+  void outputNumber();
+  void reverseDigits();
 };
+
+void numberTester();
 
 #endif
