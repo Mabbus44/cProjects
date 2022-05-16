@@ -4,6 +4,25 @@
 #include <vector>
 #include "Common.h"
 
+class Range{
+  public:
+    Range(){};
+    Range(int mi, int ma){rangeMin = mi; rangeMax = ma;};
+    int rangeMin;
+    int rangeMax;
+};
+
+class Rule{
+  public:
+    Rule(){for(int i=0; i<20; i++) index.push_back(i);};
+    Rule(vector<string> input){load(input);};
+    void load(vector<string> input);
+    bool inRange(int val);
+    void output();
+    string name;
+    vector<Range> ranges;
+    vector<int> index;
+};
 
 class Day16
 {
