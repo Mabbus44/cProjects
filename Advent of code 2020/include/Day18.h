@@ -4,6 +4,19 @@
 #include <vector>
 #include "Common.h"
 
+enum type{ADD, MUL};
+
+class Expression{
+  public:
+    Expression(){};
+    Expression(string input){load(input);};
+    void load(string input);
+    __int64 getVal();
+    int type;
+    __int64 val;
+    vector<Expression> exps;
+
+};
 
 class Day18
 {
