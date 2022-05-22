@@ -4,6 +4,15 @@
 #include <vector>
 #include "Common.h"
 
+class Recepie{
+  public:
+    Recepie(){};
+    Recepie(vector<string> input){load(input);};
+    void load(vector<string> input);
+    void output();
+    vector<string> ingredients;
+    vector<string> allergens;
+};
 
 class Day21
 {
