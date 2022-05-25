@@ -12,7 +12,8 @@ class Day22
     virtual ~Day22();
     void part1(string filename);
     void part2(string filename);
-
+    int runGame(vector<int> deck1, vector<int> deck2, vector<int> rounds);
+    __int64 winnerScore;
   protected:
 
   private:
