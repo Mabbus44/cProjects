@@ -4,6 +4,14 @@
 #include <vector>
 #include "Common.h"
 
+class Cup{
+public:
+  Cup(){};
+  Cup(int num){number=num;}
+  int number;
+  Cup* numberBefore;
+  Cup* cupAfter;
+};
 
 class Day23
 {
