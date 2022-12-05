@@ -11,6 +11,9 @@ class Day03
   public:
     Day03();
     virtual ~Day03();
+    char findDouplicate(string backpack);
+    char findCommon(vector<string> group);
+    int priority(char c);
     void part1(string filename);
     void part2(string filename);
 
