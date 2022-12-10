@@ -15,10 +15,10 @@ class InputLoader
     virtual ~InputLoader();
     void resetFile();
     vector<string> splitString(string s, vector<string> delimiters = {", "});
-    vector<int> toInt(vector<string> vs);
-    string ltrim(string s);
-    string rtrim(string s);
-    string trim(string s);
+    static vector<int> toInt(vector<string> vs);
+    static string ltrim(string s);
+    static string rtrim(string s);
+    static string trim(string s);
     vector<int> toVectorInt();
     vector<vector<int>> toVectorInt2d(vector<string> delimiters = {", "});
     vector<string> toVectorStr();

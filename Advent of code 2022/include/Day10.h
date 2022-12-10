@@ -19,4 +19,31 @@ class Day10
   private:
 };
 
+enum Instruction {ADDX, NOOP};
+
+class Command
+{
+  public:
+    Command(){}
+    Command(vector<string> cmdParts){load(cmdParts);}
+    virtual ~Command(){}
+    void load(vector<string> cmdParts);
+    Instruction instruction;
+    int intArg0;
+};
+
+class CPU
+{
+  public:
+    CPU(){}
+    virtual ~CPU(){}
+    void load(string fileName);
+    void start(){currentCommand = commands.begin(); cpuCycle = 0; cpuCycleOnCurrentCommand = 0; registerX = 1;}
+    bool runCpuCycle();
+    vector<Command> commands;
+    vector<Command>::iterator currentCommand;
+    int cpuCycle;
+    int cpuCycleOnCurrentCommand;
+    int registerX;
+};
 #endif // DAY10_H
