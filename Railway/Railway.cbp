@@ -37,10 +37,12 @@
 		<Unit filename="include/Rail.h" />
 		<Unit filename="include/RailNode.h" />
 		<Unit filename="include/RailWay.h" />
+		<Unit filename="include/Util.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Rail.cpp" />
 		<Unit filename="src/RailNode.cpp" />
 		<Unit filename="src/RailWay.cpp" />
+		<Unit filename="src/Util.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

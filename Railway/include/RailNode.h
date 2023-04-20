@@ -1,8 +1,12 @@
 #ifndef RAILNODE_H
 #define RAILNODE_H
 
+#include <tuple>
 #include <vector>
+#include <iostream>
 #include "Rail.h"
+#include "Util.h"
+
 using namespace std;
 
 class Rail;
@@ -11,28 +15,31 @@ class RailNode
 {
   public:
     RailNode();
-    RailNode(vector<int> intCon);
+    RailNode(int maxCon);
+    RailNode(string c){loadConfiguration(c);}
     virtual ~RailNode();
-    RailNode(const RailNode& n) {_internalConnections = n._internalConnections;}
+    RailNode(const RailNode& n) {_maxConnections = n._maxConnections; _connections = n._connections;/*cout << "RailNode copy " << toString() << endl;*/}
+    void loadConfiguration(string c);
     void output();
-    bool equivalent(RailNode& n);
-    bool isConnected() {return _externalConnectionRail != -1;}
-    void connect(int r, int n) {_externalConnectionRail = r; _externalConnectionNode = n;}
+    bool operator==(RailNode& n);
+    bool full() {return _maxConnections <= (int)_connections.size();}
+    bool hasTwoFree() {return _maxConnections-2 >= (int)_connections.size();}
+    bool connect(int r, int n);
+    string toString();
+    void swapRailIds(int r1, int r2);
+    void swapNodeIds(int rId, int n1, int n2);
     //set
-    void internalConnections(vector<int>& v){_internalConnections = v;}
-    void externalConnectionRail(int v){_externalConnectionRail = v;}
-    void externalConnectionNode(int v){_externalConnectionNode = v;}
+    void connections(vector<tuple<int, int>>& v){_connections = v;}
+    void maxConnections(int v){_maxConnections = v;}
     //get
-    vector<int>& internalConnections(){return _internalConnections;}
-    int externalConnectionRail(){return _externalConnectionRail;}
-    int externalConnectionNode(){return _externalConnectionNode;}
+    vector<tuple<int, int>>& connections(){return _connections;}
+    int maxConnections(){return _maxConnections;}
 
   protected:
 
   private:
-    vector<int> _internalConnections;
-    int _externalConnectionRail = -1;
-    int _externalConnectionNode = -1;
+    int _maxConnections;
+    vector<tuple<int, int>> _connections;
 };
 
 #endif // RAILNODE_H
