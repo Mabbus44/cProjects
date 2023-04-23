@@ -35,9 +35,11 @@ class RailWay
     void connectRails(vector<vector<int>> rawRail);
     void saveRailWays(list<RailWay*>& railWays, string fileName);
     void loadRailWays(list<RailWay*>& railWays, string fileName);
-    void findPath(map<string, vector<tuple<int, int>>>& paths, int railId, int nodeId);
-    bool addNodeToPaths(map<string, vector<tuple<int, int>>>& paths, int railId, int nodeId);
-
+    bool findPath(list<tuple<int, int>>& visitedNodes, tuple<int, int> currentNode);
+    void removeLoops(list<RailWay*>& children);
+    int railCount(){return _rails.size();}
+    void selectBest(list<RailWay*>& children);
+    bool isOptimal();
     //set
     void rails(vector<Rail>& v){_rails = v;}
     //get

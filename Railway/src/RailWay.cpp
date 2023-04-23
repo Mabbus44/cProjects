@@ -314,23 +314,79 @@ void RailWay::loadRailWays(list<RailWay*>& railWays, string fileName){
   myfile.close();
 }
 
-bool RailWay::addNodeToPaths(map<string, vector<tuple<int, int>>>& paths, int railId, int nodeId){
-  bool added = false;
-  tuple<int, int> railNode = make_tuple(railId, nodeId);
-  for(auto& path:  paths){
-    if(find(path.second.begin(), path.second.end(), railNode) == path.second.end()){
-      added = true;
-      path.second.push_back(railNode);
+void RailWay::removeLoops(list<RailWay*>& children){
+  list<RailWay*>::iterator rIt = children.begin();
+  //cout << "Removing loops from " << children.size() << " railways" << endl;
+  int railId=0;
+  while(rIt != children.end()){
+    //cout << "Railway " << railId << "/" << children.size() << endl;
+    bool removeChild = false;
+    for(int railId=0; !removeChild && railId < (int)(**rIt).rails().size(); railId++){
+      for(int nodeId=0; !removeChild && nodeId < 2; nodeId++){
+        list<tuple<int, int>> reachableNodes;
+        (**rIt).findPath(reachableNodes, make_tuple(railId, nodeId));
+        /*if(reachableNodes.size() >= 10){
+          cout << " ... " << reachableNodes.size() << "/" << (**rIt).nodeCount() << endl;
+          cout << (**rIt).toString() << endl;
+          for(auto& n:reachableNodes){
+            cout << get<0>(n) << " " << get<1>(n) << ",";
+          }
+          cout << endl;
+        }*/
+        if((int)reachableNodes.size() < (**rIt).railCount())
+          removeChild = true;
+      }
+    }
+    if(removeChild)
+      children.erase(rIt++);
+    else{
+      rIt++;
+      railId++;
     }
   }
-  return added;
 }
 
-void RailWay::findPath(map<string, vector<tuple<int, int>>>& paths, int railId, int nodeId){
-  bool foundNew = false;
-  string id = to_string(railId) + to_string(nodeId);
-  if(paths.find(id) == paths.end()){
-    paths.insert(pair<string, vector<tuple<int, int>>>(id, new vector<tuple<int, int>>));
+bool RailWay::findPath(list<tuple<int, int>>& visitedNodes, tuple<int, int> currentNode){
+  //cout << "FindPath (" << get<0>(currentNode) << "," << get<1>(currentNode) << ")";
+  if(find(visitedNodes.begin(), visitedNodes.end(), currentNode) != visitedNodes.end()){
+    //cout << "Already visited" << endl;
+    return false;
   }
-  _rails[railId].getNodes()[1-nodeId];
+  //cout << endl;
+  visitedNodes.push_back(currentNode);
+  vector<tuple<int, int>> cons = _rails[get<0>(currentNode)].nodes()[1-get<1>(currentNode)].connections();
+  for(auto& con:cons){
+    findPath(visitedNodes, con);
+  }
+  return true;
+}
+
+void RailWay::selectBest(list<RailWay*>& children){
+  list<RailWay*>::iterator rIt = children.begin();
+  int railId=0;
+  while(rIt != children.end()){
+    if((**rIt).isOptimal()){
+      rIt++;
+      railId++;
+    }
+    else{
+      children.erase(rIt++);
+    }
+  }
+}
+
+bool RailWay::isOptimal(){
+  for(int railId=0; railId < (int)_rails.size(); railId++){
+    for(int nodeId=0; nodeId < 2; nodeId++){
+      vector<tuple<int, int>> oldCons;
+      for(auto& con: _rails[railId].nodes()[nodeId].connections()){
+        if(find(oldCons.begin(), oldCons.end(), con) != oldCons.end())
+          return false;
+        oldCons.push_back(con);
+        if(get<0>(con) == railId)
+          return false;
+      }
+    }
+  }
+  return true;
 }
