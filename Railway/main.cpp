@@ -14,13 +14,13 @@ int main()
   //r.getAllConfigurations();
   list<RailWay*> railWays;
   cout << "Loading...";
-  r.loadRailWays(railWays, "c:/temp/no loops.txt");
+  r.loadRailWays(railWays, "c:/temp/best of no loops.txt");
   cout << "done" << endl;
   //r.removeDuplicates(railWays);
   //r.removeLoops(railWays);
   r.selectBest(railWays);
   cout << "Saving " << railWays.size() << " railways...";
-  r.saveRailWays(railWays, "c:/temp/best of no loops.txt");
+  r.saveRailWays(railWays, "c:/temp/best of best loops.txt");
   cout << "done" << endl;
   return 0;
 }

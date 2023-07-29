@@ -315,6 +315,7 @@ void RailWay::loadRailWays(list<RailWay*>& railWays, string fileName){
 }
 
 void RailWay::removeLoops(list<RailWay*>& children){
+  //I have found loops, so this seem to be not working
   list<RailWay*>::iterator rIt = children.begin();
   //cout << "Removing loops from " << children.size() << " railways" << endl;
   int railId=0;
@@ -365,6 +366,10 @@ void RailWay::selectBest(list<RailWay*>& children){
   list<RailWay*>::iterator rIt = children.begin();
   int railId=0;
   while(rIt != children.end()){
+    if(railId == 149){
+      cout << "rail 150 = ";
+      cout << (**rIt).toString() << endl;
+    }
     if((**rIt).isOptimal()){
       rIt++;
       railId++;
@@ -376,6 +381,7 @@ void RailWay::selectBest(list<RailWay*>& children){
 }
 
 bool RailWay::isOptimal(){
+  //Checks if two connections from the same node goes to the same node or if a piece is connected to itself
   for(int railId=0; railId < (int)_rails.size(); railId++){
     for(int nodeId=0; nodeId < 2; nodeId++){
       vector<tuple<int, int>> oldCons;
