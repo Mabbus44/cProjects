@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="PuzzleSolver2d" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/PuzzleSolver2d" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="include" />
+					<Add directory="C:/wxWidgets/lib/gcc810_x64_dll/mswud" />
+				</Compiler>
+				<Linker>
+					<Add library="wxmsw32ud_core" />
+					<Add library="wxbase32ud" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/PuzzleSolver2d" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="include" />
+					<Add directory="C:/wxWidgets/lib/gcc810_x64_dll/mswu" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="wxmsw32u_core" />
+					<Add library="wxbase32u" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="C:/wxWidgets/include" />
+		</Compiler>
+		<Linker>
+			<Add directory="C:/wxWidgets/lib/gcc810_x64_dll" />
+		</Linker>
+		<Unit filename="include/Board.h" />
+		<Unit filename="include/BoardCollection.h" />
+		<Unit filename="include/Piece.h" />
+		<Unit filename="include/WxWindow.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/Board.cpp" />
+		<Unit filename="src/BoardCollection.cpp" />
+		<Unit filename="src/Piece.cpp" />
+		<Unit filename="src/WxWindow.cpp" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>

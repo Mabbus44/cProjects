@@ -1,0 +1,13 @@
+Add drop down that can have either starts, goals or most steps boards, and a button to switch between.
+
+Done:
+save/load from menu
+Bug: Clicking board selects deleted pieces
+save/load collection
+Set steps left
+populate neighbour dropdown
+Double size of collectionBoard frame
+Click on collectionBoard to go to neighbour
+Write numbers on moves to show what is best
+Add borders to pieces
+Add id and stepsleft to collectionBoard title
