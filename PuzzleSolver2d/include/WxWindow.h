@@ -37,7 +37,7 @@ class MainFrame : public wxFrame
 {
   public:
     MainFrame();
-    void selectBoard(Board* newBoard);
+    void selectBoard(Board* selectedBoard);
     void selectPiece(int pieceId);
     void selectPiece(Piece* newPiece);
     void selectCollection(BoardCollection* newCollection);
@@ -84,7 +84,9 @@ enum ID {
   //ComboBoxes
   cmbColors, cmbNeighbours, cmbCollectionList,
   //Labels
-  lblCollectionBoardName
+  lblCollectionBoardName,
+  //Text controls
+  tctSizeX, tctSizeY
 };
 
 #endif // WXWINDOW_H

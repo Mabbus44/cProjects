@@ -25,6 +25,15 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "2D Puzzle solver", wxPoint(
   CreateStatusBar();
   SetStatusText("Solve 2D puzzles!");
 
+  //Validator for text boxes
+  wxTextValidator validator(wxFILTER_INCLUDE_CHAR_LIST);
+  wxArrayString letterList;
+  wxString valid_chars(wxT("0123456789"));
+  size_t len = valid_chars.Length();
+  for (size_t i=0; i<len; i++)
+    letterList.Add(wxString(valid_chars.GetChar(i)));
+  validator.SetIncludes(letterList);
+
   //Window objects
   wxBoxSizer *sizerMaster = new wxBoxSizer(wxHORIZONTAL);
 
@@ -32,6 +41,8 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "2D Puzzle solver", wxPoint(
   wxBoxSizer *sizerCol1 = new wxBoxSizer(wxVERTICAL);
   sizerCol1->Add(new wxStaticText(this, wxID_ANY, "Manual boards"));
   sizerCol1->Add(new wxListBox(this, ID::ltbBoards, wxDefaultPosition, wxSize(100, 200)));
+  sizerCol1->Add(new wxTextCtrl(this, ID::tctSizeX, "4", wxDefaultPosition, wxDefaultSize, 0, validator));
+  sizerCol1->Add(new wxTextCtrl(this, ID::tctSizeY, "5", wxDefaultPosition, wxDefaultSize, 0, validator));
   sizerCol1->Add(new wxButton(this, ID::btnNewBoard, "New board"), 0, 0, 0);
   sizerCol1->Add(new wxButton(this, ID::btnDeleteBoard, "Delete board"), 0, 0, 0);
   sizerCol1->Add(new wxButton(this, ID::btnCreateCollection, "Create collection"), 0, 0, 0);
@@ -98,8 +109,8 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "2D Puzzle solver", wxPoint(
   Bind(wxEVT_BUTTON, &MainFrame::onChangeCollectionListType, this, ID::btnCollectionListType);
 }
 
-void MainFrame::selectBoard(Board* newBoard){
-  cout << "_selectedBoard = " << newBoard << endl;
+void MainFrame::selectBoard(Board* selectedBoard){
+  cout << "_selectedBoard = " << selectedBoard << endl;
   //Clear piece list
   selectPiece(nullptr);
   wxListBox* ltb = (wxListBox*)FindWindow(ID::ltbPieces);
@@ -107,9 +118,9 @@ void MainFrame::selectBoard(Board* newBoard){
   ltb->DeselectAll();
 
   //Draw selected board
-  _selectedBoard = newBoard;
-  auto frm = (BoardFrame*)FindWindow(ID::frmBoardFrame);
-  frm->board(newBoard);
+  _selectedBoard = selectedBoard;
+  BoardFrame* frm = (BoardFrame*)FindWindow(ID::frmBoardFrame);
+  frm->board(selectedBoard);
 
   //Draw piece list
   if(_selectedBoard != nullptr){
@@ -335,18 +346,31 @@ void MainFrame::onSelectBoard(wxCommandEvent& event){
 }
 
 void MainFrame::onNewBoard(wxCommandEvent& event){
-  Board* newBoard = new Board(4, 5);
+  wxTextCtrl* tSizeX = (wxTextCtrl*)FindWindow(ID::tctSizeX);
+  wxTextCtrl* tSizeY = (wxTextCtrl*)FindWindow(ID::tctSizeY);
+  int sizeX;
+  int sizeY;
+  try{
+    sizeX = wxAtoi(tSizeX->GetValue());
+    sizeY = wxAtoi(tSizeY->GetValue());
+  }catch(exception const& e){
+    cout << "Error: invalid x/y size" << endl;
+  }
+
+  Board* newBoard = new Board(sizeX, sizeY);
   _boards.push_back(newBoard);
-  newBoard->addPiece(new Piece({{1, 4}, {2, 4}}));
-  newBoard->addPiece(new Piece({{0, 3}, {0, 2}}, COLOR::green));
-  newBoard->addPiece(new Piece({{0, 1}, {0, 0}}, COLOR::green));
-  newBoard->addPiece(new Piece({{3, 3}, {3, 2}}, COLOR::green));
-  newBoard->addPiece(new Piece({{3, 1}, {3, 0}}, COLOR::green));
-  newBoard->addPiece(new Piece({{1, 3}}, COLOR::blue));
-  newBoard->addPiece(new Piece({{2, 3}}, COLOR::blue));
-  newBoard->addPiece(new Piece({{1, 2}}, COLOR::blue));
-  newBoard->addPiece(new Piece({{2, 2}}, COLOR::blue));
-  newBoard->addPiece(new Piece({{1, 1}, {2, 1}, {1, 0}, {2, 0}}, COLOR::red));
+  if(sizeX == 4 && sizeY == 5){
+    newBoard->addPiece(new Piece({{1, 4}, {2, 4}}));
+    newBoard->addPiece(new Piece({{0, 3}, {0, 2}}, COLOR::green));
+    newBoard->addPiece(new Piece({{0, 1}, {0, 0}}, COLOR::green));
+    newBoard->addPiece(new Piece({{3, 3}, {3, 2}}, COLOR::green));
+    newBoard->addPiece(new Piece({{3, 1}, {3, 0}}, COLOR::green));
+    newBoard->addPiece(new Piece({{1, 3}}, COLOR::blue));
+    newBoard->addPiece(new Piece({{2, 3}}, COLOR::blue));
+    newBoard->addPiece(new Piece({{1, 2}}, COLOR::blue));
+    newBoard->addPiece(new Piece({{2, 2}}, COLOR::blue));
+    newBoard->addPiece(new Piece({{1, 1}, {2, 1}, {1, 0}, {2, 0}}, COLOR::red));
+  }
 
   auto ltb = (wxListBox*)FindWindow(ID::ltbBoards);
   ltb->Append("Board" + to_string(_boards.size() - 1));
@@ -531,8 +555,23 @@ void BoardFrame::onPaint(wxPaintEvent& event){
   dc.Clear();
 
   auto gc = wxGraphicsContext::Create(dc);
+
+  int sizeX = 4 * SQUARE_SIZE;
+  int sizeY = 5 * SQUARE_SIZE;
+  if(_board){
+    sizeX = _board->sizeX() * SQUARE_SIZE;
+    sizeY = _board->sizeY() * SQUARE_SIZE;
+  }
+
   if (gc)
   {
+    int width = 1;
+    gc->SetPen(wxPen(wxColour("#000000")));
+    gc->SetBrush(wxBrush(wxColour("#000000")));
+    gc->DrawRectangle(0, 0, sizeX, width);
+    gc->DrawRectangle(0, sizeY, sizeX, width);
+    gc->DrawRectangle(0, 0, width, sizeY);
+    gc->DrawRectangle(sizeX, 0, width, sizeY);
     if(_board)
       _board->draw(gc);
 
@@ -543,7 +582,7 @@ void BoardFrame::onPaint(wxPaintEvent& event){
 void BoardFrame::onClick(wxMouseEvent& event){
   cout << "Click" << endl;
   cout << "" + to_string(event.GetPosition().x) + ", " << to_string(event.GetPosition().y) << endl;
-  if(_board == nullptr)
+  if(!_board)
     return;
   if(_type == BoardFrameType::board){
     int x = event.GetPosition().x / SQUARE_SIZE;
@@ -575,5 +614,9 @@ void BoardFrame::onRightClick(wxMouseEvent& event){
 
 void BoardFrame::board(Board* board){
   _board = board;
+  if(board)
+    this->SetSize(wxSize(SQUARE_SIZE * board->sizeX() + 2, SQUARE_SIZE * board->sizeY() + 2));
+  else
+    this->SetSize(wxSize(SQUARE_SIZE * 4 + 2, SQUARE_SIZE * 5 + 2));
   Refresh();
 }
