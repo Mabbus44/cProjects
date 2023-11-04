@@ -54,8 +54,8 @@ void BoardCollection::generateChildren(){
       }
     }
     testId++;
-    cout << "Tested " << testId << " / " << _boards.size() << " (" << _boards.size() - testId << ")" << endl;
-    //testId = (int)_boards.size(); //DEBUG LINE TO ONLY GENERATE A FEW BOARDS
+    if(testId % 100 == 0)
+      cout << "Tested " << testId << " / " << _boards.size() << " (" << _boards.size() - testId << ")" << endl;
   }
   calculateMovePoints();
 }
@@ -88,7 +88,6 @@ void BoardCollection::setStepsLeft(Board* goal){
   }
   delete beingCalculated;
   delete toBeCalculated;
-  cout << "Steps left calculated" << endl;
 }
 
 void BoardCollection::output(string tab){
@@ -140,7 +139,6 @@ void BoardCollection::calculateMovePoints(){
 }
 
 void BoardCollection::calculateBoardLists(){
-  cout << "calculateBoardLists" << endl;
   if(_boards.size() == 0 || _boards[0]->stepsLeft() == -1)
     return;
   int biggestStepsLeft = 0;
@@ -156,14 +154,18 @@ void BoardCollection::calculateBoardLists(){
       biggestCount++;
     }
   }
+  if(goalCount > 20)
+    goalCount = 20;
+  if(biggestCount > 20)
+    biggestCount = 20;
   _goalBoards.resize(goalCount);
   _mostStepsBoards.resize(biggestCount);
   int goalId = 0;
   int biggestId = 0;
   for(Board* b: _boards){
-    if(b->stepsLeft() == 0){
+    if(goalId < goalCount && b->stepsLeft() == 0){
       _goalBoards[goalId++] = b;
-    }else if(b->stepsLeft() == biggestStepsLeft){
+    }else if(biggestId < biggestCount && b->stepsLeft() == biggestStepsLeft){
       _mostStepsBoards[biggestId++] = b;
     }
   }

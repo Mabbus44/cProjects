@@ -173,7 +173,6 @@ bool Board::matchGoal(Board* goal){
 }
 
 void Board::draw(wxGraphicsContext* gc, bool drawNumbers){
-  cout << "Board::draw" << endl;
   for(Piece* piece: _pieces){
     piece->draw(gc, drawNumbers);
   }

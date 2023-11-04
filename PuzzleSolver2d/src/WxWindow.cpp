@@ -113,7 +113,6 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "2D Puzzle solver", wxPoint(
 }
 
 void MainFrame::selectBoard(Board* selectedBoard){
-  cout << "_selectedBoard = " << selectedBoard << endl;
   //Clear piece list
   selectPiece(nullptr);
   wxListBox* ltb = (wxListBox*)FindWindow(ID::ltbPieces);
@@ -135,7 +134,6 @@ void MainFrame::selectBoard(Board* selectedBoard){
 }
 
 void MainFrame::selectCollection(BoardCollection* newCollection){
-  cout << "_selectedCollection = " << newCollection << endl;
   _selectedCollection = newCollection;
   Board* selectedBoard = nullptr;
   if(newCollection != nullptr)
@@ -144,7 +142,6 @@ void MainFrame::selectCollection(BoardCollection* newCollection){
 }
 
 void MainFrame::selectCollectionBoard(Board* board){
-  cout << "_selectedCollectionBoard = " << board << endl;
   _selectedCollectionBoard = board;
   auto caption = (wxStaticText*)FindWindow(ID::lblCollectionBoardName);
   caption->SetLabel("Board");
@@ -167,8 +164,6 @@ void MainFrame::selectPiece(int pieceId){
 }
 
 void MainFrame::selectPiece(Piece* newPiece){
-  cout << "_selectPiece = " << _selectedPiece << endl;
-
   //Clear square list
   wxListBox* ltb = (wxListBox*)FindWindow(ID::ltbSquares);
   ltb->Clear();
@@ -354,7 +349,6 @@ void MainFrame::save(wxCommandEvent& event){
 }
 
 void MainFrame::onSelectBoard(wxCommandEvent& event){
-  cout << "onSelectBoard" << event.GetInt() << endl;
   selectBoard(_boards[event.GetInt()]);
 }
 
@@ -370,7 +364,7 @@ void MainFrame::onNewBoard(wxCommandEvent& event){
     cout << "Error: invalid x/y size" << endl;
   }
   if(sizeX == 0 || sizeY == 0){
-    cout << "Invalid size" << endl;
+    cout << "Error: Invalid size" << endl;
     return;
   }
 
@@ -396,7 +390,6 @@ void MainFrame::onNewBoard(wxCommandEvent& event){
 }
 
 void MainFrame::onDeleteBoard(wxCommandEvent& event){
-  cout << "onDeleteBoard" << endl;
   if(_selectedBoard == nullptr)
     return;
 
@@ -421,7 +414,7 @@ void MainFrame::onDeleteBoard(wxCommandEvent& event){
 
 void MainFrame::onCreateCollection(wxCommandEvent& event){
   if(_selectedBoard == nullptr){
-    cout << "No board selected" << endl;
+    cout << "Error: No board selected" << endl;
     return;
   }
   BoardCollection* newCollection = new BoardCollection();
@@ -443,10 +436,13 @@ void MainFrame::onNewPiece(wxCommandEvent& event){
   if(_selectedBoard == nullptr)
     return;
   COLOR c = static_cast<COLOR>(_selectedBoard->pieceCount() % COLOR::count);
-  _selectedBoard->addPiece(new Piece(c));
+  Piece* piece = new Piece(c);
+  _selectedBoard->addPiece(piece);
 
-  auto ltb = (wxListBox*)FindWindow(ID::ltbPieces);
+  wxListBox* ltb = (wxListBox*)FindWindow(ID::ltbPieces);
   ltb->Append("Piece" + to_string(_selectedBoard->pieceCount() - 1));
+  ltb->SetSelection(_selectedBoard->pieceCount() - 1);
+  selectPiece(piece);
 }
 
 void MainFrame::onDeletePiece(wxCommandEvent& event){
@@ -491,13 +487,11 @@ void MainFrame::onChangeColor(wxCommandEvent& event){
 }
 
 void MainFrame::onChangeNeighbour(wxCommandEvent& event){
-  cout << "onChangeNeighbour: " << event.GetInt() << endl;
   if(_selectedCollection == nullptr || _selectedCollectionBoard == nullptr)
     return;
   selectCollectionBoard(_selectedCollectionBoard->neighbour(event.GetInt()));
 }
 void MainFrame::onChangeCollectionList(wxCommandEvent& event){
-  cout << "onChangeCollectionList: " << event.GetInt() << endl;
   if(_selectedCollection == nullptr)
     return;
   if(_collectionListType == CollectionListType::goal){
@@ -511,15 +505,15 @@ void MainFrame::onChangeCollectionList(wxCommandEvent& event){
 
 void MainFrame::onSetGoal(wxCommandEvent& event){
   if(_selectedBoard == nullptr){
-    cout << "No board selected" << endl;
+    cout << "Error: No board selected" << endl;
     return;
   }
   if(_selectedCollection == nullptr){
-    cout << "No collection selected" << endl;
+    cout << "Error: No collection selected" << endl;
     return;
   }
   if(_selectedBoard->sizeX() != _selectedCollection->board(0)->sizeX() || _selectedBoard->sizeY() != _selectedCollection->board(0)->sizeY()){
-    cout << "Goal of invalid size" << endl;
+    cout << "Error: Goal of invalid size" << endl;
     return;
   }
   _selectedCollection->goal(_selectedBoard->deepCopy());
@@ -611,8 +605,6 @@ void BoardFrame::onPaint(wxPaintEvent& event){
 }
 
 void BoardFrame::onClick(wxMouseEvent& event){
-  cout << "Click" << endl;
-  cout << "" + to_string(event.GetPosition().x) + ", " << to_string(event.GetPosition().y) << endl;
   if(!_board)
     return;
   if(_type == BoardFrameType::board){
@@ -631,8 +623,6 @@ void BoardFrame::onClick(wxMouseEvent& event){
 }
 
 void BoardFrame::onRightClick(wxMouseEvent& event){
-  cout << "RightClick" << endl;
-  cout << "" + to_string(event.GetPosition().x) + ", " << to_string(event.GetPosition().y) << endl;
   if(_board == nullptr)
     return;
   if(_type == BoardFrameType::board){

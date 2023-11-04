@@ -1,8 +1,5 @@
-PS-009 Limit how many items can be shown in dropdown. (write warning if not all are displayed).
 PS-013 Select collections
 PS-010 Make sure support of multiple collections.
-PS-012 Select new piece when it is created
-PS-015 Clean up console outputs
 
 Done:
 save/load from menu
@@ -26,3 +23,6 @@ PS-006 Make sure you can set _goal multiple times in boardCollections.
 PS-007 Allow showing numbers as well as colors on pieces.
 PS-014 Redraw collection board if new goal is set
 PS-008 Display more info about board collection (maybe only total board count).
+PS-009 Limit how many items can be shown in dropdown.
+PS-012 Select new piece when it is created
+PS-015 Clean up console outputs
