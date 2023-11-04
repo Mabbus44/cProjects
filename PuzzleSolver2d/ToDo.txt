@@ -1,15 +1,8 @@
-PS-001 Remove square even if piece is not selected.
-PS-002 Remove piece if last square is removed.
-PS-004 Error handling for different size of boards.
-PS-005 Dont save _goal in boardCollections.
-PS-006 Make sure you can set _goal multiple times in boardCollections.
-PS-007 Allow showing numbers as well as colors on pieces.
-PS-008 Display more info about board collection (maybe only total board count).
 PS-009 Limit how many items can be shown in dropdown. (write warning if not all are displayed).
-PS-010 Make sure support of multiple collections.
-PS-011 Add remove collection button.
-PS-012 Select new piece when it is created
 PS-013 Select collections
+PS-010 Make sure support of multiple collections.
+PS-012 Select new piece when it is created
+PS-015 Clean up console outputs
 
 Done:
 save/load from menu
@@ -25,3 +18,11 @@ Add id and stepsleft to collectionBoard title
 Add drop down that can have either starts, goals or most steps boards, and a button to switch between.
 Add inputs for size of new boards.
 PS-003 Support different size of boards.
+PS-001 Remove square even if piece is not selected.
+PS-002 Remove piece if last square is removed.
+PS-004 Error handling for different size of boards.
+PS-005 Dont save _goal in boardCollections.
+PS-006 Make sure you can set _goal multiple times in boardCollections.
+PS-007 Allow showing numbers as well as colors on pieces.
+PS-014 Redraw collection board if new goal is set
+PS-008 Display more info about board collection (maybe only total board count).

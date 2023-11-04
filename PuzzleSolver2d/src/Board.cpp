@@ -172,10 +172,10 @@ bool Board::matchGoal(Board* goal){
   return true;
 }
 
-void Board::draw(wxGraphicsContext* gc){
+void Board::draw(wxGraphicsContext* gc, bool drawNumbers){
   cout << "Board::draw" << endl;
   for(Piece* piece: _pieces){
-    piece->draw(gc);
+    piece->draw(gc, drawNumbers);
   }
   gc->SetPen(wxPen(wxColour("#ffffff")));
   gc->SetBrush(wxBrush(wxColour("#ffffff")));
@@ -350,6 +350,9 @@ void Board::calculateMovePoints(){
   _centerPoints.clear();
   for(Board* n: _neighbours)
     _centerPoints.push_back(getMovePoint(n));
+
+  for(Piece* p: _pieces)
+    p->calculateCenter();
 }
 
 Board* Board::closestNeighbour(tuple<double, double> point){

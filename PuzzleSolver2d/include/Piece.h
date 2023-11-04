@@ -22,30 +22,33 @@ class Piece
     Piece(vector<tuple<int, int>> squares, COLOR color = COLOR::maroon) {_squares = squares; _color = color;}
     Piece(ifstream& file);
     virtual ~Piece();
-    void addPieceToBoard(vector<vector<Piece*>>& board);
-    void removePieceFromBoard(vector<vector<Piece*>>& board);
-    void addSquare(tuple<int, int> square, vector<vector<Piece*>>* board = nullptr);
-    int removeSquare(tuple<int, int> square, vector<vector<Piece*>>* board = nullptr);
-    void output(string tab = "");
+
     COLOR color() {return _color;}
-    void color(int c) {_color = static_cast<COLOR>(c);}
     Piece* deepCopy();
-    void clear();
+    bool moveDown(vector<vector<Piece*>>& board);
     bool moveLeft(vector<vector<Piece*>>& board);
     bool moveRight(vector<vector<Piece*>>& board, int maxMinusOne);
-    bool moveDown(vector<vector<Piece*>>& board);
     bool moveUp(vector<vector<Piece*>>& board, int maxMinusOne);
-    void draw(wxGraphicsContext* gc);
-    string getSaveString();
-    void free();
+    int removeSquare(tuple<int, int> square, vector<vector<Piece*>>* board = nullptr);
     int squareCount() {return _squares.size();}
+    string getSaveString();
     tuple<int, int> square(int id);
+    void addSquare(tuple<int, int> square, vector<vector<Piece*>>* board = nullptr);
+    void calculateCenter();
+    void clear();
+    void color(int c) {_color = static_cast<COLOR>(c);}
+    void draw(wxGraphicsContext* gc, bool drawNumber);
+    void free();
+    void output(string tab = "");
+    void removePieceFromBoard(vector<vector<Piece*>>& board);
+    void addPieceToBoard(vector<vector<Piece*>>& board);
 
   protected:
 
   private:
-    vector<tuple<int, int>> _squares;
     COLOR _color = COLOR::maroon;
+    tuple<double, double> _centerPoint;
+    vector<tuple<int, int>> _squares;
 };
 
 #endif // PIECE_H

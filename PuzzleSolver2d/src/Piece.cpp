@@ -47,6 +47,20 @@ void Piece::addSquare(tuple<int, int> square, vector<vector<Piece*>>* board){
   (*board)[get<0>(square)][get<1>(square)] = this;
 }
 
+void Piece::calculateCenter(){
+  double cX = 0.0;
+  double cY = 0.0;
+  for(tuple<int, int>& s: _squares){
+    cX += get<0>(s);
+    cY += get<1>(s);
+  }
+  if(_squares.size() > 0){
+    cX /= _squares.size();
+    cY /= _squares.size();
+  }
+  _centerPoint = {cX, cY};
+}
+
 int Piece::removeSquare(tuple<int, int> square, vector<vector<Piece*>>* board){
   int squareId = 0;
   for(tuple<int, int> s: _squares){
@@ -129,7 +143,8 @@ bool Piece::moveUp(vector<vector<Piece*>>& board, int maxMinusOne){
   return true;
 }
 
-void Piece::draw(wxGraphicsContext* gc){
+void Piece::draw(wxGraphicsContext* gc, bool drawNumber){
+  // Draw squares
   gc->SetPen(wxPen(wxColour(COLOR_CODE[_color])));
   gc->SetBrush(wxBrush(wxColour(COLOR_CODE[_color])));
   int minX = -1;
@@ -149,6 +164,8 @@ void Piece::draw(wxGraphicsContext* gc){
       maxY = y;
     gc->DrawRectangle(x, y, SQUARE_SIZE, SQUARE_SIZE);
   }
+
+  // Draw frame
   if(minX != -1){
     int dx = maxX-minX+SQUARE_SIZE;
     int dy = maxY-minY+SQUARE_SIZE;
@@ -158,6 +175,18 @@ void Piece::draw(wxGraphicsContext* gc){
     gc->DrawRectangle(minX, minY + dy, dx, 2);
     gc->DrawRectangle(minX, minY, 2, dy);
     gc->DrawRectangle(minX + dx, minY, 2, dy);
+  }
+
+  // Draw number
+  double nX = get<0>(_centerPoint) + 0.5;
+  double nY = get<1>(_centerPoint) + 0.5;
+  if(drawNumber && nX > 0.0 && nY > 0.0){
+    gc->SetPen(wxPen(wxColour("#ffffff")));
+    gc->SetBrush(wxBrush(wxColour("#ffffff")));
+    wxFont myFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    gc->SetFont(myFont, wxColour("#000000"));
+    gc->DrawRectangle(nX * SQUARE_SIZE-11, nY * SQUARE_SIZE - 7, 22, 14);
+    gc->DrawText(to_string((int)_color), nX * SQUARE_SIZE-10, nY * SQUARE_SIZE - 6);
   }
 }
 

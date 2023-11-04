@@ -19,51 +19,52 @@ class Board
     Board(int sizeX, int sizeY);
     Board(ifstream& file);
     virtual ~Board();
-    void addPiece(Piece* piece);
-    void deletePiece(int id);
-    void output(string tab = " ", int detailed = 1);
+
+    Board* closestNeighbour(tuple<double, double> point);
     Board* deepCopy();
-    void clear();
-    vector<Board*> getNextSteps();
-    bool operator==(Board& other);
-    bool matchGoal(Board* goal);
-    void draw(wxGraphicsContext* gc);
-    void connectNeighbours(Board* other);
-    int pieceId(Piece* piece);
-    void calculateStepsLeft(int s);
-    string getSaveString();
-    void free();
-    void stepsLeft(int s) {_stepsLeft = s;}
-    int stepsLeft() {return _stepsLeft;}
-    int pieceCount() {return _pieces.size();}
-    vector<vector<Piece*>>* boardAddress() {return &_board;}
+    Board* neighbour(int i);
     Piece* pieces(int id);
     Piece* pieces(int x, int y);
     bool inBounds(int x, int y);
+    bool matchGoal(Board* goal);
+    bool operator==(Board& other);
+    int id(){return _id;}
+    int pieceCount() {return _pieces.size();}
+    int pieceId(Piece* piece);
     int sizeX() {return _sizeX;};
     int sizeY() {return _sizeY;};
-    int id(){return _id;}
-    void id(int i){_id = i;}
-    void connectNeighbours(vector<Board*>& boards);
-    void addNeighboursWithoutStepsLeft(list<Board*>* boardList);
+    int stepsLeft() {return _stepsLeft;}
     list<string> neighbourDescriptionList();
-    Board* neighbour(int i);
+    string getSaveString();
     tuple<double, double> getMovePoint(Board* other);
+    vector<Board*> getNextSteps();
+    vector<vector<Piece*>>* boardAddress() {return &_board;}
+    void addNeighboursWithoutStepsLeft(list<Board*>* boardList);
     void calculateMovePoints();
-    Board* closestNeighbour(tuple<double, double> point);
+    void calculateStepsLeft(int s);
+    void clear();
+    void connectNeighbours(Board* other);
+    void connectNeighbours(vector<Board*>& boards);
+    void deletePiece(int id);
+    void draw(wxGraphicsContext* gc, bool drawNumbers);
+    void free();
+    void id(int i){_id = i;}
+    void output(string tab = " ", int detailed = 1);
+    void stepsLeft(int s) {_stepsLeft = s;}
+    void addPiece(Piece* piece);
 
   protected:
 
   private:
-    vector<Piece*> _pieces;
-    vector<vector<Piece*>> _board;
-    list<Board*> _neighbours;
-    list<int> _neighboursIndex;
-    list<tuple<double, double>> _centerPoints;
+    int _id;
     int _sizeX;
     int _sizeY;
     int _stepsLeft = -1;
-    int _id;
+    list<Board*> _neighbours;
+    list<int> _neighboursIndex;
+    list<tuple<double, double>> _centerPoints;
+    vector<vector<Piece*>> _board;
+    vector<Piece*> _pieces;
 };
 
 #endif // BOARD_H

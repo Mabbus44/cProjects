@@ -21,55 +21,63 @@ class BoardFrame : public wxWindow{
   public:
     BoardFrame(wxWindow *parent, wxWindowID id, BoardFrameType type, const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize);
     ~BoardFrame();
-    wxSize DoGetBestSize() const override;
+
     Board* board() {return _board;}
+    bool drawNumbers() {return _drawNumbers;}
     void board(Board* board);
+    void drawNumbers(bool drawNumbers) {_drawNumbers = drawNumbers;}
+    wxSize DoGetBestSize() const override;
 
   private:
-    void onPaint(wxPaintEvent& event);
-    void onClick(wxMouseEvent& event);
-    void onRightClick(wxMouseEvent& event);
     Board* _board = nullptr;
     BoardFrameType _type;
+    void onClick(wxMouseEvent& event);
+    void onRightClick(wxMouseEvent& event);
+    void onPaint(wxPaintEvent& event);
+
+    bool _drawNumbers = false;
 };
 
 class MainFrame : public wxFrame
 {
   public:
     MainFrame();
-    void selectBoard(Board* selectedBoard);
-    void selectPiece(int pieceId);
-    void selectPiece(Piece* newPiece);
+
+    void clickSquare(int x, int y);
+    void deletePiece(Piece* piece);
+    void rightClickSquare(int x, int y);
     void selectCollection(BoardCollection* newCollection);
     void selectCollectionBoard(Board* board);
-    void clickSquare(int x, int y);
-    void rightClickSquare(int x, int y);
+    void selectPiece(Piece* newPiece);
+    void selectPiece(int pieceId);
     void switchCollectionListType();
+    void selectBoard(Board* selectedBoard);
 
   private:
-    void onSelectBoard(wxCommandEvent& event);
-    void onNewBoard(wxCommandEvent& event);
-    void onDeleteBoard(wxCommandEvent& event);
-    void onCreateCollection(wxCommandEvent& event);
-    void onSelectPiece(wxCommandEvent& event);
-    void onNewPiece(wxCommandEvent& event);
-    void onDeletePiece(wxCommandEvent& event);
-    void onChangeColor(wxCommandEvent& event);
-    void onChangeNeighbour(wxCommandEvent& event);
-    void onChangeCollectionList(wxCommandEvent& event);
-    void onSetGoal(wxCommandEvent& event);
-    void onChangeCollectionListType(wxCommandEvent& event);
-    void onExit(wxCommandEvent& event);
-    void free();
-    void load(wxCommandEvent& event);
-    void save(wxCommandEvent& event);
+    Board* _selectedBoard = nullptr;
+    Board* _selectedCollectionBoard = nullptr;
+    BoardCollection* _selectedCollection = nullptr;
+    CollectionListType _collectionListType = CollectionListType::start;
+    Piece* _selectedPiece = nullptr;
     vector<Board*> _boards;
     vector<BoardCollection*> _collections;
-    Piece* _selectedPiece = nullptr;
-    Board* _selectedBoard = nullptr;
-    BoardCollection* _selectedCollection = nullptr;
-    Board* _selectedCollectionBoard = nullptr;
-    CollectionListType _collectionListType = CollectionListType::start;
+    void free();
+    void load(wxCommandEvent& event);
+    void onChangeCollectionList(wxCommandEvent& event);
+    void onChangeCollectionListType(wxCommandEvent& event);
+    void onChangeColor(wxCommandEvent& event);
+    void onChangeNeighbour(wxCommandEvent& event);
+    void onCreateCollection(wxCommandEvent& event);
+    void onDeleteBoard(wxCommandEvent& event);
+    void onDeletePiece(wxCommandEvent& event);
+    void onExit(wxCommandEvent& event);
+    void onNewBoard(wxCommandEvent& event);
+    void onNewPiece(wxCommandEvent& event);
+    void onSelectPiece(wxCommandEvent& event);
+    void onSetGoal(wxCommandEvent& event);
+    void onToggleDrawNumber(wxCommandEvent& event);
+    void save(wxCommandEvent& event);
+    void onSelectBoard(wxCommandEvent& event);
 };
 
 enum ID {
@@ -86,7 +94,9 @@ enum ID {
   //Labels
   lblCollectionBoardName,
   //Text controls
-  tctSizeX, tctSizeY
+  tctSizeX, tctSizeY,
+  //Checkboxes
+  chbDrawNumbers
 };
 
 #endif // WXWINDOW_H

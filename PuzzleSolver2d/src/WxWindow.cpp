@@ -75,6 +75,7 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "2D Puzzle solver", wxPoint(
   wxBoxSizer *sizerCol5 = new wxBoxSizer(wxVERTICAL);
   sizerCol5->Add(new wxStaticText(this, ID::lblCollectionBoardName, "Board"));
   sizerCol5->Add(new BoardFrame(this, ID::frmNeighbourFrame, BoardFrameType::boardCollection, wxDefaultPosition, wxSize(4*SQUARE_SIZE+2, 5*SQUARE_SIZE+2)));
+  sizerCol5->Add(new wxCheckBox(this, ID::chbDrawNumbers, "Draw numbers"));
   sizerCol5->Add(new wxComboBox(this, ID::cmbNeighbours));
   sizerCol5->Add(new wxButton(this, ID::btnCollectionListType, "Start"), 0, 0, 0);
   sizerCol5->Add(new wxComboBox(this, ID::cmbCollectionList));
@@ -107,6 +108,8 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "2D Puzzle solver", wxPoint(
 
   Bind(wxEVT_BUTTON, &MainFrame::onSetGoal, this, ID::btnSetGoal);
   Bind(wxEVT_BUTTON, &MainFrame::onChangeCollectionListType, this, ID::btnCollectionListType);
+
+  Bind(wxEVT_CHECKBOX, &MainFrame::onToggleDrawNumber, this, ID::chbDrawNumbers);
 }
 
 void MainFrame::selectBoard(Board* selectedBoard){
@@ -229,15 +232,26 @@ void MainFrame::rightClickSquare(int x, int y){
   Piece* clickedPiece = _selectedBoard->pieces(x, y);
 
   //Remove square
-  if(clickedPiece == nullptr || clickedPiece != _selectedPiece)
+  if(clickedPiece == nullptr)
     return;
-  int squareId = _selectedPiece->removeSquare({x, y}, _selectedBoard->boardAddress());
+  int squareId = clickedPiece->removeSquare({x, y}, _selectedBoard->boardAddress());
   if(squareId == -1)
     return;
 
   //Remove square from list of squares
-  wxListBox* ltb = (wxListBox*)FindWindow(ID::ltbSquares);
-  ltb->Delete(squareId);
+  if(_selectedPiece == clickedPiece){
+    wxListBox* ltb = (wxListBox*)FindWindow(ID::ltbSquares);
+    int selectedId = ltb->GetSelection();
+    ltb->Delete(squareId);
+    if(selectedId >= squareId){
+      selectedId--;
+      ltb->SetSelection(selectedId);
+    }
+  }
+
+  //Remove piece if no squares
+  if(clickedPiece->squareCount() == 0)
+    deletePiece(clickedPiece);
 
   //Redraw board
   auto frm = (BoardFrame*)FindWindow(ID::frmBoardFrame);
@@ -302,8 +316,7 @@ void MainFrame::load(wxCommandEvent& event){
     while(inputFile.peek() != 'e'){
       newCollection = new BoardCollection(inputFile);
       _collections.push_back(newCollection);
-      ltb->Append("Collection" + to_string(_collections.size() - 1));
-      newCollection->connectGoal(_boards);
+      ltb->Append("Col" + to_string(_collections.size() - 1) + "(" + to_string(newCollection->boardCount()) + ")");
     }
     getline(inputFile, line);
     if(_collections.size() > 0){
@@ -355,6 +368,10 @@ void MainFrame::onNewBoard(wxCommandEvent& event){
     sizeY = wxAtoi(tSizeY->GetValue());
   }catch(exception const& e){
     cout << "Error: invalid x/y size" << endl;
+  }
+  if(sizeX == 0 || sizeY == 0){
+    cout << "Invalid size" << endl;
+    return;
   }
 
   Board* newBoard = new Board(sizeX, sizeY);
@@ -413,7 +430,7 @@ void MainFrame::onCreateCollection(wxCommandEvent& event){
   _collections.push_back(newCollection);
 
   auto ltb = (wxListBox*)FindWindow(ID::ltbCollections);
-  ltb->Append("Collection" + to_string(_collections.size() - 1));
+  ltb->Append("Col" + to_string(_collections.size() - 1) + "(" + to_string(newCollection->boardCount()) + ")");
   ltb->Select(_collections.size() - 1);
   selectCollection(newCollection);
 }
@@ -436,8 +453,12 @@ void MainFrame::onDeletePiece(wxCommandEvent& event){
   if(_selectedBoard == nullptr || _selectedPiece == nullptr)
     return;
 
+  deletePiece(_selectedPiece);
+}
+
+void MainFrame::deletePiece(Piece* piece){
   int pieceId = 0;
-  while(pieceId < _selectedBoard->pieceCount() && _selectedBoard->pieces(pieceId) != _selectedPiece)
+  while(pieceId < _selectedBoard->pieceCount() && _selectedBoard->pieces(pieceId) != piece)
     pieceId++;
   _selectedBoard->deletePiece(pieceId);
   selectPiece(nullptr);
@@ -497,8 +518,18 @@ void MainFrame::onSetGoal(wxCommandEvent& event){
     cout << "No collection selected" << endl;
     return;
   }
+  if(_selectedBoard->sizeX() != _selectedCollection->board(0)->sizeX() || _selectedBoard->sizeY() != _selectedCollection->board(0)->sizeY()){
+    cout << "Goal of invalid size" << endl;
+    return;
+  }
   _selectedCollection->goal(_selectedBoard->deepCopy());
   switchCollectionListType();
+}
+
+void MainFrame::onToggleDrawNumber(wxCommandEvent& event){
+  BoardFrame* frm = (BoardFrame*)FindWindow(ID::frmNeighbourFrame);
+  frm->drawNumbers(!(frm->drawNumbers()));
+  frm->Refresh();
 }
 
 void MainFrame::onChangeCollectionListType(wxCommandEvent& event){
@@ -573,7 +604,7 @@ void BoardFrame::onPaint(wxPaintEvent& event){
     gc->DrawRectangle(0, 0, width, sizeY);
     gc->DrawRectangle(sizeX, 0, width, sizeY);
     if(_board)
-      _board->draw(gc);
+      _board->draw(gc, _drawNumbers);
 
     delete gc;
   }

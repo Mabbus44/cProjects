@@ -19,14 +19,6 @@ BoardCollection::BoardCollection(ifstream& file){
     addBoard(new Board(file));
   }
   getline(file, line);
-
-  if(file.peek() == 'e')
-    _goalId = -1;
-  else{
-    getline(file, line);
-    _goalId = stoi(line);
-  }
-  getline(file, line);
   connectNeighbours();
   calculateMovePoints();
   calculateBoardLists();
@@ -68,18 +60,16 @@ void BoardCollection::generateChildren(){
   calculateMovePoints();
 }
 
-void BoardCollection::setStepsLeft(){
-  if(_goal == nullptr){
-    cout << "Error: goal not set" << endl;
+void BoardCollection::setStepsLeft(Board* goal){
+  if(goal == nullptr)
     return;
-  }
   list<Board*>* toBeCalculated;
   list<Board*>* beingCalculated;
   list<Board*>* temp;
   beingCalculated = new list<Board*>;
   toBeCalculated = new list<Board*>;
   for(Board* b: _boards){
-    if(b->matchGoal(_goal))
+    if(b->matchGoal(goal))
       beingCalculated->push_back(b);
   }
 
@@ -117,9 +107,6 @@ string BoardCollection::getSaveString(){
   for(Board* b: _boards)
     ans.append(b->getSaveString());
   ans.append("e\n");
-  if(_goal != nullptr)
-    ans.append(to_string(_goal->id()) + "\n");
-  ans.append("e\n");
   return ans;
 }
 
@@ -130,14 +117,11 @@ void BoardCollection::free(){
   }
 }
 
-void BoardCollection::goal(Board* g){
-  if(_goal != nullptr){
-    for(Board* b: _boards){
-      b->stepsLeft(-1);
-    }
+void BoardCollection::goal(Board* goal){
+  for(Board* b: _boards){
+    b->stepsLeft(-1);
   }
-  _goal = g;
-  setStepsLeft();
+  setStepsLeft(goal);
   calculateBoardLists();
 }
 
@@ -148,20 +132,6 @@ void BoardCollection::connectNeighbours(){
 
 void BoardCollection::addBoard(Board* board){
   _boards.push_back(board);
-}
-
-void BoardCollection::connectGoal(vector<Board*>& boards){
-  if(_goalId < 0)
-    return;
-  int boardId = 0;
-  bool foundGoal = false;
-  while(boardId < (int)boards.size() && !foundGoal){
-    if(boards[boardId]->id() == _goalId){
-      foundGoal = true;
-      _goal = boards[boardId];
-    }
-    boardId++;
-  }
 }
 
 void BoardCollection::calculateMovePoints(){

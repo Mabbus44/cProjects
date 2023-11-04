@@ -10,34 +10,32 @@ class BoardCollection
     BoardCollection();
     BoardCollection(ifstream& file);
     virtual ~BoardCollection();
-    void setStartingBoard(Board* startingBoard);
-    void generateChildren();
-    void setStepsLeft();
-    void output(string tab = "");
-    string getSaveString();
-    void free();
-    void goal(Board* g);
+
     Board* board(int i) {if((int)_boards.size() > i) {return _boards[i];} else {return nullptr;}}
     Board* goalBoard(int i) {if((int)_goalBoards.size() > i) {return _goalBoards[i];} else {return nullptr;}}
     Board* mostStepsBoard(int i) {if((int)_mostStepsBoards.size() > i) {return _mostStepsBoards[i];} else {return nullptr;}}
-    void connectNeighbours();
-    void addBoard(Board* board);
-    void connectGoal(vector<Board*>& boards);
-    void calculateMovePoints();
-    void calculateBoardLists();
-    list<string> startDescriptionList();
+    int boardCount() {return _boards.size();}
     list<string> goalDescriptionList();
     list<string> mostDescriptionList();
-
+    list<string> startDescriptionList();
+    string getSaveString();
+    void addBoard(Board* board);
+    void calculateBoardLists();
+    void calculateMovePoints();
+    void connectNeighbours();
+    void free();
+    void generateChildren();
+    void goal(Board* goal);
+    void output(string tab = "");
+    void setStepsLeft(Board* goal);
+    void setStartingBoard(Board* startingBoard);
 
   protected:
 
   private:
-    vector<Board*> _boards;
     vector<Board*> _goalBoards;
     vector<Board*> _mostStepsBoards;
-    Board* _goal = nullptr;
-    int _goalId;
+    vector<Board*> _boards;
 };
 
 #endif // BOARDCOLLECTION_H
