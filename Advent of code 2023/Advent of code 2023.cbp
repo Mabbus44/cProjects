@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Advent of code 2023" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Advent of code 2022" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Advent of code 2022" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="include/Common.h" />
+		<Unit filename="include/Day01.h" />
+		<Unit filename="include/Day02.h" />
+		<Unit filename="include/Day03.h" />
+		<Unit filename="include/Day04.h" />
+		<Unit filename="include/Day05.h" />
+		<Unit filename="include/Day06.h" />
+		<Unit filename="include/Day07.h" />
+		<Unit filename="include/Day08.h" />
+		<Unit filename="include/Day09.h" />
+		<Unit filename="include/Day10.h" />
+		<Unit filename="include/Day11.h" />
+		<Unit filename="include/Day12.h" />
+		<Unit filename="include/Day13.h" />
+		<Unit filename="include/Day14.h" />
+		<Unit filename="include/Day15.h" />
+		<Unit filename="include/Day16.h" />
+		<Unit filename="include/Day17.h" />
+		<Unit filename="include/Day18.h" />
+		<Unit filename="include/Day19.h" />
+		<Unit filename="include/Day20.h" />
+		<Unit filename="include/Day21.h" />
+		<Unit filename="include/Day22.h" />
+		<Unit filename="include/Day23.h" />
+		<Unit filename="include/Day24.h" />
+		<Unit filename="include/Day25.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/Common.cpp" />
+		<Unit filename="src/Day01.cpp" />
+		<Unit filename="src/Day02.cpp" />
+		<Unit filename="src/Day03.cpp" />
+		<Unit filename="src/Day04.cpp" />
+		<Unit filename="src/Day05.cpp" />
+		<Unit filename="src/Day06.cpp" />
+		<Unit filename="src/Day07.cpp" />
+		<Unit filename="src/Day08.cpp" />
+		<Unit filename="src/Day09.cpp" />
+		<Unit filename="src/Day10.cpp" />
+		<Unit filename="src/Day11.cpp" />
+		<Unit filename="src/Day12.cpp" />
+		<Unit filename="src/Day13.cpp" />
+		<Unit filename="src/Day14.cpp" />
+		<Unit filename="src/Day15.cpp" />
+		<Unit filename="src/Day16.cpp" />
+		<Unit filename="src/Day17.cpp" />
+		<Unit filename="src/Day18.cpp" />
+		<Unit filename="src/Day19.cpp" />
+		<Unit filename="src/Day20.cpp" />
+		<Unit filename="src/Day21.cpp" />
+		<Unit filename="src/Day22.cpp" />
+		<Unit filename="src/Day23.cpp" />
+		<Unit filename="src/Day24.cpp" />
+		<Unit filename="src/Day25.cpp" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
