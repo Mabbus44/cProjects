@@ -17,6 +17,7 @@ class Day01
   protected:
 
   private:
+    size_t findLast(string subStr, string str);
 };
 
 #endif // DAY01_H
