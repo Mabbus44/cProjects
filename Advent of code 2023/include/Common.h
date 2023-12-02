@@ -14,7 +14,7 @@ class InputLoader
     InputLoader(string filename);
     virtual ~InputLoader();
     void resetFile();
-    vector<string> splitString(string s, vector<string> delimiters = {", "});
+    static vector<string> splitString(string s, vector<string> delimiters = {", "});
     static vector<int> toInt(vector<string> vs);
     static string ltrim(string s);
     static string rtrim(string s);
