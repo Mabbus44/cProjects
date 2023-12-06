@@ -54,6 +54,20 @@ vector<int> InputLoader::toInt(vector<string> vs){
   return vi;
 }
 
+vector<__int64> InputLoader::toInt64(vector<string> vs){
+  vector<__int64> vi;
+  for(string s:vs){
+    char *endChar;
+    const char* trimmedString = trim(s).c_str();
+    __int64 convertedVal = strtoull(trimmedString, &endChar, 10);
+    if(endChar != trimmedString)
+      vi.push_back(convertedVal);
+    else
+      cout << "could not convert \"" << trim(s) << "\" to int" << endl;
+  }
+  return vi;
+}
+
 string InputLoader::ltrim(string s) {
   s.erase(s.begin(), find_if(s.begin(), s.end(),
     not1(ptr_fun<int, int>(isspace))));
