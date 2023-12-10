@@ -123,3 +123,49 @@ vector<vector<char>> InputLoader::toVectorChar2d(){
     ret.push_back(vector<char>(line.begin(), line.end()));
   return ret;
 }
+
+void PrimeFactorizer::findNewPrimes(int maxVal){
+  int testVal=3;
+  if(_primes.size() == 0){
+    _primes.push_back(2);
+  }else{
+    testVal = _primes.back() + 2;
+  }
+  while(testVal <= maxVal){
+    if(isPrime(testVal)){
+      _primes.push_back(testVal);
+    }
+    testVal += 2;
+  }
+}
+
+bool PrimeFactorizer::isPrime(int num){
+  int i=0;
+  while(_primes[i] * _primes[i] <= num){
+    if(num % _primes[i] == 0)
+      return false;
+    i++;
+    if(i >= (int)_primes.size())
+      findNewPrimes(_primes.back() * 10);
+  }
+  return true;
+}
+
+vector<int> PrimeFactorizer::factorize(int num){
+  vector<int> ret;
+  int i=0;
+  while(_primes[i] * _primes[i] < num){
+    if(num % _primes[i] == 0){
+      num /= _primes[i];
+      ret.push_back(_primes[i]);
+    }else{
+      i++;
+    }
+    if(i >= (int)_primes.size()){
+      findNewPrimes(_primes.back() * 10);
+    }
+  }
+  if(num>1)
+    ret.push_back(num);
+  return ret;
+}

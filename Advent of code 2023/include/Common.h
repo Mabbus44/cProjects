@@ -32,6 +32,17 @@ class InputLoader
     ifstream _file;
 };
 
+class PrimeFactorizer{
+  public:
+    PrimeFactorizer(){findNewPrimes(1000);}
+    virtual ~PrimeFactorizer(){}
+    void findNewPrimes(int maxVal);
+    bool isPrime(int num);
+    vector<int> factorize(int num);
+  private:
+    vector<int> _primes;
+};
+
 template <class T>
 class BtNode
 {
