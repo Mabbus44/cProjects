@@ -6,6 +6,24 @@
 
 using namespace std;
 
+class Dish{
+public:
+  Dish(){}
+  Dish(vector<vector<char>> input) {load(input);}
+  virtual ~Dish(){}
+  bool operator==(Dish& other);
+  void load(vector<vector<char>> input);
+  void moveNorth();
+  void moveWest();
+  void moveSouth();
+  void moveEast();
+  void cycle();
+  void output();
+  int calcLoad();
+private:
+  vector<vector<char>> _dish;
+};
+
 class Day14
 {
   public:
