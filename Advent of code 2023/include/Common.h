@@ -16,6 +16,7 @@ class InputLoader
     void resetFile();
     static vector<string> splitString(string s, vector<string> delimiters = {", "});
     static vector<int> toInt(vector<string> vs);
+    static int toSingleInt(string s);
     static vector<__int64> toInt64(vector<string> vs);
     static string ltrim(string s);
     static string rtrim(string s);

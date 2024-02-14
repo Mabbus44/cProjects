@@ -54,6 +54,15 @@ vector<int> InputLoader::toInt(vector<string> vs){
   return vi;
 }
 
+int InputLoader::toSingleInt(string s){
+  try{
+    return stoi(trim(s));
+  }catch(...){
+    cout << "could not convert \"" << trim(s) << "\" to int" << endl;
+  }
+  return 0;
+}
+
 vector<__int64> InputLoader::toInt64(vector<string> vs){
   vector<__int64> vi;
   for(string s:vs){
