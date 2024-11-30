@@ -1,6 +1,7 @@
 #ifndef DAY03_H
 #define DAY03_H
 #include "Common.h"
+#include <set>
 
 class Day03
 {
