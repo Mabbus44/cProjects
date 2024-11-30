@@ -1,6 +1,7 @@
 #ifndef DAY02_H
 #define DAY02_H
 #include "Common.h"
+#include <math.h>
 
 class Day02
 {
