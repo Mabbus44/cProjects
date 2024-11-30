@@ -1,0 +1,24 @@
+DT tree of cubes
+Saved in files in order of discovery
+Cube value is determine by comparing value of position 0 first, then 1....
+Each new cube is rotated in all 24 directions, only the direction with the smallest val is saved
+Cubes refere to each other by an int, starting at 0, actual cube is found in
+file (int)(ADR / CUBES_PER_FILE)
+position ADR % CUBER_PER_FILE
+
+
+Rebalancing DT tree:
+
+Calculate height of each node in DT tree will be very costly since it requires reading/writing to file for all cubes.
+
+If height is to high when you inseart a node then walk on step up and count all child nodes until you can decrese hight with x by perfectly balancing the tree bellow there.
+Perfect balance in "Balance tree 1986.pdf", and this method might be used in "Balance tree uppsala.pdf" if I understood correct.
+
+
+TODO:
+* Write stats when starting new tests (testNodeId, nodeCount, moveCount, treeDepth)
+* Fix start from file (only works if data file is removed now).
+* Rebalance part of tree to height A if height is above B
+* Unload part of tree
+* Support multiple datafiles
+* Sanity-check on files before starting (if program was aborten in the middle of a write).

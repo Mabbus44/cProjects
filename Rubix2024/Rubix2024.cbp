@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Rubix2019" />
+		<Option title="Rubix2024" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/Rubix2019" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/Rubix2024" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -17,7 +17,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/Rubix2019" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/Rubix2024" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -34,20 +34,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="include/BinaryNode.h" />
-		<Unit filename="include/BinaryNodeF.h" />
-		<Unit filename="include/FileHandler.h" />
 		<Unit filename="include/RubixCube.h" />
-		<Unit filename="include/RubixCube20B.h" />
-		<Unit filename="include/RubixCube20BF.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="src/BinaryNodeF.cpp" />
-		<Unit filename="src/FileHandler.cpp" />
 		<Unit filename="src/RubixCube.cpp" />
-		<Unit filename="src/RubixCube20B.cpp" />
-		<Unit filename="src/RubixCube20BF.cpp" />
-		<Extensions>
-			<lib_finder disable_auto="1" />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
