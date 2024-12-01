@@ -125,6 +125,12 @@ std::vector<std::vector<std::string>> InputLoader::toVectorStr2d(std::vector<std
   return ret;
 }
 
+std::vector<char> InputLoader::toVectorChar(){
+  std::string  line;
+  getline(_file, line);
+  return std::vector<char>(line.begin(), line.end());
+}
+
 std::vector<std::vector<char>> InputLoader::toVectorChar2d(){
   std::vector<std::vector<char>> ret;
   std::string  line;

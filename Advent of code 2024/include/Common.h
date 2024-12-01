@@ -24,6 +24,7 @@ class InputLoader
     std::vector<std::vector<int>> toVectorInt2d(std::vector<std::string> delimiters = {", "});
     std::vector<std::string> toVectorStr();
     std::vector<std::vector<std::string>> toVectorStr2d(std::vector<std::string> delimiters = {", "});
+    std::vector<char> toVectorChar();
     std::vector<std::vector<char>> toVectorChar2d();
 
   protected:
@@ -102,5 +103,39 @@ void BtNode<T>::clear(){
     right = nullptr;
   }
 }
+
+class Point2D {
+  public:
+    int x, y;
+    Point2D() { this->x = 0; this->y = 0;}
+    Point2D(int a, int b) { this->x = a; this->y = b; }
+    Point2D operator+(const Point2D& other) const {return Point2D(x+other.x, y+other.y);}
+    Point2D operator-(const Point2D& other) const {return Point2D(x-other.x, y-other.y);}
+    Point2D operator+(Point2D& other) {return Point2D(x+other.x, y+other.y);}
+    Point2D operator-(Point2D& other) {return Point2D(x-other.x, y-other.y);}
+    bool operator==(Point2D& other) {return x==other.x && y==other.y;}
+    bool operator<(const Point2D& other) const  {return y<other.y || (y==other.y && x<other.x);}
+    bool operator>(const Point2D& other) const {return y>other.y || (y==other.y && x>other.x);}
+    bool operator<(Point2D& other) {return y<other.y || (y==other.y && x<other.x);}
+    bool operator>(Point2D& other) {return y>other.y || (y==other.y && x>other.x);}
+    void output() {std::cout << "(" << x << "," << y << ")";}
+};
+
+class Point3D {
+  public:
+    int x, y, z;
+    Point3D() { this->x = 0; this->y = 0; this->z = 0;}
+    Point3D(int a, int b, int c) { this->x = a; this->y = b; this->z = c;}
+    Point3D operator+(const Point3D& other) const {return Point3D(x+other.x, y+other.y, z+other.z);}
+    Point3D operator-(const Point3D& other) const {return Point3D(x-other.x, y-other.y, z-other.z);}
+    Point3D operator+(Point3D& other) {return Point3D(x+other.x, y+other.y, z+other.z);}
+    Point3D operator-(Point3D& other) {return Point3D(x-other.x, y-other.y, z-other.z);}
+    bool operator==(Point3D& other) {return x==other.x && y==other.y;}
+    bool operator<(const Point3D& other) const {return z<other.z || (z==other.z && (y<other.y || (y==other.y && x<other.x)));}
+    bool operator>(const Point3D& other) const {return z>other.z || (z==other.z && (y>other.y || (y==other.y && x>other.x)));}
+    bool operator<(Point3D& other) {return z<other.z || (z==other.z && (y<other.y || (y==other.y && x<other.x)));}
+    bool operator>(Point3D& other) {return z>other.z || (z==other.z && (y>other.y || (y==other.y && x>other.x)));}
+    void output() {std::cout << "(" << x << "," << y << "," << z << ")";}
+};
 
 #endif // COMMON_H
