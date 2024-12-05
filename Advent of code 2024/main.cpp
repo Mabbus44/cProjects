@@ -1,11 +1,11 @@
 #include <iostream>
 #include "Common.h"
-#include "Day04.h"
+#include "Day05.h"
 
 int main()
 {
-    Day04 d;
-    d.part1("input04.txt");
-    d.part2("input04.txt");
+    Day05 d;
+    d.part1("input05");
+    d.part2("input05");
     return 0;
 }
