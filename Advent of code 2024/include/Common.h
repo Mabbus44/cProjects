@@ -15,13 +15,14 @@ class InputLoader
     void resetFile();
     static std::vector<std::string> splitString(std::string s, std::vector<std::string> delimiters = {", "});
     static std::vector<int> toInt(std::vector<std::string> vs);
-    static int toSingleInt(std::string s);
     static std::vector<__int64> toInt64(std::vector<std::string> vs);
+    static int toSingleInt(std::string s);
     static std::string ltrim(std::string s);
     static std::string rtrim(std::string s);
     static std::string trim(std::string s);
     std::vector<int> toVectorInt();
     std::vector<std::vector<int>> toVectorInt2d(std::vector<std::string> delimiters = {", "});
+    std::vector<std::vector<__int64>> toVectorInt642d(std::vector<std::string> delimiters = {", "});
     std::vector<std::string> toVectorStr();
     std::vector<std::vector<std::string>> toVectorStr2d(std::vector<std::string> delimiters = {", "});
     std::vector<char> toVectorChar();

@@ -60,7 +60,6 @@ bool Day04::findXmas(int x, int y, int dX, int dY){
 }
 
 bool Day04::findXdashMas(int x, int y){
-  int wl=1;
   if(x-1<0 || x+1>=(int)input[0].size() || y-1<0 || y+1>=(int)input.size())
     return false;
   if(input[y][x] != 'A')

@@ -109,6 +109,14 @@ std::vector<std::vector<int>> InputLoader::toVectorInt2d(std::vector<std::string
   return ret;
 }
 
+std::vector<std::vector<__int64>> InputLoader::toVectorInt642d(std::vector<std::string> delimiters){
+  std::vector<std::vector<__int64>> ret;
+  std::string line;
+  while(getline(_file, line))
+    ret.push_back(toInt64(splitString(line, delimiters)));
+  return ret;
+}
+
 std::vector<std::string> InputLoader::toVectorStr(){
   std::vector<std::string> ret;
   std::string line;
