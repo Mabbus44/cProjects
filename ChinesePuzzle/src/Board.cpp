@@ -76,11 +76,11 @@ void Board::getAllPossibleBoards(PIECE_TYPE pieceType, int pieceCount){
     case TWO_ONE:
       break;
     case TWO_TWO:
-      for(int x=0; x<3: x++){
+      for(int x=0; x<3; x++){
         for(int y=0; y<4; y++){
           Board newBoard(*this);
           if(newBoard.tryAdd(9, x, y)){
-            newBoard.getAllPossibleBoard(TWO_ONE, 0);
+            newBoard.getAllPossibleBoards(TWO_ONE, 0);
           }else{
             newBoard.free();
           }
