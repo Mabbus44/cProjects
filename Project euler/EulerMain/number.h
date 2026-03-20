@@ -5,9 +5,9 @@
 #ifndef NUMBERRAZ
 #define NUMBERRAZ
 
-
-//Digit[0] is sign (1 or -1);
-//Digit[1] is least significant digit;
+// From 2020
+// Digit[0] is sign (1 or -1);
+// Digit[1] is least significant digit;
 class Number : public Variable
 {
 private:

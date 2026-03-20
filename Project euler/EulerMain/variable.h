@@ -4,6 +4,7 @@ using namespace std;
 #ifndef VARIABLE
 #define VARIABLE
 
+// From 2020
 class Variable{
 private:
   Variable* content;
