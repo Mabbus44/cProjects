@@ -36,4 +36,6 @@ class BigInt
 };
 
 int reduceTwos(unsigned long long& num);
+int factorizeList();
+std::vector<unsigned long long> factorizeNum(unsigned long long num, std::vector<unsigned long long>& primes, unsigned long long primeCount);
 #endif // BIGINT_H

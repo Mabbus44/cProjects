@@ -19,8 +19,12 @@ int main()
   // 64bit:     10 not found
   // Found bug, was missing numberOfTwosFromK. valuse above are probably worse in readlity, gonna run again.
   // Found a second bug, reduce by 2s only did 8 bits instead of 64. Dont know how these two will affect the result. Have to run again.
+  // Ran again now, took perhaps 12 hours, and now its more not found :(
+  // 64bit:     31 not found
 
   // Only run the program for prime D, since they surely are the biggest ones (trust me bro).
+  factorizeList();
+  return 0;
   std::set<unsigned long long> primes = {2,3,5,7,11,13,17,19,23,29,
 31,37,41,43,47,53,59,61,67,71,
 73,79,83,89,97,101,103,107,109,113,
