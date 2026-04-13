@@ -2,309 +2,177 @@
 #include <vector>
 #include <set>
 #include <math.h>
+#include <chrono>
+#include <algorithm>
 #include "../EulerMain/OutputSelected.h"
 #include "../EulerMain/BigInt.h"
 
+bool isSquareBabylonian(unsigned long long num);
+bool isSquareBinary(unsigned long long num);
+bool checkBothSquares(unsigned long long d, unsigned long long k, bool allowFactorTwos);
+bool removeFactorTwos(unsigned long long& num);
+int removeFactorTwosCount(unsigned long long& num);
+unsigned long long pow32minus1 = 4294967295;
+unsigned long long pow64minus1 = 18446744073709551615;
+
+
 int main()
 {
-  // 4,294,967,296 squares found (including 0) <= 8 byte unsigned int max (no shit sherlook, ofc its the square of 2^64 = 2^32)
-  // Memory will run out trying to save all squares in a vector even if we didnt have to use a custom bignumber class.
-  // long long = 8 byte. 2^64-1 = 18,446,744,073,709,551,615 (18 * 10^18)
+  // I come no futher with sets. I will now use an algoritm to calculate square roots instead
+  // This program does not work for d=2, its a special case, so I skip it
+  std::vector<unsigned long long> dVector =
+    {3,5,6,8,10,12,15,18,20,24,26,28,32,38,40,45,48,50,51,52,58,60,63,65,66,72,75,76,77,78,80,82,87,92,94,95,96,102,104,105,106,111,112,115,116,117,119,122,123,124,125,128,133,148,152,153,160,166,170,172,180,185,186,192,200,203,204,208,209,210,213,217,221,232,234,236,238,240,242,244,245,246,247,249,252,254,255,260,261,262,264,273,275,278,279,285,288,290,291,292,294,295,300,303,304,305,306,308,309,312,314,315,318,319,320,322,328,334,335,339,343,348,350,351,355,356,357,358,362,365,366,368,370,371,376,380,381,382,384,385,386,387,388,390,391,399,402,403,405,406,407,408,411,414,415,416,417,420,422,423,424,425,426,428,429,430,434,436,437,438,442,444,445,446,448,450,451,452,458,460,464,465,466,468,469,470,471,473,474,475,476,478,485,486,488,489,490,492,493,494,496,497,498,500,505,507,508,510,511,512,515,525,527,531,532,534,539,546,549,550,555,556,558,561,562,566,570,573,574,578,581,583,585,590,592,594,596,597,605,608,609,610,611,612,614,615,621,623,627,629,630,638,639,640,652,654,655,658,664,667,674,678,680,682,687,688,689,690,694,695,703,706,710,713,715,720,723,734,735,738,740,744,745,750,753,754,759,762,763,768,772,775,779,783,786,788,790,791,794,798,800,812,816,818,822,831,832,836,838,840,843,844,845,846,847,851,852,865,868,869,870,871,873,874,882,884,886,890,891,894,897,902,903,906,909,914,916,917,918,922,923,928,932,934,935,936,938,939,943,944,946,952,954,958,960,962,963,964,966,968,970,975,976,979,980,984,985,986,988,989,990,994,995,996,999};
 
-  // Dont know what I was thinking when writing lines above. I already found all 64 bit squares.
-  // Ran third try all 64 bit/100 squares, 64bit/10 squares and all 64bit squares. Last one took a few hours.
-  // Se text files for output
-  // 64bit/100: 23 not found
-  // 64bit/10:  18 not found
-  // 64bit:     10 not found
-  // Found bug, was missing numberOfTwosFromK. valuse above are probably worse in readlity, gonna run again.
-  // Found a second bug, reduce by 2s only did 8 bits instead of 64. Dont know how these two will affect the result. Have to run again.
-  // Ran again now, took perhaps 12 hours, and now its more not found :(
-  // 64bit:     31 not found
+    // All non primes {6,8,10,12,15,18,20,24,26,28,32,38,40,45,48,50,51,52,58,60,63,65,66,72,75,76,77,78,80,82,87,92,94,95,96,102,104,105,106,111,112,115,116,117,119,122,123,124,125,128,133,148,152,153,160,166,170,172,180,185,186,192,200,203,204,208,209,210,213,217,221,232,234,236,238,240,242,244,245,246,247,249,252,254,255,260,261,262,264,273,275,278,279,285,288,290,291,292,294,295,300,303,304,305,306,308,309,312,314,315,318,319,320,322,328,334,335,339,343,348,350,351,355,356,357,358,362,365,366,368,370,371,376,380,381,382,384,385,386,387,388,390,391,399,402,403,405,406,407,408,411,414,415,416,417,420,422,423,424,425,426,428,429,430,434,436,437,438,442,444,445,446,448,450,451,452,458,460,464,465,466,468,469,470,471,473,474,475,476,478,485,486,488,489,490,492,493,494,496,497,498,500,505,507,508,510,511,512,515,525,527,531,532,534,539,546,549,550,555,556,558,561,562,566,570,573,574,578,581,583,585,590,592,594,596,597,605,608,609,610,611,612,614,615,621,623,627,629,630,638,639,640,652,654,655,658,664,667,674,678,680,682,687,688,689,690,694,695,703,706,710,713,715,720,723,734,735,738,740,744,745,750,753,754,759,762,763,768,772,775,779,783,786,788,790,791,794,798,800,812,816,818,822,831,832,836,838,840,843,844,845,846,847,851,852,865,868,869,870,871,873,874,882,884,886,890,891,894,897,902,903,906,909,914,916,917,918,922,923,928,932,934,935,936,938,939,943,944,946,952,954,958,960,962,963,964,966,968,970,975,976,979,980,984,985,986,988,989,990,994,995,996,999}
+    // All primes {3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661,673,677,683,691,701,709,719,727,733,739,743,751,757,761,769,773,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997}
+    // Easy {2,3,7,11,23,47,79,83,167,223,227,359,439,443,727,839,5,17,37,101,197,257,401,577,677,19,59,107,499,659,31,71,383,503,13,41,269,557,43,131,563,983,29,263,887,67,743,827,53,761,347,103,587,467,89,479,389,113,173,251,179,229,239,73,127,293,137,191,311,373,647,683,733,307,431,163,701,349,283,139,419,97,233,151,947,997,863,353,61,787,367,199,877,523,149,491,607,271,719,317,593,211,643,773,757,281,971,193,599,487,857,547,157,911,463,829,709,109,797,461,617,331,379,241,521,313,449,509,619}
+    // Hard {941,811,967,337,181,953,653,569}
+    // Unsolved {277,397,409,421,433,457,541,571,601,613,631,641,661,673,691,739,751,769,809,821,823,853,859,881,883,907,919,929,937,977,991}
 
-  // Only run the program for prime D, since they surely are the biggest ones (trust me bro).
-  factorizeList();
-  return 0;
-  std::set<unsigned long long> primes = {2,3,5,7,11,13,17,19,23,29,
-31,37,41,43,47,53,59,61,67,71,
-73,79,83,89,97,101,103,107,109,113,
-127,131,137,139,149,151,157,163,167,173,
-179,181,191,193,197,199,211,223,227,229,
-233,239,241,251,257,263,269,271,277,281,
-283,293,307,311,313,317,331,337,347,349,
-353,359,367,373,379,383,389,397,401,409,
-419,421,431,433,439,443,449,457,461,463,
-467,479,487,491,499,503,509,521,523,541,
-547,557,563,569,571,577,587,593,599,601,
-607,613,617,619,631,641,643,647,653,659,
-661,673,677,683,691,701,709,719,727,733,
-739,743,751,757,761,769,773,787,797,809,
-811,821,823,827,829,839,853,857,859,863,
-877,881,883,887,907,911,919,929,937,941,
-947,953,967,971,977,983,991,997};
-    std::vector<unsigned long long> dVector;
-    for(int i=2; i<=1000; i++){
-        int squareRootN = round(sqrt(i));
-        if(squareRootN*squareRootN != i && primes.find(i) != primes.end()){
-            dVector.push_back(i);
-        }
-    }
-    /* Super naive sollution
-    for(int oneD: d){
-        unsigned long long dd = oneD;
-        unsigned long long y = 1;
-        unsigned long long xx = y*y*dd+1;
-        unsigned long long x = std::sqrt(xx);
-        while(x*x != xx){
-            y++;
-            xx = y*y*dd+1;
-            x = std::sqrt(xx);
-        }
-        std::cout << "D " << dd << " x " << x << " y " << y << std::endl;
-    }*/
-
-    /* First try
-    BigInt zero(0);
-    BigInt x(1);
-    BigInt y(1);
-    BigInt x2(1);
-    BigInt y2(1);
-    OutputSelected output;
-    unsigned long long yAsLong = 1;
-    while(dVector.size() > 1){
-        for(int i=0; i<(int)dVector.size(); i++){
-            //BigInt dAsBig()
-            y2 = y*y*d[i];
-            ++y2;
-            while(x2<y2){
-                ++x;
-                x2 = x*x;
-            }
-            if(x2==y2){
-                std::cout << d[i] << ": ";
-                x2.output();
-                std::cout << std::endl;
-                dVector.erase(dVector.begin()+i);
-                i--;
-            }
-        }
-        if(output.shouldOutput(yAsLong)){
-            std::cout << "Remaining after ";
-            y.output();
-            std::cout << " is " << dVector.size() << ": ";
-            for(int i:d)
-                std::cout << i << ", ";
-            std::cout << std::endl;
-        }
-        ++y;
-        yAsLong++;
-        x=y;
-        x2 = x*x;
-    }*/
-
-    // Second try with 64 bit int
-    // This solved 794/969, so 175 not found. took a few minutes
-    /*unsigned long long maxX = 4294967296; // 2^32
-    unsigned long long biggestX = 0;
-    unsigned long long bestD = 0;
-    int maxXReachedCount = 0;
-    for(unsigned long long d: dVector){
-        unsigned long long x=1;
-        unsigned long long x2=d+1;
-        unsigned long long dx2 = 3*d;
-        unsigned long long xJump = std::sqrt(d);
-        if(xJump < 3)
-            xJump = 1;
-        else
-            xJump -= 2;
-        bool doneWithD = false;
-        while(!doneWithD){
-            while(x*x < x2 && x<maxX)
-                x++;
-            if(x >= maxX){
-                std::cout << d << ": Max X reached" << std::endl;
-                maxXReachedCount++;
-                doneWithD = true;
-            }else if(x*x == x2){
-                std::cout << d << ": " << x;
-                if(x > biggestX){
-                    biggestX = x;
-                    bestD = d;
-                    std::cout << " (best so far)";
-                }
-                std::cout << std::endl;
-                doneWithD = true;
-            }else{
-                x2 += dx2;
-                dx2 += d*2;
-                x += xJump;
-            }
-        }
-    }
-    std::cout << "Best d: " << bestD << std::endl;
-    std::cout << "Calculated " << dVector.size() - maxXReachedCount << "/" << dVector.size() << std::endl;
-    std::cout << std::endl;*/
-
-    // Second try but with BigInt
-    /*BigInt biggestX(0);
-    unsigned long long bestD = 0;
-    int maxXReachedCount = 0;
-    for(unsigned long long d: dVector){
-        BigInt x(1);
-        BigInt x2(d+1);
-        BigInt dx2(3*d);
-        unsigned long long xJump = std::sqrt(d);
-        unsigned long long dTimes2 = d*2;
-        if(xJump < 3)
-            xJump = 1;
-        else
-            xJump -= 2;
-        bool doneWithD = false;
-        while(!doneWithD){
-            while(x*x < x2)
-                ++x;
-            if(x*x == x2){
-                std::cout << d << ": ";
-                x.output();
-                if(x > biggestX){
-                    biggestX = x;
-                    bestD = d;
-                    std::cout << " (best so far)";
-                }
-                std::cout << std::endl;
-                doneWithD = true;
-            }else{
-                x2 += dx2;
-                dx2 += dTimes2;
-                x += xJump;
-            }
-        }
-    }
-    std::cout << "Best d: " << bestD << std::endl;
-    std::cout << "Calculated " << dVector.size() - maxXReachedCount << "/" << dVector.size() << std::endl;
-    std::cout << std::endl;*/
-
-  // Third try
-  // 1. Make a set of all squares of odd numbers.
-  // (also made a separate set of k, this should be optimized)
-  unsigned long long base = 1;
-  std::set<unsigned long long> oddSquares;
-  std::set<unsigned long long> possibleK;
-  OutputSelected outputOddSquares;
-  unsigned long long maxBase = 4294967296;
-  unsigned long long maxK = maxBase /10;
-  maxK = maxK * maxK;
-
-  unsigned long long prod2= 2;
-  while(prod2 < maxK){
-      possibleK.insert(prod2);
-      prod2 *= 2;
-    }
-
-  while(base < maxBase){
-    unsigned long long prod = base*base;
-    oddSquares.insert(prod);
-    while(prod < maxK){
-      possibleK.insert(prod);
-      prod *= 2;
-    }
-    base += 2;
-    outputOddSquares.output(base);
-  }
-  std::cout << "Created set of all " << oddSquares.size() << " odd squares of 64 bits" << std::endl;
-
-  // 2. Calculate kd+2 or kd-2
-  //OutputSelected outputXPlus1;
-  //unsigned long long d = 109;
+  auto start = std::chrono::system_clock::now();
   for(unsigned long long d: dVector){
-    unsigned long long localMaxK = 18446744073709551615/d;
+    unsigned long long oddNumAdd = 8;
+    unsigned long long oddNumSquare = 1;            // k
+    unsigned long long oddNum2Add = 16;
+    unsigned long long oddNum2SquareTimesTwo = 2;    // also k
+
+    //unsigned long long k=1;
+
+    unsigned long long maxK = (18446744073709551615 -2)/d;
     bool done = false;
-    for(unsigned long long k: possibleK){
-      if(k >= localMaxK)
-        break;
-      unsigned long long reducedK = k;
-      int numberOfTwosFromK = reduceTwos(reducedK);
-      for(int addVal = -2; addVal <= 2 && !done; addVal += 4){
-        unsigned long long secondFactor = k * d + addVal;
-        int numberOfTwos = numberOfTwosFromK + reduceTwos(secondFactor);
-        if(!(numberOfTwos & 1)){
-          if(oddSquares.find(secondFactor) != oddSquares.end()){
-            std::cout << d << ": k=" << k << std::endl;
+    while(!done){
+
+      /* All K
+      unsigned long long kCopy=k;
+      int twoCount = removeFactorTwosCount(kCopy);
+      if(isSquareBabylonian(kCopy)){
+        unsigned long long xMinusOne = k * d - 2;
+        unsigned long long xPlusOne = k * d + 2;
+        int twoCount2 = removeFactorTwosCount(xMinusOne);
+        if(isSquareBabylonian(xMinusOne)){
+          int twoCountSum = twoCount+twoCount2;
+          if((twoCountSum&1)==0)
             done = true;
-          }
+        }
+        if(!done)
+          twoCount2 = removeFactorTwosCount(xPlusOne);
+        if(!done && isSquareBabylonian(xPlusOne)){
+          int twoCountSum = twoCount+twoCount2;
+          if((twoCountSum&1)==0)
+            done = true;
         }
       }
       if(done)
-        break;
+        std::cout << d << " found\n";
+      if(!done && maxK - 1 < k){
+        std::cout << d << ": Not found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        done = true;
+      }
+      ++k;*/
+
+      // First try with unsigned long long
+      if(oddNumSquare < oddNum2SquareTimesTwo){
+        done = checkBothSquares(d, oddNumSquare, false);
+        if(!done && maxK - oddNumAdd < oddNumSquare){
+          std::cout << d << ": Not found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+          done = true;
+        }
+        oddNumSquare += oddNumAdd;
+        oddNumAdd += 8;
+      }else{
+        done = checkBothSquares(d, oddNum2SquareTimesTwo, true);
+        if(!done && maxK - oddNum2Add < oddNum2SquareTimesTwo){
+          std::cout << d << ": Not found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+          done = true;
+        }
+        oddNum2SquareTimesTwo += oddNum2Add;
+        oddNum2Add += 16;
+      }
+
+
     }
-    if(!done)
-      std::cout << d << " not fonud" << std::endl;
   }
 
   std::cout << "Done" << std::endl;
+  auto end = std::chrono::system_clock::now();
+  auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+  std::cout << "Time taken: " << elapsed.count() << " s\n";
   std::string a;
   std::cin >> a;
   return 0;
 }
 
-// First try: Maybe a naive approach with big int will work.
-// Start with y = 1, square it, multiply with D, add 1, save in y2
-// Start with x = 1, square it, save in x2
-// If y2 == x2 you are done
-// If x2 > Y2 add one to y and recalculate y2
-// If x2 < Y2 add one to x and recalculate y2
+bool isSquareBabylonian(unsigned long long num){
+  unsigned long long x = num;
+  unsigned long long y = 1;
+  while(x > y){
+    x = ((x+y) >> 1);
+    y = num / x;
+  }
+  return x * x == num;
+}
 
-// bigInt will need
-// =(int)
-// =(bigInt)
-// <
-// >
-// ==
-// ++
-// *
+bool isSquareBinary(unsigned long long num){
+  unsigned long long left = 0;
+  unsigned long long right = num;
+  unsigned long long midSquared;
+  while(left <= right){
+    unsigned long long mid = ((left + right) >> 1);
+    if(mid<=pow32minus1)
+      midSquared = mid*mid;
+    else
+      midSquared = pow64minus1;
+    if (midSquared < num)
+      left = mid+1;
+    else if (midSquared > num)
+      if(mid>0)
+        right = mid-1;
+      else
+        right = 0;
+    else
+      return true;
+  }
+  if(left == right && left*left == num)
+    return true;
+  return false;
+}
 
-// BigInt could have a vector if unsigned long long (64 bit)
-// Each element should be lower then 2^32.
-// The remainder is moved to the next element (n >>> 32)
-// If one element is >= 2^32 after any operation it should be truncated n & 0xFFFFFFFF
+bool checkBothSquares(unsigned long long d, unsigned long long k, bool allowFactorTwos){
+  unsigned long long xMinusOne = k * d - 2;
+  // Only check if square if twos are allowed and the amount of twos are odd, or if twos are not allowed and the number is odd
+  if((allowFactorTwos && removeFactorTwos(xMinusOne)) || (!allowFactorTwos && ((xMinusOne & 1) == 1))){
+    if(isSquareBabylonian(xMinusOne)){
+      std::cout <<  d << ": " << k << " (x-1): " << k * d - 2 << std::endl;
+      return true;
+    }
+  }
+  unsigned long long xPlusOne = k * d + 2;
+  // Only check if square if twos are allowed and the amount of twos are odd, or if twos are not allowed and the number is odd
+  if((allowFactorTwos && removeFactorTwos(xPlusOne)) || (!allowFactorTwos && ((xPlusOne & 1) == 1))){
+    if(isSquareBabylonian(xPlusOne)){
+      std::cout <<  d << ": " << k << " (x+1): " << k * d + 2 << std::endl;
+      return true;
+    }
+  }
+  return false;
+}
 
-// ----------------------------------------------------------
-// Second try: Better idea. Noted in the files "2026 Formulas.docx" and "2026 Calculations.xlsx" that second derivative of Dy^2+1 is 2D.
-// And the derivative of x seem to converge to sqrt(D).
-// So a method for iterating all values of y for a gived D with only relative simple calculations would be
-// 1. Set y = 1, x = 1
-// 2. Calculate x2 = Dy^2+1 (with y==1 it will be just D+1)
-// 3. Set dx2 = 3D
-// 4. do x++ until x*x is >= x2 (if it equals we are done, else continue)
-// 5. y++
-// 6. x2 += dx2
-// 7. dx2 += 2D
-// 8. x += a little less then sqrt(D) (to reduce the number of x++ in nest iteration).
-// 9. Loop back to step 4
-// Looking at it now, I dont even need to keep track of y.
+// Removes all factor twos from num. Returns true if the number of twos are odd
+bool removeFactorTwos(unsigned long long& num){
+  int c = 0;
+  while((num & 1) == 0){
+    ++c;
+    num = num >> 1;
+  }
+  return ((c & 1) == 1);
+}
 
-// If I use bigInt this will only require
-// =(int)
-// =(bigInt)
-// >=
-// ==
-// ++
-// +=
-
-// --------------------------------------------------------
-// Third try: Even better. Figured out most things I understood a few years ago.
-// x^2 - Dy^2 = 1   =>
-// (x+1)(x-1)/D = y^2
-// Set k = (x+1)/D or k = (x-1)/D   =>
-// k(kd+2) = y^2  (or k(kd-1) = y^2)
-// k and kd+2 can only share the factor 2. And since the factors in y^2 must appear in pairs we can say:
-// 1: The number of factor 2 in k plus number of factor 2 in kd+2 must be even.
-// 2: After removing all factor 2 the remainder of k and k+2 must be a even number squared.
-// So if these two things are true we dont even need to calculate y^2 to know if we found a match. The biggest number will be x.
-
-// Im not sure how to cycle k, but however I solve that I should
-// 1. Make a set of all squares of odd numbers.
-// 2. Calculate kd+2 or kd-2
-// 3. Remove all factor 2 from k and kd+2
-// 4. Check that the count of factor 2 is even
-// 5. Check that what remains of k and k+2 exist in the set of odd numbers
+// Removes all factor twos from num. Returns the number of twos
+int removeFactorTwosCount(unsigned long long& num){
+  int c = 0;
+  while((num & 1) == 0){
+    ++c;
+    num = num >> 1;
+  }
+  return c;
+}

@@ -34,8 +34,4 @@ class BigInt
         void addToData(int dataId, unsigned long long num);
         std::vector<unsigned long long> data;   // 32 bits used in each
 };
-
-int reduceTwos(unsigned long long& num);
-int factorizeList();
-std::vector<unsigned long long> factorizeNum(unsigned long long num, std::vector<unsigned long long>& primes, unsigned long long primeCount);
 #endif // BIGINT_H
