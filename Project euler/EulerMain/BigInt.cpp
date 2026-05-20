@@ -57,6 +57,16 @@ bool BigInt::operator>(BigInt& other){
     return false;
 }
 
+bool BigInt::operator>(int other){
+  if(data.size() > 1)
+    return true;
+  if(data.size() > 0 && data[0] > other)
+    return true;
+  if(data.size() == 0 && 0 > other)
+    return true;
+  return false;
+}
+
 bool BigInt::operator==(BigInt& other){
     if(data.size() != other.data.size())
         return false;
@@ -80,15 +90,50 @@ BigInt BigInt::operator*(BigInt other){
     return ret;
 }
 
+BigInt BigInt::operator+(BigInt other){
+    BigInt ret;
+    int maxSize = (int)data.size();
+    if((int)other.data.size() > maxSize)
+      maxSize = (int)other.data.size();
+    for(int a=0; a<maxSize; a++){
+      if(a<(int)data.size())
+        ret.addToData(a, data[a]);
+      if(a<(int)other.data.size())
+        ret.addToData(a, other.data[a]);
+    }
+    return ret;
+}
+
+BigInt BigInt::operator>>(int other){
+  for(int i=0; i < (int)data.size(); i++){
+    data[i]>>1;
+  }
+}
+
 BigInt& BigInt::operator+=(BigInt& other){
     for(int i=0; i<(int)other.data.size(); i++)
         addToData(i, other.data[i]);
     return *this;
 }
 
-BigInt& BigInt::operator+=(unsigned long long& other){
+BigInt& BigInt::operator+=(unsigned long long other){
     addToData(0, other);
     return *this;
+}
+
+BigInt& BigInt::operator-=(unsigned long long other){
+  if((int)data.size() == 0){
+    data.clear();
+    data.push_back(0);
+  }
+  substractFromData(0, other);
+  return *this;
+}
+
+bool BigInt::isOdd(){
+  if((int)data.size() > 0 && (data[0] & 1))
+    return true;
+  return false;
 }
 
 void BigInt::addToData(int dataId, unsigned long long num){
@@ -100,6 +145,25 @@ void BigInt::addToData(int dataId, unsigned long long num){
         data[dataId] = (data[dataId] & MAX32);                      // Remove the upper 32 bits
         addToData(dataId+1, upper32Bits);                           // Add the upper 32 bits to the next data
     }
+}
+
+void BigInt::substractFromData(int dataId, unsigned long long num){
+    while(dataId >= (int)data.size())
+        data.push_back(0);
+    if(num > data[dataId]){
+      if(data.size() == dataId+1){
+        std::cout << "Error, tried substracting BigInt into a negative number" << std::endl;
+        return;
+      }
+      if(num >= POWER32){
+        std::cout << "Error, tried substracting a to big number from BigInt" << std::endl;
+        return;
+      }
+      data[dataId] += POWER32;
+      substractFromData(dataId+1, 1);
+    }
+    data[dataId] -= num;
+    return;
 }
 
 void BigInt::output(){

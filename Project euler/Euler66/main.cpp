@@ -8,9 +8,13 @@
 #include "../EulerMain/BigInt.h"
 
 bool isSquareBabylonian(unsigned long long num);
+//bool isSquareBabylonianB(BigInt& num);
 bool isSquareBinary(unsigned long long num);
+bool isSquareBinaryB(BigInt& num);
 bool checkBothSquares(unsigned long long d, unsigned long long k, bool allowFactorTwos);
+bool checkBothSquaresB(unsigned long long d, BigInt& k, bool allowFactorTwos);
 bool removeFactorTwos(unsigned long long& num);
+bool removeFactorTwosB(BigInt& num);
 int removeFactorTwosCount(unsigned long long& num);
 unsigned long long pow32minus1 = 4294967295;
 unsigned long long pow64minus1 = 18446744073709551615;
@@ -34,7 +38,12 @@ int main()
     unsigned long long oddNumAdd = 8;
     unsigned long long oddNumSquare = 1;            // k
     unsigned long long oddNum2Add = 16;
-    unsigned long long oddNum2SquareTimesTwo = 2;    // also k
+    unsigned long long oddNum2SquareTimesTwo = 2;   // also k
+
+    BigInt oddNumAddB = 8;
+    BigInt oddNumSquareB = 1;                        // k
+    BigInt oddNum2AddB = 16;
+    BigInt oddNum2SquareTimesTwoB = 2;               // also k
 
     //unsigned long long k=1;
 
@@ -70,11 +79,11 @@ int main()
       }
       ++k;*/
 
-      // First try with unsigned long long
+      /* First try with unsigned long long
       if(oddNumSquare < oddNum2SquareTimesTwo){
         done = checkBothSquares(d, oddNumSquare, false);
         if(!done && maxK - oddNumAdd < oddNumSquare){
-          std::cout << d << ": Not found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+          std::cout << d << ": Not found" << std::endl;
           done = true;
         }
         oddNumSquare += oddNumAdd;
@@ -82,13 +91,23 @@ int main()
       }else{
         done = checkBothSquares(d, oddNum2SquareTimesTwo, true);
         if(!done && maxK - oddNum2Add < oddNum2SquareTimesTwo){
-          std::cout << d << ": Not found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+          std::cout << d << ": Not found" << std::endl;
           done = true;
         }
         oddNum2SquareTimesTwo += oddNum2Add;
         oddNum2Add += 16;
-      }
+      }*/
 
+      // Second try with big integers
+      if(oddNumSquareB < oddNum2SquareTimesTwoB){
+        done = checkBothSquaresB(d, oddNumSquareB, false);
+        oddNumSquareB += oddNumAddB;
+        oddNumAddB += (unsigned long long)8;
+      }else{
+        done = checkBothSquaresB(d, oddNum2SquareTimesTwoB, true);
+        oddNum2SquareTimesTwoB += oddNum2AddB;
+        oddNum2AddB += 16;
+      }
 
     }
   }
@@ -112,6 +131,17 @@ bool isSquareBabylonian(unsigned long long num){
   return x * x == num;
 }
 
+/* Divide is not defined, dont use this
+bool isSquareBabylonianB(BigInt& num){
+  BigInt x = num;
+  BigInt y = 1;
+  while(x > y){
+    x = ((x+y) >> 1);
+    y = num / x;
+  }
+  return x * x == num;
+}*/
+
 bool isSquareBinary(unsigned long long num){
   unsigned long long left = 0;
   unsigned long long right = num;
@@ -128,6 +158,29 @@ bool isSquareBinary(unsigned long long num){
       if(mid>0)
         right = mid-1;
       else
+        right = 0;
+    else
+      return true;
+  }
+  if(left == right && left*left == num)
+    return true;
+  return false;
+}
+
+bool isSquareBinaryB(BigInt& num){
+  BigInt left = 0;
+  BigInt right = num;
+  BigInt midSquared;
+  while(left < right || left == right){
+    BigInt mid = ((left + right) >> 1);
+    midSquared = mid*mid;
+    if (midSquared < num)
+      left = mid+1;
+    else if (midSquared > num)
+      if(mid>0){
+        right = mid;
+        right -= 1;
+      }else
         right = 0;
     else
       return true;
@@ -157,10 +210,51 @@ bool checkBothSquares(unsigned long long d, unsigned long long k, bool allowFact
   return false;
 }
 
+bool checkBothSquaresB(unsigned long long d, BigInt& k, bool allowFactorTwos){
+  BigInt xMinusOne = k * d;
+  xMinusOne -= 2;
+  if((allowFactorTwos && removeFactorTwosB(xMinusOne)) || (!allowFactorTwos && ((xMinusOne.isOdd()) == 1))){
+    if(isSquareBinaryB(xMinusOne)){
+      std::cout <<  d << ": ";
+      k.output();
+      std::cout << " (x-1): ";
+      BigInt otherX = k * d;
+      otherX -= 2;
+      otherX.output();
+      std::cout << std::endl;
+      return true;
+    }
+  }
+  BigInt xPlusOne = xMinusOne;
+  xPlusOne += 4;
+  if((allowFactorTwos && removeFactorTwosB(xPlusOne)) || (!allowFactorTwos && ((xPlusOne.isOdd()) == 1))){
+    if(isSquareBinaryB(xPlusOne)){
+      std::cout <<  d << ": ";
+      k.output();
+      std::cout << " (x+1): ";
+      BigInt otherX = k * d;
+      otherX += 2;
+      otherX.output();
+      std::cout << std::endl;
+      return true;
+    }
+  }
+  return false;
+}
+
 // Removes all factor twos from num. Returns true if the number of twos are odd
 bool removeFactorTwos(unsigned long long& num){
   int c = 0;
   while((num & 1) == 0){
+    ++c;
+    num = num >> 1;
+  }
+  return ((c & 1) == 1);
+}
+
+bool removeFactorTwosB(BigInt& num){
+  int c = 0;
+  while(!num.isOdd()){
     ++c;
     num = num >> 1;
   }

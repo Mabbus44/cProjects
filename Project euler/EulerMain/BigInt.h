@@ -20,18 +20,25 @@ class BigInt
         void operator=(BigInt other);
         bool operator<(BigInt& other);
         bool operator>(BigInt& other);
+        bool operator>(int other);
         bool operator==(BigInt& other);
         BigInt& operator++();
         BigInt operator*(BigInt other); //Shouldent argument and return type be references? Maybe not return type since its created in the method, but at least argument.
+        BigInt operator+(BigInt other);
+        BigInt operator>>(int other);
         BigInt& operator+=(BigInt& other);
-        BigInt& operator+=(unsigned long long& other);
+        BigInt& operator+=(unsigned long long other);
+        BigInt& operator-=(unsigned long long other);
+        bool isOdd();
         void output();
         int len() {return data.size();}
+        unsigned long long getData(int i) {return data[i];}
 
     protected:
 
     private:
         void addToData(int dataId, unsigned long long num);
+        void substractFromData(int dataId, unsigned long long num);
         std::vector<unsigned long long> data;   // 32 bits used in each
 };
 #endif // BIGINT_H
